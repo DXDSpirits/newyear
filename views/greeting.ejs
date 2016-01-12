@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html class="no-js">
+
+<head>
+    <title>八音盒</title>
+
+    <% include includes/metadata %>
+
+    <% include includes/stylesheets %>
+
+    <link rel="stylesheet" href="<%= static_url %>stylesheets/greeting.css?v=<%= build_no %>">
+
+    <% include includes/production %>
+
+    <% include includes/analytics %>
+
+    <script>
+        window.onpageshow = function(e) { if (e.persisted) location.reload(); }
+    </script>
+    <script src="<%= tat_static %>javascripts/vendor/modernizr-2.7.1.min.js"></script>
+</head>
+<body>
+
+<% include includes/apploader %>
+
+<!-- The views begin here -->
+<div class="views-wrapper">
+    <% include greeting/map %>
+    <% include greeting/search %>
+    <% include greeting/play %>
+    <% include greeting/record %>
+</div>
+<!-- The views end -->
+
+<% include greeting/templates %>
+<script>
+    var WX_CONFIG = <%- JSON.stringify(wx_config) %>
+</script>
+
+<% include includes/javascripts %>
+
+<script crossorigin="anonymous" src="<%= tat_static %>javascripts/plugins/plupload.full.min.js"></script>
+<script crossorigin="anonymous" src="<%= tat_static %>javascripts/plugins/qiniu.js"></script>
+
+<script src="http://api.map.baidu.com/api?v=2.0&ak=FWQSbKcHs6QABLjn6zkOIRGk"></script>
+
+<script src="<%= static_url %>javascripts/greeting-built.js?v=<%= build_no %>"></script>
+
+</body>
+</html>

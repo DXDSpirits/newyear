@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html class="no-js">
+
+<head>
+
+<title>出错啦</title>
+
+<% include includes/metadata %>
+
+<link rel="stylesheet" href="<%= tat_static %>stylesheets/bootstrap.css">
+<link rel="stylesheet" href="<%= tat_static %>stylesheets/font-awesome.css">
+
+<% include includes/production %>
+
+<script src="<%= tat_static %>javascripts/vendor/modernizr-2.7.1.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <h2><%= status %></h2>
+    <h3><%= message %></h3>
+    <% if (settings.env == 'development') { %>
+        <pre><%= stack %></pre>
+    <% } %>
+</div>
+
+</body>
+</html>
