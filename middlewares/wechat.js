@@ -83,11 +83,14 @@ exports.signUrl = function() {
         var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         var sig = sign(WECHAT_TICKET, fullUrl);
         res.locals.wx_config = {
+            debug: true,
             appId: WECHAT_APPID,
             timestamp: sig.timestamp,
             nonceStr: sig.nonceStr,
             signature: sig.signature,
-            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'uploadImage', 'previewImage']
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'uploadImage', 'previewImage',
+                        'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice',
+                        'onVoicePlayEnd', 'uploadVoice', 'downloadVoice']
         };
         next();
     };
