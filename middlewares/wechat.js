@@ -1,6 +1,6 @@
 var settings = require('../settings/settings.js');
 var http = require('http');
-var APIRoot = settings.API_ROOT;
+var AuthAPIRoot = settings.AUTH_API_ROOT;
 
 
 function createNonceStr() {
@@ -68,7 +68,7 @@ var WECHAT_APPID = '';
 
 (function repeat() {
     console.log('Update Wechat JSAPI Ticket');
-    var url = APIRoot + 'clients/wechat-jsapi-ticket/';
+    var url = AuthAPIRoot + 'clients/wechat-jsapi-ticket/';
     request(url, function(res) {
         WECHAT_TICKET = res.ticket;
         WECHAT_APPID = res.appid;
@@ -83,7 +83,6 @@ exports.signUrl = function() {
         var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         var sig = sign(WECHAT_TICKET, fullUrl);
         res.locals.wx_config = {
-            debug: true,
             appId: WECHAT_APPID,
             timestamp: sig.timestamp,
             nonceStr: sig.nonceStr,
