@@ -32,7 +32,7 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
     var imageSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
     client.fetch(imageSrc, bucketName, key, function(error, result, response) {
         if (!error && /audio/.test(result.mimeType)) {
-            var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(key + '.mp3');
+            var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
             qiniu.fop.pfop(bucketName, key, fops, {
                 notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
             });
