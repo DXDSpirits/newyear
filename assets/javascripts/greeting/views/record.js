@@ -3,7 +3,7 @@ var App = require('../app');
 var PageView = require('../pageview');
 
 var GreetingModel = Amour.Model.extend({
-    url: Amour.APIRoot + 'greetings/greeting/'
+    urlRoot: Amour.APIRoot + 'greetings/greeting/'
 });
 
 App.Pages.Record = new (PageView.extend({
