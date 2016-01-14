@@ -174,6 +174,7 @@ App.vent = new Amour.EventAggregator();
 App.user = new Amour.Models.User();
 
 if (!Amour.TokenAuth.get()) {
+    Amour.storage.set('redirect-on-login', location.href);
     App.rediectWechatAuth();
 }
 
