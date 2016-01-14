@@ -10,7 +10,9 @@ App.Pages.Record = new (PageView.extend({
     events: {
         'click .btn-record': 'record'
     },
-    initPage: function() {},
+    initPage: function() {
+        this.greeting = new GreetingModel();
+    },
     leave: function() {},
     record: function() {
         if (!this.recording) {
@@ -48,20 +50,36 @@ App.Pages.Record = new (PageView.extend({
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        var greeting = new GreetingModel({
+        this.greeting.set({
             place_id: selected
         });
+        var self = this;
         $.get('/qiniu/fetchwxvoice/' + serverId, function(data) {
-            greeting.save({
+            self.greeting.save({
                 key: data.key,
                 url: data.url
             }, {
                 success: function() {
                     alert('上传成功');
+                    self.waiting();
                 }
             });
         }).fail(function() {
             alert('上传录音有点问题，请检查您的网络设置或者联系小盒子客服~');
+        });
+    },
+    waiting: function() {
+        var self = this;
+        this.greeting.fetch({
+            success: function(model) {
+                if (!model.get('key')) {
+                    App.router.navigate('play/' + model.id);
+                } else {
+                    _.delay(function() {
+                        self.waiting();
+                    }, 1000);
+                }
+            }
         });
     },
     playVoice: function(localId) {
@@ -69,5 +87,7 @@ App.Pages.Record = new (PageView.extend({
             localId: localId
         });
     },
-    render: function() {}
+    render: function() {
+        this.greeting.clear();
+    }
 }))({el: $('#view-record')});
