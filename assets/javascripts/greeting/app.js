@@ -173,6 +173,10 @@ App.vent = new Amour.EventAggregator();
 
 App.user = new Amour.Models.User();
 
+if (!Amour.TokenAuth.get()) {
+    App.rediectWechatAuth();
+}
+
 /*
  * Start application
  */
