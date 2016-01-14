@@ -1,5 +1,7 @@
 
-var places = new (Amour.Model.extend({
+var App = require('../app');
+
+var places = App.places = new (Amour.Model.extend({
     url: Amour.APIRoot + 'greetings/place/'
 }))();
 
@@ -8,22 +10,22 @@ function initPlaceList() {
     var fillProvinces = function($select, provinces) {
         var $provinces = _.map(provinces, function(item) {
             var cities = _.where(data, { category: 'city', parent: item.id });
-            return $('<option></option>').text(item.name).attr('val', item.name).data('cities', cities);
+            return $('<option></option>').text(item.name).attr('value', item.id).data('cities', cities);
         });
-        $select.html($provinces).prepend('<option>省</option>');
+        $select.html($provinces).prepend('<option value="">省</option>');
     }
     var fillCities = function($select, cities) {
         var $cities = _.map(cities, function(item) {
             var districts = _.where(data, { category: 'district', parent: item.id });
-            return $('<option></option>').text(item.name).attr('val', item.name).data('districts', districts);
+            return $('<option></option>').text(item.name).attr('value', item.id).data('districts', districts);
         });
-        $select.html($cities); //.prepend('<option>市</option>');
+        $select.html($cities).prepend('<option value="">市</option>');
     }
     var fillDistricts = function($select, districts) {
         var $districts = _.map(districts, function(item) {
-            return $('<option></option>').text(item.name).attr('val', item.name);
+            return $('<option></option>').text(item.name).attr('value', item.id);
         });
-        $select.html($districts); //.prepend('<option>区</option>');
+        $select.html($districts).prepend('<option value="">区</option>');
     }
     var $view = $('.places-select');
     $view.find('select[name="province"]').on('change', function() {
