@@ -8,8 +8,10 @@ var qiniu = require('qiniu');
 qiniu.conf.ACCESS_KEY = settings.QINIU.ACCESS_KEY;
 qiniu.conf.SECRET_KEY = settings.QINIU.SECRET_KEY;
 
-var putPolicy = new qiniu.rs.PutPolicy(settings.QINIU.BUCKET_NAME);
+var bucketName = settings.QINIU.BUCKET_NAME;
+var putPolicy = new qiniu.rs.PutPolicy(bucketName);
 var client = new qiniu.rs.Client();
+
 
 router.get('/uptoken', function(req, res, next) {
     var token = putPolicy.token();
@@ -25,12 +27,16 @@ router.get('/uptoken', function(req, res, next) {
 
 router.get('/fetchwxvoice/:serverid', function(req, res, next) {
     var serverid = req.params.serverid;
+    var key = 'wechat/' + serverid;
     var token = wechat.getAccessToken();
     var imageSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
-    client.fetch(imageSrc, 'tatmusic', 'wechat/' + serverid, function(error, result, response) {
+    client.fetch(imageSrc, bucketName, key, function(error, result, response) {
         if (!error && /audio/.test(result.mimeType)) {
+            qiniu.fop.pfop(bucketName, key, 'avthumb/mp3', {
+                notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
+            });
             res.json({
-                url: 'http://mm.8yinhe.cn/wechat/' + serverid
+                url: 'http://mm.8yinhe.cn/' + key
             });
         } else {
             res.status(400).json({});
