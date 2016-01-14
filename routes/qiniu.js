@@ -28,7 +28,7 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
     var token = wechat.getAccessToken();
     var imageSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
     client.fetch(imageSrc, 'tatmusic', 'wechat/' + serverid, function(error, result, response) {
-        if (!error && /image/.test(result.mimeType)) {
+        if (!error && /audio/.test(result.mimeType)) {
             res.json({
                 url: 'http://mm.8yinhe.cn/wechat/' + serverid
             });

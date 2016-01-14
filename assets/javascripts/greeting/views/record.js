@@ -14,25 +14,37 @@ App.Pages.Record = new (PageView.extend({
     leave: function() {},
     record: function() {
         if (!this.recording) {
-            this.$('.btn-record').text('停止录音').addClass('btn-success').removeClass('btn-primary');
-            this.recording = true;
-            wx.startRecord();
+            this.startRecord();
         } else {
-            this.$('.btn-record').text('开始录音').removeClass('btn-success').addClass('btn-primary');
-            this.recording = false;
             this.endRecord();
         }
+    },
+    startRecord: function() {
+        this.$('.btn-record').text('停止录音').addClass('btn-success').removeClass('btn-primary');
+        this.recording = true;
+        wx.startRecord();
     },
     endRecord: function() {
         var self = this;
         wx.stopRecord({
             success: function (res) {
-                var localId = res.localId;
-                self.uploadVoice(localId);
+                self.$('.btn-record').text('开始录音').removeClass('btn-success').addClass('btn-primary');
+                self.recording = false;
+                self.uploadVoiceToWx(res.localId);
             }
         });
     },
-    uploadVoice: function(localId) {
+    uploadVoiceToWx: function(localId) {
+        var self = this;
+        wx.uploadVoice({
+            localId: localId,
+            isShowProgressTips: 1,
+            success: function (res) {
+                self.saveVoiceToQiniu(res.serverId);
+            }
+        });
+    },
+    saveVoiceToQiniu: function(serverId) {
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
@@ -48,7 +60,7 @@ App.Pages.Record = new (PageView.extend({
                 }
             });
         }).fail(function() {
-            alert('上传照片有点问题，请检查您的网络设置或者联系小盒子客服~');
+            alert('上传录音有点问题，请检查您的网络设置或者联系小盒子客服~');
         });
     },
     playVoice: function(localId) {
