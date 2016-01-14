@@ -36,6 +36,7 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
                 notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
             });
             res.json({
+                key: key,
                 url: 'http://mm.8yinhe.cn/' + key
             });
         } else {

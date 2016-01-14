@@ -53,6 +53,7 @@ App.Pages.Record = new (PageView.extend({
         });
         $.get('/qiniu/fetchwxvoice/' + serverId, function(data) {
             greeting.save({
+                key: data.key,
                 url: data.url
             }, {
                 success: function() {
