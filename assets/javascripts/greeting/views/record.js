@@ -73,7 +73,7 @@ App.Pages.Record = new (PageView.extend({
         this.greeting.fetch({
             cache: false,
             success: function(model) {
-                if (!model.get('key')) {
+                if (!model.get('status') != 'raw') {
                     App.router.navigate('play/' + model.id);
                 } else {
                     _.delay(function() {
