@@ -4,7 +4,6 @@ var CONFIG = {
 
     TAT_STATIC : 'http://static.wedfairy.com/',
 
-    AUTH_API_ROOT : 'http://api.wedfairy.com/api/',
     API_ROOT : 'http://greeting.wedfairy.com/api/',
 
     CDN_URL : '/assets/',

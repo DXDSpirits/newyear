@@ -1,6 +1,6 @@
 var settings = require('../settings/settings.js');
 var http = require('http');
-var AuthAPIRoot = settings.AUTH_API_ROOT;
+var APIRoot = settings.API_ROOT;
 
 
 function createNonceStr() {
@@ -68,7 +68,7 @@ var WECHAT_APPID = '';
 
 (function repeat() {
     console.log('Update Wechat JSAPI Ticket');
-    var url = AuthAPIRoot + 'clients/wechat-jsapi-ticket/';
+    var url = APIRoot + 'clients/wechat-jsapi-ticket/';
     request(url, function(res) {
         WECHAT_TICKET = res.ticket;
         WECHAT_APPID = res.appid;
