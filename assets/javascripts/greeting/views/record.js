@@ -69,11 +69,13 @@ App.Pages.Record = new (PageView.extend({
         });
     },
     waiting: function() {
+        $('#apploader').removeClass('invisible');
         var self = this;
         this.greeting.fetch({
             cache: false,
             global: false,
             success: function(model) {
+                $('#apploader').addClass('invisible');
                 App.router.navigate('play/' + model.id);
             },
             error: function() {
