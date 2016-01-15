@@ -72,14 +72,14 @@ App.Pages.Record = new (PageView.extend({
         var self = this;
         this.greeting.fetch({
             cache: false,
+            global: false,
             success: function(model) {
-                if (!model.get('status') != 'raw') {
-                    App.router.navigate('play/' + model.id);
-                } else {
-                    _.delay(function() {
-                        self.waiting();
-                    }, 1000);
-                }
+                App.router.navigate('play/' + model.id);
+            },
+            error: function() {
+                _.delay(function() {
+                    self.waiting();
+                }, 1000);
             }
         });
     },
