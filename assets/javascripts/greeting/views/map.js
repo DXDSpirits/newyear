@@ -13,18 +13,27 @@ App.Pages.Map = new (PageView.extend({
     initPage: function() {
         /////////////////////////////// Models /////////////////////////////////
 
-        var Province = Backbone.Model.extend({
+        var Province = Amour.Collection.extend({
             "url": "http://greeting.wedfairy.com/api/greetings/place/province/"
         });
-        new Province().fetch({
-            success: function(model, provinces){
-                this.provinces = provinces;
-                this.provinces.forEach(function(p){
-                    console.log(p);
-                    //Map.get_boundary(p["name"]);
-                });
-            }
-        });
+        this.provinces = new Province();
+            //.fetch({
+            // success: function(model, provinces){
+            //     this.provinces = provinces;
+            //     this.provinces.forEach(function(p){
+            //         console.log(p);
+            //         //Map.get_boundary(p["name"]);
+            //     });
+            // }
+        //});
+        this.provinces.on("reset", function() {
+             this.provinces.forEach(function(p){
+                 console.log(p);
+                 this.get_boundary(p.get("name"));
+             }, this);
+
+            //object.trigger(eventName);
+        }, this);
     },
 
     leave: function() {
@@ -66,5 +75,6 @@ App.Pages.Map = new (PageView.extend({
     render: function() {
         _.once(this.init_map_once());
         this.map.centerAndZoom(new BMap.Point(116.403765, 39.914850), 5);
+        this.provinces.fetch({reset: true});
     }
 }))({el: $('#view-map')});
