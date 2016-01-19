@@ -120,7 +120,7 @@ App.Pages.Record = new (PageView.extend({
         }
     },
     playVoice: function() {
-        this.$('.btn-play').text('停止').removeClass('btn-success').addClass('btn-primary');
+        this.$('.btn-play').text('停止').addClass('btn-success').removeClass('btn-primary');
         this.playing = true;
     },
     stopVoice: function(localId) {
