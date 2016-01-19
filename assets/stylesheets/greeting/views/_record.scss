@@ -11,6 +11,10 @@
         }
     }
     .play-buttons {
+        width: 100px;
         margin: 30px auto;
+        .btn {
+            margin: 15px auto;
+        }
     }
 }

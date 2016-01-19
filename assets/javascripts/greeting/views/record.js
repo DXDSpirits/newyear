@@ -38,6 +38,11 @@ App.Pages.Record = new (PageView.extend({
                 self.endRecord(res.localId);
             }
         });
+        wx.onVoicePlayEnd({
+            success: function (res) {
+                self.stopVoice(res.localId);
+            }
+        });
     },
     leave: function() {},
     record: function() {
@@ -107,18 +112,20 @@ App.Pages.Record = new (PageView.extend({
     },
     play: function() {
         if (!this.playing) {
-            this.playVoice(this.localId);
+            wx.playVoice({ localId: this.localId });
+            this.playVoice();
         } else {
-            this.pauseVoice(this.localId);
+            wx.stopVoice({ localId: this.localId });
+            this.stopVoice();
         }
     },
-    playVoice: function(localId) {
+    playVoice: function() {
+        this.$('.btn-play').text('停止').removeClass('btn-success').addClass('btn-primary');
         this.playing = true;
-        wx.playVoice({ localId: localId });
     },
-    pauseVoice: function(localId) {
+    stopVoice: function(localId) {
+        this.$('.btn-play').text('试听').removeClass('btn-success').addClass('btn-primary');
         this.playing = false;
-        wx.pauseVoice({ localId: localId });
     },
     render: function() {
         this.greeting.clear();
