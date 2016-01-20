@@ -5,29 +5,73 @@ var PageView = require('../pageview');
 var GreetingsCollection = Amour.Model.extend({
     url: Amour.APIRoot + 'greetings/greeting/'
 });
+var $itemsWrapper = $(".newyear-wishes-wrapper");
 
 App.Pages.Search = new (PageView.extend({
     events: {
-        'click li.place-item': 'showItems',
+        'click li.place-item'     : 'searchShowItems',
+        'click span.search-cancel': 'cancel',
+        'focus input#search-input': 'showFilters',
+        'blur input#search-input' : 'hideFilters',
+        'click .btn-select-search': 'selectShowItems'
     },
     initPage: function() {
         this.greetings = new GreetingsCollection();
     },
     leave: function() {},
-    showItems: function() {},
-    render: function() {
+    cancel: function(e) {
+        // e.stopPropagation();
+        var w = $("#view-search").width();
+        $("span.search-cancel").addClass('hidden');
+        $("input#search-input").val('').css('width', w).removeClass('no-border-right');
+        $("#place-list-wrapper").addClass('hidden');
+        // placesList.update();
+    },
+    showFilters: function() {
+        var w = $("#view-search").width();
+        $("span.search-cancel").removeClass('hidden').css('width', 50);
+        $("input#search-input").addClass('no-border-right').css('width', w - 50);
+        $("#place-list-wrapper").removeClass('hidden');
+        $("#places-select-wrapper").addClass('hidden');
+    },
+    hideFilters: function() {
+        this.cancel();
+        $("#places-select-wrapper").removeClass('hidden');
+    },
+    searchShowItems: function(e) {
+        var itemID = $(e.currentTarget).find('.id').text();
+        // var itemName = $(e.currentTarget).find('.name').text();
+        // $("input#search-input").val(itemName);
+        this.renderItems(itemID);
+    },
+    selectShowItems: function() {
+        var selected = this.$('select[name="district"]').val() ||
+                       this.$('select[name="city"]').val() ||
+                       this.$('select[name="province"]').val();
+        this.renderItems(selected);
+    },
+    renderItems: function(id) {
+        $("#place-list-wrapper").addClass('hidden');
+        $("#places-select-wrapper").removeClass('hidden');
         this.greetings.fetch({
-            reset: true
+            reset: true,
+            data: {
+                place: id,
+            },
+            success: function(collection) {
+                var wishArray = collection.toJSON().results;
+                renderFilterResult(wishArray);
+            }
         });
     }
 }))({el: $('#view-search')});
 
 var options = {
     valueNames: ['name','id'],
-    item: '<li class="place-item"><h5 class="name"></h5><p class="id hidden"></p></li>'
+    item: '<li class="place-item"><p class="name"></p><p class="id hidden"></p></li>'
 };
 
-var placesList = new List('places', options);
+var placesList = new List('places-search', options);
 
 if (App.places.isEmpty()) {
     App.places.once('reset', function() {
@@ -37,9 +81,21 @@ if (App.places.isEmpty()) {
     _.defer(filterPlaces, App.places);
 }
 
+function renderFilterResult(arrayResult) {
+    $itemsWrapper.html('');
+    _.each(arrayResult, function(wish) {
+        var wishID = wish.id;
+        var wishOwerName = wish.profile.name;
+        var wishOwerAvatar = wish.profile.avatar;
+        // console.log(wishID);
+        // console.log(wishOwerAvatar);
+        // console.log(wishOwerName);
+    });
+}
+
 function filterPlaces(result) {
     placesList.clear();
-    $("#place-list-wrapper").addClass('list-transparent');
+    $("#place-list-wrapper").addClass('hidden');
     _.each(result.toJSON(), function(item) {
         // 填充所有省市（直辖市按省级）
         if (item.category == "province") {
@@ -57,28 +113,3 @@ function filterPlaces(result) {
         }
     });
 }
-
-// function hideList() {
-//     $("#place-list-wrapper").addClass('list-transparent');
-// }
-
-$("input#search-input").on('focus', function() {
-    $("span.search-cancel").removeClass('hidden');
-});
-
-$("span.search-cancel").click(function(e) {
-    e.stopPropagation();
-    $("span.search-cancel").addClass('hidden');
-    $("input#search-input").val('');
-    // $("#place-list-wrapper").addClass('list-transparent');
-    // hideList();
-});
-
-$("input#search-input").bind('input propertychange', function() {
-    var val = $("input#search-input").val();
-    if (val) {
-        $("#place-list-wrapper").removeClass('list-transparent');
-    } else {
-        $("#place-list-wrapper").addClass('list-transparent');
-    }
-});

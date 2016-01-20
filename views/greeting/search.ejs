@@ -11,15 +11,15 @@
         </div>
     </header>
     <div class="wrapper">
-        <div id="places">
+        <div id="places-search">
             <div class="input-wrapper">
-                <input type="text" id="search-input" class="form-control search" placeholder="Search">
+                <input type="text" id="search-input" class="form-control search" placeholder="搜索省市">
                 <!-- <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span> -->
-                <span class="search-cancel">取消</span>
+                <span class="search-cancel has-border-right glyphicon glyphicon-remove hidden"></span>
             </div>
-            <ul id="place-list-wrapper" class="list list-transparent-1"></ul>
+            <ul id="place-list-wrapper" class="list hidden"></ul>
         </div>
-        <div>
+        <div id="places-select-wrapper">
             <div class="text-center places-select">
                 <select class="form-control" name="province">
                     <option value="">省</option>
@@ -30,7 +30,11 @@
                 <select class="form-control" name="district">
                     <option value="">区</option>
                 </select>
+                <button class="btn btn-primary btn-select-search">确定</button>
             </div>
+        </div>
+        <div class="newyear-wishes-wrapper">
+
         </div>
     </div>
 </div>
