@@ -1,7 +1,7 @@
 
 var App = require('../app');
 
-var places = App.places = new (Amour.Model.extend({
+var places = App.places = new (Amour.Collection.extend({
     url: Amour.APIRoot + 'greetings/place/'
 }))();
 
