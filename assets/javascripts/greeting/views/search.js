@@ -29,25 +29,25 @@ var options = {
 
 var placesList = new List('places', options);
 
-App.places.fetch({
-    success: function(model) {
-        $("input#search-input").focus(function() {
-            var fetchModel = _.extend(model);
-            $("span.search-cancel").removeClass('hidden');
-            filterPlaces(fetchModel);
-        });
-    }
-});
+if (App.places.isEmpty()) {
+    App.places.once('reset', function() {
+        _.defer(filterPlaces, App.places);
+    });
+} else {
+    _.defer(filterPlaces, App.places);
+}
 
 function filterPlaces(result) {
+    placesList.clear();
+    $("#place-list-wrapper").addClass('list-transparent');
     _.each(result.toJSON(), function(item) {
         // 填充所有省市（直辖市按省级）
-        if(item.category == "province") {
+        if (item.category == "province") {
             placesList.add({
                 name: item.name,
                 id: item.id
             });
-        }else if(item.category == "city") {
+        } else if (item.category == "city") {
             if(_.indexOf(['北京', '天津', '重庆', '上海'], item.name) < 0) {
                 placesList.add({
                     name: item.name,
@@ -57,9 +57,14 @@ function filterPlaces(result) {
         }
     });
 }
+
 // function hideList() {
 //     $("#place-list-wrapper").addClass('list-transparent');
 // }
+
+$("input#search-input").on('focus', function() {
+    $("span.search-cancel").removeClass('hidden');
+});
 
 $("span.search-cancel").click(function(e) {
     e.stopPropagation();
@@ -71,9 +76,9 @@ $("span.search-cancel").click(function(e) {
 
 $("input#search-input").bind('input propertychange', function() {
     var val = $("input#search-input").val();
-    if(val) {
+    if (val) {
         $("#place-list-wrapper").removeClass('list-transparent');
-    }else {
+    } else {
         $("#place-list-wrapper").addClass('list-transparent');
     }
 });
