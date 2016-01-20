@@ -1,4 +1,35 @@
 
 #view-search {
-    //
+    .places-select {
+        margin: 30px auto;
+        select {
+            display: inline-block;
+            -webkit-appearance: none;
+            width: auto;
+            min-width: 80px;
+            max-width: 100px;
+        }
+    }
+    #places {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        .input-wrapper {
+            position: fixed;
+            width: 100%;
+        }
+        button.sort {
+            margin-top: 34px;
+        }
+        ul#place-list-wrapper {
+            margin-top: 34px;
+        }
+        // input#search-places:focus {
+        //     span.glyphicon-remove {}
+        // }
+        .list-transparent {
+            color: transparent;
+        }
+    }
+
 }
