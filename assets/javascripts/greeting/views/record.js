@@ -59,20 +59,20 @@ App.Pages.Record = new (PageView.extend({
         }
     },
     startRecord: function() {
-        this.$('.btn-record').text('停止录音').addClass('btn-success').removeClass('btn-primary');
-        this.$('.recording-tip').removeClass('invisible').find('>span').text(0);
+        this.$('.record-wrapper').addClass('recording');
+        this.$('.record-seconds > span').text(0);
         this.recording = true;
         (function tick(self) {
             if (!self.recording) return;
-            self.$('.recording-tip > span').text(function() {
+            self.$('.record-seconds > span').text(function() {
                 return +$(this).text() + 1;
             });
             _.delay(tick, 1000, self);
         })(this);
     },
     endRecord: function(localId) {
-        this.$('.btn-record').text('开始录音').removeClass('btn-success').addClass('btn-primary');
-        this.$('.recording-tip').addClass('invisible').find('>span').text(0);
+        this.$('.record-wrapper').removeClass('recording');
+        this.$('.record-seconds > span').text(0);
         this.recording = false;
         this.voiceReady(localId);
     },
@@ -84,7 +84,7 @@ App.Pages.Record = new (PageView.extend({
         this.greeting.set({
             place_id: selected
         });
-        this.$('.play-buttons').removeClass('invisible');
+        // this.$('.play-buttons').removeClass('invisible');
     },
     saveRecord: function() {
         uploadVoice(this.localId, function(key, url) {
@@ -120,11 +120,11 @@ App.Pages.Record = new (PageView.extend({
         }
     },
     playVoice: function() {
-        this.$('.btn-play').text('停止').addClass('btn-success').removeClass('btn-primary');
+        this.$('.play-wrapper').addClass('playing');
         this.playing = true;
     },
-    stopVoice: function(localId) {
-        this.$('.btn-play').text('试听').removeClass('btn-success').addClass('btn-primary');
+    stopVoice: function() {
+        this.$('.play-wrapper').removeClass('playing');
         this.playing = false;
     },
     render: function() {

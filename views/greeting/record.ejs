@@ -6,29 +6,48 @@
         <div class="btn btn-link pull-left" data-route="return">
             <i class="iconfont icon-angle-left"></i>
         </div>
-        <div class="btn btn-link pull-right">
+        <!-- <div class="btn btn-link pull-right">
             <i class="iconfont icon-check"></i>
-        </div>
+        </div> -->
     </header>
     <div class="wrapper">
-        <div class="text-center places-select">
-            <select class="form-control" name="province">
-                <option value="">省</option>
-            </select>
-            <select class="form-control" name="city">
-                <option value="">市</option>
-            </select>
-            <select class="form-control" name="district">
-                <option value="">区</option>
-            </select>
-        </div>
-        <div class="text-center">
-            <p class="recording-tip invisible">正在录音... <span>0</span>s</p>
-            <button class="btn btn-primary btn-record">开始录音</button>
-        </div>
-        <div class="text-center play-buttons invisible">
-            <button class="btn btn-block btn-primary btn-play">试听</button>
-            <button class="btn btn-block btn-outline btn-save">保存</button>
-        </div>
+        <section class="play-wrapper container-fluid">
+            <div class="text-center controls">
+                <button class="btn btn-link btn-play">
+                    <span class="fa fa-play transition"></span>
+                    <span class="fa fa-pause transition"></span>
+                </button>
+                <div class="record-seconds text-center"><span>0</span>"</div>
+            </div>
+        </section>
+        <section class="record-wrapper container-fluid">
+            <div class="text-center places-select">
+                <select class="form-control" name="province">
+                    <option value="">省</option>
+                </select>
+                <select class="form-control" name="city">
+                    <option value="">市</option>
+                </select>
+                <select class="form-control" name="district">
+                    <option value="">区</option>
+                </select>
+            </div>
+            <div class="row text-center controls">
+                <div class="col-xs-4 col-xs-offset-4">
+                    <button class="btn btn-record transition">
+                        <span class="fa fa-microphone"></span>
+                    </button>
+                    <div class="tip-record">
+                        <span class="transition">点击录音</span>
+                        <span class="transition">点击停止</span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <button class="btn btn-link btn-save transition">
+                        <span class="fa fa-check"></span>
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
