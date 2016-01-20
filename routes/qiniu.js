@@ -34,11 +34,17 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
         if (!error && /audio/.test(result.mimeType)) {
             var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
             qiniu.fop.pfop(bucketName, key, fops, {
+                pipeline: 'wechataudio',
                 notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
-            });
-            res.json({
-                key: key,
-                url: 'http://mm.8yinhe.cn/' + key
+            }, function(error, result, response) {
+                if (!error) {
+                    res.json({
+                        key: key,
+                        url: 'http://mm.8yinhe.cn/' + key
+                    });
+                } else {
+                    res.status(400).json({});
+                }
             });
         } else {
             res.status(400).json({});
