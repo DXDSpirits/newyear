@@ -135,10 +135,10 @@ App.Pages.Map = new (PageView.extend({
             this.map.addOverlay(polygon);
 
             //////// Add Marker //////////
-            if (i == 0){
+            if (i == 0 && data.get('greetings') > 0){
                 firstPath = polygon.getPath();
                 marker = new BMap.Marker(this.getCenterPoint(firstPath));  // 创建标注
-                var label = this.createLabel(data.get('name')); //创建
+                var label = this.createLabel(data.get('name') +"(" + data.get("greetings") + ")"); //创建
                 marker.setLabel(label);
                 this.map.addOverlay(marker);
             }
@@ -148,16 +148,21 @@ App.Pages.Map = new (PageView.extend({
                 //var listener = this.boundaryListener(data, level, firstPath);
                 var self = this;
                 [polygon, marker].forEach(function(item){
+                    if (item == null) return;
                     item.addEventListener("click", function(){
                         self.map.setViewport(firstPath, {zoomFactor: 1 });    //调整视野
                         self.showOrHideOverlay(false, self.provinceOverlay);
-                        //self.map.clearOverlays();
                         self.initMapData(data.get("id"));
                         self.cities.fetch({reset: true});
                     }, false);
                 });
-                // polygon.addEventListener("click", boundaryListener);
-                // marker.addEventListener("click", boundaryListener);
+            }else{
+                [polygon, marker].forEach(function(item){
+                    if (item == null) return;
+                    item.addEventListener("click", function(){
+                        App.router.navigate("#search?place=" + data.get('id'));
+                    });
+                });
             }
         }
     },
@@ -200,6 +205,18 @@ App.Pages.Map = new (PageView.extend({
         this.map.addControl(new BMap.NavigationControl(
             {type: BMAP_NAVIGATION_CONTROL_SMALL}
         ));
+        this.map.setMapStyle({
+            styleJson:[
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": {
+                        "color": "#ffffff",
+                        "visibility": "off"
+                    }
+                },
+            ]
+        });
         this.map.enableScrollWheelZoom();
         this.map.centerAndZoom(new BMap.Point(116.403765, 39.914850), 5);
         var self = this;
@@ -227,8 +244,10 @@ App.Pages.Map = new (PageView.extend({
     },
 
     render: function() {
-        _.once(this.init_map_once());
-        this.provinces.fetch({reset: true});
+        if(this.map == null){
+            _.once(this.init_map_once());
+            this.provinces.fetch({reset: true});
+        }
     }
 
 }))({el: $('#view-map')});
