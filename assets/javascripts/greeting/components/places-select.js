@@ -1,4 +1,3 @@
-
 var App = require('../app');
 
 var places = App.places = new (Amour.Collection.extend({
@@ -29,6 +28,7 @@ function initPlaceList() {
     }
     var $view = $('.places-select');
     $view.find('select[name="province"]').on('change', function() {
+
         var cities = $(this).find('option:selected').data('cities') || [];
         var $select = $(this).siblings('select[name="city"]');
         fillCities($select, cities);
