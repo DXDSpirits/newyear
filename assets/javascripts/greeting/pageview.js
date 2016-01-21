@@ -38,14 +38,10 @@ var pageView = Amour.View.extend({
         this.$el.one('pageOpen', pageOpen);
         this.showPage();
     },
-    refresh: function() {
-        var render = this.render;
-        var pageOpen = _.once(function() {
-            render();
-        });
-        _.delay(pageOpen, 1000);
-        this.$el.one('pageOpen', pageOpen);
-        this.showPage();
+    refresh: function(options) {
+        this.options = options || {};
+        this.reset();
+        this.render();
     },
     reset: function() {},
     showPage: function(options) {

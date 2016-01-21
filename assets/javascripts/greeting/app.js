@@ -63,6 +63,8 @@ App.pageRouter = new(function(pages) {
             }
             next.go(options);
             this.history.active = next;
+        } else if (next && next == this.history.active) {
+            next.refresh(options);
         }
         this.pushNext = false;
     };
