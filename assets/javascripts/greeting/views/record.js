@@ -121,10 +121,10 @@ App.Pages.Record = new (PageView.extend({
         }
     },
     waitForPfop: function() {
+        $('#apploader').removeClass('invisible');
         pfopVoice(this.greeting.get('key'), function(persistentId) {
             this.persistentId = persistentId;
         }, this);
-        $('#apploader').removeClass('invisible');
         var self = this;
         (function waiting() {
             self.greeting.fetch({
@@ -135,6 +135,7 @@ App.Pages.Record = new (PageView.extend({
                     App.router.navigate('play/' + model.id);
                 },
                 error: function() {
+                    $('#apploader').removeClass('invisible');
                     _.delay(waiting, 1000);
                 }
             });
