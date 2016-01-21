@@ -102,7 +102,7 @@ App.Pages.Record = new (PageView.extend({
             uploadVoice(this.localId, function(key, url) {
                 this.greeting.save({
                     place_id: selected,
-                    description: translation
+                    description: translation,
                     key: key,
                     url: url
                 }, {
