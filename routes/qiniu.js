@@ -29,25 +29,37 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
     var serverid = req.params.serverid;
     var key = 'wechat/' + serverid;
     var token = wechat.getAccessToken();
-    var imageSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
-    client.fetch(imageSrc, bucketName, key, function(error, result, response) {
+    var mediaSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
+    var responseSuccess = function(persistentId) {
+        res.json({
+            key: key,
+            url: 'http://mm.8yinhe.cn/' + key,
+            persistentId: persistentId
+        });
+    };
+    var responseError = function(msg) {
+        res.status(400).json({
+            detail: msg
+        });
+    };
+    var pfop = function() {
+        var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
+        qiniu.fop.pfop(bucketName, key, fops, {
+            pipeline: 'wechataudio',
+            notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
+        }, function(error, result, _response) {
+            if (!error && result.persistentId) {
+                responseSuccess(result.persistentId);
+            } else {
+                responseError('Audio pfop failed');
+            }
+        });
+    };
+    client.fetch(mediaSrc, bucketName, key, function(error, result, _response) {
         if (!error && /audio/.test(result.mimeType)) {
-            var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
-            qiniu.fop.pfop(bucketName, key, fops, {
-                pipeline: 'wechataudio',
-                notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
-            }, function(error, result, response) {
-                if (!error) {
-                    res.json({
-                        key: key,
-                        url: 'http://mm.8yinhe.cn/' + key
-                    });
-                } else {
-                    res.status(400).json({});
-                }
-            });
+            pfop();
         } else {
-            res.status(400).json({});
+            responseError('Media fetch failed');
         }
     });
 });

@@ -6,7 +6,7 @@ var uploadVoice = function(localId, callback, context) {
     var ctx = context || this;
     var saveVoiceToQiniu = function(serverId) {
         $.get('/qiniu/fetchwxvoice/' + serverId, function(data) {
-            callback && callback.call(ctx, data.key, data.url);
+            callback && callback.call(ctx, data.key, data.url, data.persistentId);
         }).fail(function() {
             alert('上传录音有点问题，请检查您的网络设置或者联系小盒子客服~');
         });
@@ -99,12 +99,13 @@ App.Pages.Record = new (PageView.extend({
         } else if (!selected) {
             alert('请选择省市');
         } else {
-            uploadVoice(this.localId, function(key, url) {
+            uploadVoice(this.localId, function(key, url, persistentId) {
                 this.greeting.save({
                     place_id: selected,
                     description: translation,
                     key: key,
-                    url: url
+                    url: url,
+                    persistent_id: persistentId
                 }, {
                     success: _.bind(this.waiting, this)
                 });
