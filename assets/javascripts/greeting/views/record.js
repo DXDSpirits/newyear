@@ -4,7 +4,7 @@ var PageView = require('../pageview');
 
 var pfopVoice = function(key, callback, context) {
     var ctx = context || this;
-    $.get('/qiniu/pfopwxvoice/' + key, function(data) {
+    $.get('/qiniu/pfopwxvoice/' + encodeURIComponent(key), function(data) {
         callback && callback.call(ctx, data.persistentId);
     }).fail(function() {
         alert('上传的录音转码有点问题，请联系小盒子客服~');
