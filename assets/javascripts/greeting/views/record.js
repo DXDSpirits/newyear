@@ -20,6 +20,18 @@ var uploadVoice = function(localId, callback, context) {
     });
 };
 
+
+var translateVoice = function(localId, callback, context) {
+    var ctx = context || this;
+    wx.translateVoice({
+        localId: localId,
+        isShowProgressTips: 1,
+        success: function (res) {
+            callback && callback.call(ctx, res.translateResult);
+        }
+    });
+};
+
 var GreetingModel = Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/greeting/'
 });
@@ -72,7 +84,7 @@ App.Pages.Record = new (PageView.extend({
     },
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
-        this.$('.record-seconds > span').text(0);
+        // this.$('.record-seconds > span').text(0);
         this.recording = false;
         this.voiceReady(localId);
     },
@@ -84,7 +96,8 @@ App.Pages.Record = new (PageView.extend({
         this.greeting.set({
             place_id: selected
         });
-        // this.$('.play-buttons').removeClass('invisible');
+        translateVoice(localId, function(translateResult) {
+        }, this);
     },
     saveRecord: function() {
         uploadVoice(this.localId, function(key, url) {

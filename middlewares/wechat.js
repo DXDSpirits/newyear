@@ -93,7 +93,7 @@ exports.signUrl = function() {
             signature: sig.signature,
             jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'uploadImage', 'previewImage',
                         'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice',
-                        'onVoicePlayEnd', 'uploadVoice', 'downloadVoice']
+                        'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'translateVoice']
         };
         next();
     };

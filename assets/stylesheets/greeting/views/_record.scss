@@ -41,7 +41,7 @@
         margin: 20px auto;
         background-color: $gray-lighter;
         color: $brand-primary-inverse;
-        &:active, &:focus, &:hover {
+        &:active, &:hover {
             background-color: $brand-primary;
             color: $gray-lighter;
         }
@@ -80,7 +80,6 @@
     }
     .btn-play {
         font-size: 40px;
-        margin: 20px auto;
         span + span {
             opacity: 0;
             margin-left: -1.1em;
@@ -91,5 +90,9 @@
             span { opacity: 0; }
             span + span { opacity: 1; }
         }
+    }
+    .translate {
+        @include position(absolute, auto 20px 0 20px);
+        padding: 20px;
     }
 }
