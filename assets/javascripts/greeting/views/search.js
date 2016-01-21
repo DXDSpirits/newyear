@@ -28,6 +28,7 @@ App.Pages.Search = new (PageView.extend({
         // placesList.update();
     },
     showFilters: function() {
+        $itemsWrapper.addClass('hidden');
         var w = $("#view-search").width();
         $("span.search-cancel").removeClass('hidden').css('width', 50);
         $("input#search-input").addClass('no-border-right').css('width', w - 50);
@@ -81,15 +82,37 @@ if (App.places.isEmpty()) {
     _.defer(filterPlaces, App.places);
 }
 
+function piecePlaces(someObject) {
+    var nameList = _.pluck(_.pick(someObject, 'places').places, 'name');
+    return nameList.join(',');
+}
+
 function renderFilterResult(arrayResult) {
     $itemsWrapper.html('');
     _.each(arrayResult, function(wish) {
         var wishID = wish.id;
+        var wishPlayUrl = '/#play/' + wishID;
         var wishOwerName = wish.profile.name;
+        var wishPlace = piecePlaces(wish);
         var wishOwerAvatar = wish.profile.avatar;
-        // console.log(wishID);
-        // console.log(wishOwerAvatar);
-        // console.log(wishOwerName);
+
+        var avatarDiv = '<div class="inline-div inline-div-avatar"><div class="avatar" style="background: url(' +
+                        wishOwerAvatar +
+                        ');background-size: contain;background-repeat: no-repeat;background-position: center;"></div></div>';
+
+        var nameDiv = '<div class="inline-div inline-div-name"><div class="name">' +
+                        wishOwerName +
+                        '</div></div>';
+
+        var placeDiv = '<div class="inline-div inline-div-place"><div class="place">' +
+                        wishPlace +
+                        '</div></div>';
+        var playBtnDiv = '<div class="inline-div inline-div-play"><div class="play"><a href="' +
+                         wishPlayUrl +
+                        '">收听</div></div>';
+
+        var wishItem = '<div class="wish-item">' + avatarDiv + nameDiv + placeDiv + playBtnDiv + '</div>';
+        $itemsWrapper.append(wishItem);
     });
 }
 
@@ -112,4 +135,22 @@ function filterPlaces(result) {
             }
         }
     });
+}
+
+function parseURL() {
+    var hashValue = location.hash;
+    var re = /place=(\d+)/;
+
+    if(!re.test(hashValue)) {
+        return;
+    }else {
+        var matchID = re.exec(hashValue)[1];
+        App.Pages.Search.renderItems(matchID);
+    }
+}
+
+parseURL();
+
+window.onhashchange = function(){
+    parseURL();
 }

@@ -45,7 +45,7 @@
             list-style-type: none;
             padding: 0;
             margin-top: 0;
-            // @include transition(all .25s);
+            @include transition(all .25s);
         }
         li.place-item {
             font-size: 14px;
@@ -57,6 +57,53 @@
         }
         .list-transparent {
             color: transparent;
+        }
+    }
+    .wish-item {
+        display: block;
+        border-bottom: 1px dashed #ddd;
+        @include clearfix;
+        .inline-div {
+            display: inline-block;
+            float: left;
+            border-right: 1px solid rgba(#ddd, 0.8);
+            &:last-child {
+                border-right-width: 0;
+            }
+        }
+        .inline-div-avatar {
+            width: 15%;
+            .avatar {
+                padding-top: 100%;
+                border-radius: 10%;
+            }
+        }
+        .inline-div-name {
+            width: 20%;
+            .name {
+                padding: 10px 0;
+                text-align: center;
+                width: 100%;
+                white-space: nowrap;
+                overflow:hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .inline-div-place {
+            width: 45%;
+            .place {
+                padding: 10px 0;
+                text-align: center;
+                white-space: nowrap;
+                overflow:hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .inline-div-play {
+            width: 20%;
+            .play {
+                padding: 10px 0;
+            }
         }
     }
 
