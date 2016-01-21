@@ -25,15 +25,12 @@ router.get('/uptoken', function(req, res, next) {
     }
 });
 
-router.get('/fetchwxvoice/:serverid', function(req, res, next) {
-    var serverid = req.params.serverid;
-    var key = 'wechat/' + serverid;
-    var token = wechat.getAccessToken();
-    var mediaSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
+
+router.get('/pfopwxvoice/:key', function(req, res, next) {
+    var key = req.params.key;
+    var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
     var responseSuccess = function(persistentId) {
         res.json({
-            key: key,
-            url: 'http://mm.8yinhe.cn/' + key,
             persistentId: persistentId
         });
     };
@@ -42,22 +39,38 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
             detail: msg
         });
     };
-    var pfop = function() {
-        var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
-        qiniu.fop.pfop(bucketName, key, fops, {
-            pipeline: 'wechataudio',
-            notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
-        }, function(error, result, _response) {
-            if (!error && result.persistentId) {
-                responseSuccess(result.persistentId);
-            } else {
-                responseError('Audio pfop failed');
-            }
+    qiniu.fop.pfop(bucketName, key, fops, {
+        pipeline: 'wechataudio',
+        notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
+    }, function(error, result, _response) {
+        if (!error && result.persistentId) {
+            responseSuccess(result.persistentId);
+        } else {
+            responseError('Audio pfop failed');
+        }
+    });
+});
+
+
+router.get('/fetchwxvoice/:serverid', function(req, res, next) {
+    var serverid = req.params.serverid;
+    var key = 'wechat/' + serverid;
+    var token = wechat.getAccessToken();
+    var mediaSrc = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' + token + '&media_id=' + serverid;
+    var responseSuccess = function() {
+        res.json({
+            key: key,
+            url: 'http://mm.8yinhe.cn/' + key
+        });
+    };
+    var responseError = function(msg) {
+        res.status(400).json({
+            detail: msg
         });
     };
     client.fetch(mediaSrc, bucketName, key, function(error, result, _response) {
         if (!error && /audio/.test(result.mimeType)) {
-            pfop();
+            responseSuccess();
         } else {
             responseError('Media fetch failed');
         }

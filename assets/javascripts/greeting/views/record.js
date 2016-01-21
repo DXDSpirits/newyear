@@ -2,11 +2,20 @@
 var App = require('../app');
 var PageView = require('../pageview');
 
+var pfopVoice = function(key, callback, context) {
+    var ctx = context || this;
+    $.get('/qiniu/pfopwxvoice/' + key, function(data) {
+        callback && callback.call(ctx, data.persistentId);
+    }).fail(function() {
+        alert('上传的录音转码有点问题，请联系小盒子客服~');
+    });
+};
+
 var uploadVoice = function(localId, callback, context) {
     var ctx = context || this;
     var saveVoiceToQiniu = function(serverId) {
         $.get('/qiniu/fetchwxvoice/' + serverId, function(data) {
-            callback && callback.call(ctx, data.key, data.url, data.persistentId);
+            callback && callback.call(ctx, data.key, data.url);
         }).fail(function() {
             alert('上传录音有点问题，请检查您的网络设置或者联系小盒子客服~');
         });
@@ -99,35 +108,37 @@ App.Pages.Record = new (PageView.extend({
         } else if (!selected) {
             alert('请选择省市');
         } else {
-            uploadVoice(this.localId, function(key, url, persistentId) {
+            uploadVoice(this.localId, function(key, url) {
                 this.greeting.save({
                     place_id: selected,
                     description: translation,
                     key: key,
-                    url: url,
-                    persistent_id: persistentId
+                    url: url
                 }, {
-                    success: _.bind(this.waiting, this)
+                    success: _.bind(this.waitForPfop, this)
                 });
             }, this);
         }
     },
-    waiting: function() {
+    waitForPfop: function() {
+        pfopVoice(this.greeting.get('key'), function(persistentId) {
+            this.persistentId = persistentId;
+        }, this);
         $('#apploader').removeClass('invisible');
         var self = this;
-        this.greeting.fetch({
-            cache: false,
-            global: false,
-            success: function(model) {
-                $('#apploader').addClass('invisible');
-                App.router.navigate('play/' + model.id);
-            },
-            error: function() {
-                _.delay(function() {
-                    self.waiting();
-                }, 1000);
-            }
-        });
+        (function waiting() {
+            self.greeting.fetch({
+                cache: false,
+                global: false,
+                success: function(model) {
+                    $('#apploader').addClass('invisible');
+                    App.router.navigate('play/' + model.id);
+                },
+                error: function() {
+                    _.delay(waiting, 1000);
+                }
+            });
+        })();
     },
     play: function() {
         if (!this.playing) {
