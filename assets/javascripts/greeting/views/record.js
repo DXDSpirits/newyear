@@ -97,6 +97,7 @@ App.Pages.Record = new (PageView.extend({
             place_id: selected
         });
         translateVoice(localId, function(translateResult) {
+            this.$('.translate').text(translateResult);
         }, this);
     },
     saveRecord: function() {
