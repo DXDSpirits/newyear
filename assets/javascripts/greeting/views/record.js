@@ -20,7 +20,6 @@ var uploadVoice = function(localId, callback, context) {
     });
 };
 
-
 var translateVoice = function(localId, callback, context) {
     var ctx = context || this;
     wx.translateVoice({
@@ -84,27 +83,33 @@ App.Pages.Record = new (PageView.extend({
     },
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
-        // this.$('.record-seconds > span').text(0);
         this.recording = false;
-        this.voiceReady(localId);
-    },
-    voiceReady: function(localId) {
+        translateVoice(localId, function(translateResult) {
+            this.$('input[name="translation"]').val(translateResult);
+        }, this);
         this.localId = localId;
+    },
+    saveRecord: function() {
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        this.greeting.set('place_id', selected);
-        translateVoice(localId, function(translateResult) {
-            this.greeting.set('description', translateResult);
-            this.$('.translate').text(translateResult);
-        }, this);
-    },
-    saveRecord: function() {
-        uploadVoice(this.localId, function(key, url) {
-            this.greeting.save({ key: key, url: url }, {
-                success: _.bind(this.waiting, this)
-            });
-        }, this);
+        var translation = this.$('input[name="translation"]').val();
+        if (!this.localId) {
+            alert('请先录一段语音');
+        } else if (!selected) {
+            alert('请选择省市');
+        } else {
+            uploadVoice(this.localId, function(key, url) {
+                this.greeting.save({
+                    place_id: selected,
+                    description: translation
+                    key: key,
+                    url: url
+                }, {
+                    success: _.bind(this.waiting, this)
+                });
+            }, this);
+        }
     },
     waiting: function() {
         $('#apploader').removeClass('invisible');
