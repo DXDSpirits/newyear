@@ -93,10 +93,9 @@ App.Pages.Record = new (PageView.extend({
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        this.greeting.set({
-            place_id: selected
-        });
+        this.greeting.set('place_id', selected);
         translateVoice(localId, function(translateResult) {
+            this.greeting.set('description', translateResult);
             this.$('.translate').text(translateResult);
         }, this);
     },
