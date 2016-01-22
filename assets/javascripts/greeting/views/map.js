@@ -6,9 +6,10 @@ App.Pages.Map = new (PageView.extend({
 
     map:             null,
     provinces:       null,
-    provinceOverlay: [],
+    provinceBoundary: [],
     cities:          null,
     cityOverlay:     [],
+    currentLevel:    'province',
     events: {
         'click .btn-logout': 'logout'
     },
@@ -110,22 +111,12 @@ App.Pages.Map = new (PageView.extend({
     ///////////////////////////// Set Boundary /////////////////////////////////
 
     //level is in ['province', 'city']
-    boundaryListener: function(data, level, path){
-        var id = data.get("id");
-        if( level == 'province' ){
-            this.map.setViewport(path, {zoomFactor: 1 });    //调整视野
-            this.showOrHideOverlay(false, this.provinceOverlay);
-            //self.map.clearOverlays();
-            this.initMapData(id);
-            this.cities.fetch({reset: true});
-        }
-    },
-
     drawBoundary: function(data, level){
         var boundaries = data.get('boundary');
-        var count = boundaries.length; //行政区域的点有多少个
         var firstPath; var marker;
         var color = this.getRandomColor();
+        var count = boundaries.length; //行政区域的点有多少个
+        this.currentLevel = level;
         for(var i = 0; i < count; i++){
             ////////// 添加覆盖物 //////////
             var polygon = new BMap.Polygon(
@@ -145,13 +136,12 @@ App.Pages.Map = new (PageView.extend({
 
             ///////// Add Listener /////////
             if( level == 'province' ){
-                //var listener = this.boundaryListener(data, level, firstPath);
                 var self = this;
                 [polygon, marker].forEach(function(item){
                     if (item == null) return;
                     item.addEventListener("click", function(){
+                        self.map.clearOverlays();
                         self.map.setViewport(firstPath, {zoomFactor: 1 });    //调整视野
-                        self.showOrHideOverlay(false, self.provinceOverlay);
                         self.initMapData(data.get("id"));
                         self.cities.fetch({reset: true});
                     }, false);
@@ -177,8 +167,8 @@ App.Pages.Map = new (PageView.extend({
             this.provinces = new Province();
             this.provinces.on("reset", function() {
                 this.provinces.forEach(function(province){
+                    this.provinceBoundary.push(province);
                     this.drawBoundary(province, 'province');
-                    this.provinceOverlay = this.map.getOverlays();
                 }, this);
             }, this);
         }else{   // init city data
@@ -205,26 +195,28 @@ App.Pages.Map = new (PageView.extend({
         this.map.addControl(new BMap.NavigationControl(
             {type: BMAP_NAVIGATION_CONTROL_SMALL}
         ));
-        // this.map.setMapStyle({
-        //     styleJson:[
-        //         {
-        //             "featureType": "road",
-        //             "elementType": "all",
-        //             "stylers": {
-        //                 "color": "#ffffff",
-        //                 "visibility": "off"
-        //             }
-        //         },
-        //     ]
-        // });
+        this.map.setMapStyle({
+            styleJson:[
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": {
+                        "color": "#ffffff",
+                        "visibility": "off"
+                    }
+                },
+            ]
+        });
         this.map.enableScrollWheelZoom();
         this.map.centerAndZoom(new BMap.Point(116.403765, 39.914850), 5);
         var self = this;
         this.map.addEventListener("zoomend", function(e){
-            if(this.getZoom() == 5){
-                self.showOrHideOverlay(true, self.provinceOverlay);
-                self.showOrHideOverlay(false, self.cityOverlay);
-                self.cityOverlay = [];
+            if(this.getZoom() == 5 && self.currentLevel == 'city'){
+                self.map.clearOverlays();
+                self.provinceBoundary.forEach(function(province){
+                    self.drawBoundary(province, 'province');
+                });
+                self.currentLevel = 'province';
             }
         });
     },
