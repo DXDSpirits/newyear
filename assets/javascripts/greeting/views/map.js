@@ -205,18 +205,18 @@ App.Pages.Map = new (PageView.extend({
         this.map.addControl(new BMap.NavigationControl(
             {type: BMAP_NAVIGATION_CONTROL_SMALL}
         ));
-        this.map.setMapStyle({
-            styleJson:[
-                {
-                    "featureType": "road",
-                    "elementType": "all",
-                    "stylers": {
-                        "color": "#ffffff",
-                        "visibility": "off"
-                    }
-                },
-            ]
-        });
+        // this.map.setMapStyle({
+        //     styleJson:[
+        //         {
+        //             "featureType": "road",
+        //             "elementType": "all",
+        //             "stylers": {
+        //                 "color": "#ffffff",
+        //                 "visibility": "off"
+        //             }
+        //         },
+        //     ]
+        // });
         this.map.enableScrollWheelZoom();
         this.map.centerAndZoom(new BMap.Point(116.403765, 39.914850), 5);
         var self = this;
