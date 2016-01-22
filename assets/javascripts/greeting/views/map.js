@@ -8,7 +8,6 @@ App.Pages.Map = new (PageView.extend({
     provinces:       null,
     provinceBoundary: [],
     cities:          null,
-    cityOverlay:     [],
     currentLevel:    'province',
     events: {
         'click .btn-logout': 'logout'
@@ -44,7 +43,7 @@ App.Pages.Map = new (PageView.extend({
             border: null,
             backgroundColor: null
         });
-        label.setOffset(new BMap.Size(20,-10));
+        label.setOffset(new BMap.Size(10,-10));
         return label;
     },
 
@@ -67,19 +66,23 @@ App.Pages.Map = new (PageView.extend({
         new Province().fetch({
             success: function(model, provinces){
                 provinces.forEach(function(province){
-                    var province_id = province['id'];
-                    self.postBoundary(province_id, province['name']);
-                    if(province_id == 1 || province_id == 21 || province_id == 800 || province_id == 2254){
-                        return;
+                    var provinceId = province['id'];
+                    var provinceName = province['name'];
+                    self.postBoundary(provinceId, provinceName);
+                    ////////// Get City Boundary /////////
+                    if(provinceId == 1 || provinceId == 21 || provinceId == 800 || provinceId == 2254){
+                        var Cities = Amour.Collection.extend({
+                            "url": "http://greeting.wedfairy.com/api/greetings/place/district/?city=" + (provinceId + 1)
+                        });
+                    }else{
+                        var Cities = Amour.Collection.extend({
+                            "url": "http://greeting.wedfairy.com/api/greetings/place/city/?province=" + provinceId
+                        });
                     }
-                    ////////// post city
-                    var Cities = Amour.Collection.extend({
-                        "url": "http://greeting.wedfairy.com/api/greetings/place/city/?province=" + province_id
-                    });
                     new Cities().fetch({
                         success: function(model, cities){
                             cities.forEach(function(city){
-                                self.postBoundary(city['id'], city['name']);
+                                self.postBoundary(city['id'], provinceName + city['name']);
                             });
                         }
                     });
@@ -124,13 +127,14 @@ App.Pages.Map = new (PageView.extend({
                 {strokeWeight: 2, fillColor: color}
             );
             this.map.addOverlay(polygon);
-
+            if (i == 0){ firstPath = polygon.getPath(); }
             //////// Add Marker //////////
             if (i == 0 && data.get('greetings') > 0){
-                firstPath = polygon.getPath();
                 marker = new BMap.Marker(this.getCenterPoint(firstPath));  // 创建标注
-                var label = this.createLabel(data.get('name') +"(" + data.get("greetings") + ")"); //创建
-                marker.setLabel(label);
+                if(level == 'city'){
+                    var label = this.createLabel(data.get('name') +"(" + data.get("greetings") + ")"); //创建
+                    marker.setLabel(label);
+                }
                 this.map.addOverlay(marker);
             }
 
@@ -150,7 +154,7 @@ App.Pages.Map = new (PageView.extend({
                 [polygon, marker].forEach(function(item){
                     if (item == null) return;
                     item.addEventListener("click", function(){
-                        App.router.navigate("#search?place=" + data.get('id'));
+                        App.router.navigate("#search/place/" + data.get('id'));
                     });
                 });
             }
@@ -172,18 +176,19 @@ App.Pages.Map = new (PageView.extend({
                 }, this);
             }, this);
         }else{   // init city data
-            var Cities = Amour.Collection.extend({
-                "url": "http://greeting.wedfairy.com/api/greetings/place/city/?province=" + id
-            });
+            if(id == 1 || id == 800 || id == 2254 || id == 21){
+                var Cities = Amour.Collection.extend({
+                    "url": "http://greeting.wedfairy.com/api/greetings/place/district/?city=" + (id + 1)
+                });
+            }else{
+                var Cities = Amour.Collection.extend({
+                    "url": "http://greeting.wedfairy.com/api/greetings/place/city/?province=" + id
+                });
+            }
             this.cities = new Cities();
             this.cities.on("reset", function() {
                 this.cities.forEach(function(city){
                     this.drawBoundary(city, 'city');
-                    this.map.getOverlays().forEach(function(overlay){
-                        if(overlay.isVisible()){
-                            this.cityOverlay.push(overlay);
-                        }
-                    }, this);
                 }, this);
             }, this);
         }
