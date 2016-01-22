@@ -22,59 +22,49 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
 
 App.Pages.Search = new (PageView.extend({
     events: {
-        'click li.place-item'     : 'searchShowItems',
+        'click li.place-item'     : 'showItemsSearch',
         'click span.search-cancel': 'cancel',
         'focus input#search-input': 'showFilters',
-        'blur input#search-input' : 'hideFilters',
-        'click .btn-select-search': 'selectShowItems'
+        // 'blur input#search-input' : 'hideFilters',
+        'click .btn-select-search': 'showItemsSelect',
+        'scroll .wishes-loading': 'throttleLoading'
     },
     initPage: function() {
         this.greetings = new GreetingsCollection();
         this.greetingsView = new GreetingsCollectionView({
             collection: this.greetings,
-            el: $("#newyear-wishes-wrapper")
+            el: $(".newyear-wishes-wrapper")
         });
+        this.$('.wishes-loading').on('scroll', _.bind(this.throttleLoading, this));
     },
     leave: function() {},
-    cancel: function(e) {
-        // e.stopPropagation();
-        var w = $("#view-search").width();
-        this.$("span.search-cancel").addClass('hidden');
-        this.$("input#search-input").val('').css('width', w).removeClass('no-border-right');
-        this.$("#place-list-wrapper").addClass('hidden');
+    cancel: function() {
+        this.$(".search-wrapper").removeClass('searching');
     },
     showFilters: function() {
-        this.$("#newyear-wishes-wrapper").addClass('hidden');
-        var w = $("#view-search").width();
-        this.$("span.search-cancel").removeClass('hidden').css('width', 50);
-        this.$("input#search-input").addClass('no-border-right').css('width', w - 50);
-        this.$("#place-list-wrapper").removeClass('hidden');
-        this.$("#places-select-wrapper").addClass('hidden');
+        this.$(".search-wrapper").addClass('searching');
     },
     hideFilters: function() {
         this.cancel();
         this.$("#places-select-wrapper").removeClass('hidden');
-        this.$("#newyear-wishes-wrapper").removeClass('hidden');
+        this.$(".newyear-wishes-wrapper").removeClass('hidden');
     },
-    searchShowItems: function(e) {
+    showItemsSearch: function(e) {
         var itemID = $(e.currentTarget).find('.id').text();
         var itemName = $(e.currentTarget).find('.name').text();
         this.$(".places-select select").val('');
         this.$("input#search-input").val(itemName);
+        this.$(".search-wrapper").removeClass('searching');
         App.router.navigate("search/place/" + itemID, {trigger: true});
     },
-    selectShowItems: function() {
+    showItemsSelect: function() {
         this.$("input#search-input").val('');
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        // console.log(selected);
         App.router.navigate("search/place/" + selected, {trigger: true});
     },
     renderItems: function(id) {
-        this.$("#newyear-wishes-wrapper").removeClass('hidden');
-        $("#place-list-wrapper").addClass('hidden');
-        $("#places-select-wrapper").removeClass('hidden');
         this.greetings.fetch({
             reset: true,
             data: {
@@ -87,11 +77,38 @@ App.Pages.Search = new (PageView.extend({
     render: function() {
         var placeId = this.options.placeId;
         this.renderItems(placeId);
-    }
+    },
+    throttleLoading: _.throttle(function() {
+        console.log(this.fetching);
+        if (this.fetching) return;
+        var scrollTop = this.$('.wishes-loading').scrollTop();
+        console.log(scrollTop);
+        var height = this.$('.wishes-loading').height();
+        if (scrollTop + height >= this.$('.newyear-wishes-wrapper').height()) {
+            this.fetchMore();
+        }
+    }, 200),
+    fetchMore: function() {
+        console.log(22);
+        this.fetching = true;
+        this.$('.loading-more').button('loading');
+        var self = this;
+        var delayReset = function() {
+            self.fetching = false;
+            self.$('.loading-more').button('reset');
+        };
+        _.delay(function() {
+            self.greetings.fetchNext({
+                remove: false,
+                success: delayReset
+            });
+        }, 200);
+    },
 }))({el: $('#view-search')});
 
 var options = {
     valueNames: ['name','id'],
+    page: 20,
     item: '<li class="place-item"><p class="name"></p><p class="id hidden"></p></li>'
 };
 
@@ -112,7 +129,6 @@ function piecePlaces(someObject) {
 
 function filterPlaces(result) {
     placesList.clear();
-    $("#place-list-wrapper").addClass('hidden');
     _.each(result.toJSON(), function(item) {
         // 填充所有省市（直辖市按省级）
         if (item.category == "province") {
@@ -130,21 +146,3 @@ function filterPlaces(result) {
         }
     });
 }
-
-// function parseURL() {
-//     var hashValue = location.hash;
-//     var re = /place=(\d+)/;
-
-//     if(!re.test(hashValue)) {
-//         return;
-//     }else {
-//         var matchID = re.exec(hashValue)[1];
-//         App.Pages.Search.renderItems(matchID);
-//     }
-// }
-
-// parseURL();
-
-// window.onhashchange = function(){
-//     parseURL();
-// }

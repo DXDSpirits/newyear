@@ -1,5 +1,7 @@
 
-#view-search {
+#view-search .search-wrapper{
+    @include transition(all 2s ease-in-out);
+    // overflow: hidden;
     .places-select {
         margin: 30px auto;
         select {
@@ -15,52 +17,53 @@
         overflow: auto;
         position: relative;
         margin: 10px auto;
-        // @include transition(all .5s);
-        .input-wrapper {
-            width: 100%;
-            @include clearfix;
-        }
-        #search-input {
-            float: left;
-            // @include transition(all .25s);
-        }
-        .no-border-right {
-            border-top-right-radius: 0px;
-            border-bottom-right-radius: 0px;
-        }
-        .has-border-right {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-        .search-cancel {
-            text-align: center;
-            height: 34px;
-            padding: 10px;
-            float: right;
-            background-color: #eee;
-            border: #ccc;
-        }
-        ul#place-list-wrapper {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 0;
-            @include transition(all .25s);
-        }
-        li.place-item {
-            font-size: 14px;
-            padding: 8px 20px;
-            border-bottom: 1px solid rgba(#ededed, 0.8);
-        }
-        p.name {
-            margin: 0;
-        }
-        .list-transparent {
-            color: transparent;
-        }
     }
+
+    .input-wrapper {
+        width: 100%;
+        @include clearfix;
+    }
+    #search-input {
+        float: left;
+        // @include transition(all 2s ease-in-out);
+    }
+    .no-border-right {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    .has-border-right {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+    .search-cancel {
+        display: none;
+        text-align: center;
+        height: 34px;
+        padding: 10px;
+        float: right;
+        background-color: #eee;
+        border: #ccc;
+        // @include transition(all 2s ease-in-out);
+    }
+    ul#place-list-wrapper {
+        display: none;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 0;
+        // @include transition(all 2s ease-in-out);
+    }
+    li.place-item {
+        font-size: 14px;
+        padding: 8px 20px;
+        border-bottom: 1px solid rgba(#ededed, 0.8);
+    }
+    p.name {
+        margin: 0;
+    }
+
     .wish-item {
         display: block;
-        border-bottom: 1px dashed #ddd;
+        border-bottom: 1px solid #ddd;
         @include clearfix;
         .inline-div {
             display: inline-block;
@@ -73,8 +76,8 @@
         .inline-div-avatar {
             width: 15%;
             .avatar {
-                width: 34px;
-                padding-top: 34px;
+                width: 39px;
+                padding-top: 39px;
                 margin: 0 auto;
                 background-position: center;
             }
@@ -107,5 +110,29 @@
             }
         }
     }
-
+    &.searching {
+        .search-wrapper {
+            position: relative;
+        }
+        #search-input {
+            padding-right: 34px;
+        }
+        .search-cancel {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        ul#place-list-wrapper {
+            display: block;
+        }
+        .places-select {
+            display: none;
+        }
+    }
+    .wishes-loading {
+        width: 100%;
+        height: 306px;
+        overflow: auto;
+    }
 }

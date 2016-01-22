@@ -11,28 +11,32 @@
         </div>
     </header>
     <div class="wrapper">
-        <div id="places-search">
-            <div class="input-wrapper">
-                <input type="text" id="search-input" class="form-control search" placeholder="搜索省市">
-                <!-- <span class="glyphicon glyphicon-remove form-control-feedback hidden" aria-hidden="true"></span> -->
-                <span class="search-cancel has-border-right glyphicon glyphicon-remove hidden"></span>
+        <div class="search-wrapper">
+            <div id="places-search">
+                <div class="input-wrapper">
+                    <input type="text" id="search-input" class="form-control search" placeholder="搜索省市">
+                    <span class="search-cancel has-border-right glyphicon glyphicon-remove"></span>
+                </div>
+                <ul id="place-list-wrapper" class="list"></ul>
             </div>
-            <ul id="place-list-wrapper" class="list hidden"></ul>
-        </div>
-        <div id="places-select-wrapper">
-            <div class="text-center places-select">
-                <select class="form-control" name="province">
-                    <option value="">省</option>
-                </select>
-                <select class="form-control" name="city">
-                    <option value="">市</option>
-                </select>
-                <select class="form-control" name="district">
-                    <option value="">区</option>
-                </select>
-                <button class="btn btn-primary btn-select-search">确定</button>
+            <div id="places-select-wrapper">
+                <div class="text-center places-select">
+                    <select class="form-control" name="province">
+                        <option value="">省</option>
+                    </select>
+                    <select class="form-control" name="city">
+                        <option value="">市</option>
+                    </select>
+                    <select class="form-control" name="district">
+                        <option value="">区</option>
+                    </select>
+                    <button class="btn btn-primary btn-select-search">确定</button>
+                </div>
+            </div>
+            <div class="wishes-loading">
+                <div class="newyear-wishes-wrapper"></div>
+                <div class="loading-more text-center hidden">正在加载...</div>
             </div>
         </div>
-        <div id="newyear-wishes-wrapper"></div>
     </div>
 </div>
