@@ -26,32 +26,6 @@ router.get('/uptoken', function(req, res, next) {
 });
 
 
-router.get('/pfopwxvoice/:key', function(req, res, next) {
-    var key = req.params.key;
-    var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
-    var responseSuccess = function(persistentId) {
-        res.json({
-            persistentId: persistentId
-        });
-    };
-    var responseError = function(msg) {
-        res.status(400).json({
-            detail: msg
-        });
-    };
-    qiniu.fop.pfop(bucketName, key, fops, {
-        pipeline: 'wechataudio',
-        notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
-    }, function(error, result, _response) {
-        if (!error && result.persistentId) {
-            responseSuccess(result.persistentId);
-        } else {
-            responseError('Audio pfop failed');
-        }
-    });
-});
-
-
 router.get('/fetchwxvoice/:serverid', function(req, res, next) {
     var serverid = req.params.serverid;
     var key = 'wechat/' + serverid;
@@ -76,5 +50,32 @@ router.get('/fetchwxvoice/:serverid', function(req, res, next) {
         }
     });
 });
+
+
+// router.get('/pfopwxvoice/:key', function(req, res, next) {
+//     var key = req.params.key;
+//     var fops = 'avthumb/mp3|saveas/' + qiniu.util.urlsafeBase64Encode(bucketName + ':' + key + '.mp3');
+//     var responseSuccess = function(persistentId) {
+//         res.json({
+//             persistentId: persistentId
+//         });
+//     };
+//     var responseError = function(msg) {
+//         res.status(400).json({
+//             detail: msg
+//         });
+//     };
+//     qiniu.fop.pfop(bucketName, key, fops, {
+//         pipeline: 'wechataudio',
+//         notifyURL: settings.API_ROOT + 'greetings/pfop-notify/'
+//     }, function(error, result, _response) {
+//         if (!error && result.persistentId) {
+//             responseSuccess(result.persistentId);
+//         } else {
+//             responseError('Audio pfop failed');
+//         }
+//     });
+// });
+
 
 module.exports = router;

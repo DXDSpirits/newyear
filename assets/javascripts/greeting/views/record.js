@@ -2,14 +2,14 @@
 var App = require('../app');
 var PageView = require('../pageview');
 
-var pfopVoice = function(key, callback, context) {
-    var ctx = context || this;
-    $.get('/qiniu/pfopwxvoice/' + encodeURIComponent(key), function(data) {
-        callback && callback.call(ctx, data.persistentId);
-    }).fail(function() {
-        alert('上传的录音转码有点问题，请联系小盒子客服~');
-    });
-};
+// var pfopVoice = function(key, callback, context) {
+//     var ctx = context || this;
+//     $.get('/qiniu/pfopwxvoice/' + encodeURIComponent(key), function(data) {
+//         callback && callback.call(ctx, data.persistentId);
+//     }).fail(function() {
+//         alert('上传的录音转码有点问题，请联系小盒子客服~');
+//     });
+// };
 
 var uploadVoice = function(localId, callback, context) {
     var ctx = context || this;
@@ -122,9 +122,9 @@ App.Pages.Record = new (PageView.extend({
     },
     waitForPfop: function() {
         $('#apploader').removeClass('invisible');
-        pfopVoice(this.greeting.get('key'), function(persistentId) {
-            this.persistentId = persistentId;
-        }, this);
+        // pfopVoice(this.greeting.get('key'), function(persistentId) {
+        //     this.persistentId = persistentId;
+        // }, this);
         var self = this;
         (function waiting() {
             self.greeting.fetch({
