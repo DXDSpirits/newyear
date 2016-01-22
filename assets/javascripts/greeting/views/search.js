@@ -2,10 +2,23 @@
 var App = require('../app');
 var PageView = require('../pageview');
 
-var GreetingsCollection = Amour.Model.extend({
+var GreetingsCollection = Amour.Collection.extend({
     url: Amour.APIRoot + 'greetings/greeting/'
 });
-var $itemsWrapper = $(".newyear-wishes-wrapper");
+var GreetingsCollectionView = Amour.CollectionView.extend({
+    ModelView: Amour.ModelView.extend({
+        events: {
+            'click .play': 'play'
+        },
+        className: 'animated fadeIn',
+        template: $("#wish-item-template").html(),
+        initialize: function() {
+        },
+        play: function() {
+            location.href = '/#play/' + this.model.id;
+        },
+    })
+});
 
 App.Pages.Search = new (PageView.extend({
     events: {
@@ -17,41 +30,49 @@ App.Pages.Search = new (PageView.extend({
     },
     initPage: function() {
         this.greetings = new GreetingsCollection();
+        this.greetingsView = new GreetingsCollectionView({
+            collection: this.greetings,
+            el: $("#newyear-wishes-wrapper")
+        });
     },
     leave: function() {},
     cancel: function(e) {
         // e.stopPropagation();
         var w = $("#view-search").width();
-        $("span.search-cancel").addClass('hidden');
-        $("input#search-input").val('').css('width', w).removeClass('no-border-right');
-        $("#place-list-wrapper").addClass('hidden');
-        // placesList.update();
+        this.$("span.search-cancel").addClass('hidden');
+        this.$("input#search-input").val('').css('width', w).removeClass('no-border-right');
+        this.$("#place-list-wrapper").addClass('hidden');
     },
     showFilters: function() {
-        $itemsWrapper.addClass('hidden');
+        this.$("#newyear-wishes-wrapper").addClass('hidden');
         var w = $("#view-search").width();
-        $("span.search-cancel").removeClass('hidden').css('width', 50);
-        $("input#search-input").addClass('no-border-right').css('width', w - 50);
-        $("#place-list-wrapper").removeClass('hidden');
-        $("#places-select-wrapper").addClass('hidden');
+        this.$("span.search-cancel").removeClass('hidden').css('width', 50);
+        this.$("input#search-input").addClass('no-border-right').css('width', w - 50);
+        this.$("#place-list-wrapper").removeClass('hidden');
+        this.$("#places-select-wrapper").addClass('hidden');
     },
     hideFilters: function() {
         this.cancel();
-        $("#places-select-wrapper").removeClass('hidden');
+        this.$("#places-select-wrapper").removeClass('hidden');
+        this.$("#newyear-wishes-wrapper").removeClass('hidden');
     },
     searchShowItems: function(e) {
         var itemID = $(e.currentTarget).find('.id').text();
-        // var itemName = $(e.currentTarget).find('.name').text();
-        // $("input#search-input").val(itemName);
-        this.renderItems(itemID);
+        var itemName = $(e.currentTarget).find('.name').text();
+        this.$(".places-select select").val('');
+        this.$("input#search-input").val(itemName);
+        App.router.navigate("search/place/" + itemID, {trigger: true});
     },
     selectShowItems: function() {
+        this.$("input#search-input").val('');
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        this.renderItems(selected);
+        // console.log(selected);
+        App.router.navigate("search/place/" + selected, {trigger: true});
     },
     renderItems: function(id) {
+        this.$("#newyear-wishes-wrapper").removeClass('hidden');
         $("#place-list-wrapper").addClass('hidden');
         $("#places-select-wrapper").removeClass('hidden');
         this.greetings.fetch({
@@ -60,10 +81,12 @@ App.Pages.Search = new (PageView.extend({
                 place: id,
             },
             success: function(collection) {
-                var wishArray = collection.toJSON().results;
-                renderFilterResult(wishArray);
             }
         });
+    },
+    render: function() {
+        var placeId = this.options.placeId;
+        this.renderItems(placeId);
     }
 }))({el: $('#view-search')});
 
@@ -87,35 +110,6 @@ function piecePlaces(someObject) {
     return nameList.join(',');
 }
 
-function renderFilterResult(arrayResult) {
-    $itemsWrapper.html('');
-    _.each(arrayResult, function(wish) {
-        var wishID = wish.id;
-        var wishPlayUrl = '/#play/' + wishID;
-        var wishOwerName = wish.profile.name;
-        var wishPlace = piecePlaces(wish);
-        var wishOwerAvatar = wish.profile.avatar;
-
-        var avatarDiv = '<div class="inline-div inline-div-avatar"><div class="avatar" style="background: url(' +
-                        wishOwerAvatar +
-                        ');background-size: contain;background-repeat: no-repeat;background-position: center;"></div></div>';
-
-        var nameDiv = '<div class="inline-div inline-div-name"><div class="name">' +
-                        wishOwerName +
-                        '</div></div>';
-
-        var placeDiv = '<div class="inline-div inline-div-place"><div class="place">' +
-                        wishPlace +
-                        '</div></div>';
-        var playBtnDiv = '<div class="inline-div inline-div-play"><div class="play"><a href="' +
-                         wishPlayUrl +
-                        '">收听</div></div>';
-
-        var wishItem = '<div class="wish-item">' + avatarDiv + nameDiv + placeDiv + playBtnDiv + '</div>';
-        $itemsWrapper.append(wishItem);
-    });
-}
-
 function filterPlaces(result) {
     placesList.clear();
     $("#place-list-wrapper").addClass('hidden');
@@ -137,20 +131,20 @@ function filterPlaces(result) {
     });
 }
 
-function parseURL() {
-    var hashValue = location.hash;
-    var re = /place=(\d+)/;
+// function parseURL() {
+//     var hashValue = location.hash;
+//     var re = /place=(\d+)/;
 
-    if(!re.test(hashValue)) {
-        return;
-    }else {
-        var matchID = re.exec(hashValue)[1];
-        App.Pages.Search.renderItems(matchID);
-    }
-}
+//     if(!re.test(hashValue)) {
+//         return;
+//     }else {
+//         var matchID = re.exec(hashValue)[1];
+//         App.Pages.Search.renderItems(matchID);
+//     }
+// }
 
-parseURL();
+// parseURL();
 
-window.onhashchange = function(){
-    parseURL();
-}
+// window.onhashchange = function(){
+//     parseURL();
+// }

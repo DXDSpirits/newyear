@@ -39,7 +39,6 @@
             float: right;
             background-color: #eee;
             border: #ccc;
-            // @include transition(all .25s);
         }
         ul#place-list-wrapper {
             list-style-type: none;
@@ -74,8 +73,10 @@
         .inline-div-avatar {
             width: 15%;
             .avatar {
-                padding-top: 100%;
-                border-radius: 10%;
+                width: 34px;
+                padding-top: 34px;
+                margin: 0 auto;
+                background-position: center;
             }
         }
         .inline-div-name {
