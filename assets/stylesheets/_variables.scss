@@ -3,6 +3,17 @@
     @return url("/assets/images/" + $path);
 }
 
+@font-face {
+    font-family: 'qkbysjt';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/qkbysjt-full-webfont.eot');
+    src: url('../fonts/qkbysjt-full-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/qkbysjt-full-webfont.woff') format('woff'),
+         url('../fonts/qkbysjt-full-webfont.ttf') format('truetype'),
+         url('../fonts/qkbysjt-full-webfont.svg#FZQKBYSJW--GB1-0') format('svg');
+}
+
 //== Colors
 //
 //## Gray and brand colors for use across Bootstrap.
@@ -35,11 +46,11 @@ $link-hover-decoration: none !default;
 
 //== Typography
 // $font-family-sans-serif:  "Helvetica Neue", "Microsoft Yahei", Helvetica, Arial, sans-serif !default;
-$font-family-sans-serif:  Avenir, "Helvetica Neue", Arial, 
+$font-family-sans-serif:  Avenir, "Helvetica Neue", Arial,
                           "Hiragino Sans GB", "Hiragino Sans GB W3",
                           "Microsoft YaHei", "Wenquanyi Micro Hei",
                           sans-serif !default;
-$font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
+$font-family-serif:       qkbysjt, Georgia, "Times New Roman", Times, serif !default;
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 
 $font-family-base:        $font-family-sans-serif !default;

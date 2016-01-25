@@ -1,5 +1,6 @@
 
 #view-record {
+    font-family: $font-family-serif;
     .transition {
         @include transition(all .35s ease-in-out);
     }
