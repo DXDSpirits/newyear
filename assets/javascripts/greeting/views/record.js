@@ -75,6 +75,7 @@ App.Pages.Record = new (PageView.extend({
     startRecord: function() {
         this.$('.record-wrapper').addClass('recording');
         this.$('.record-seconds > span').text(0);
+        // this.$('.modal-record').modal('show');
         this.recording = true;
         (function tick(self) {
             if (!self.recording) return;
@@ -86,6 +87,7 @@ App.Pages.Record = new (PageView.extend({
     },
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
+        // this.$('.modal-record').modal('hide');
         this.recording = false;
         translateVoice(localId, function(translateResult) {
             this.$('input[name="translation"]').val(translateResult);
@@ -101,6 +103,7 @@ App.Pages.Record = new (PageView.extend({
             alert('请先录一段语音');
         } else if (!selected) {
             alert('请选择省市');
+            this.$('.modal-places').modal('show');
         } else {
             uploadVoice(this.localId, function(key, url) {
                 this.greeting.save({
@@ -151,5 +154,6 @@ App.Pages.Record = new (PageView.extend({
     },
     render: function() {
         this.greeting.clear();
+        this.$('.modal-places').modal('show');
     }
 }))({el: $('#view-record')});
