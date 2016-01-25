@@ -68,14 +68,15 @@ $navbar-text-color: #e8eaf1;
         }
     }
     &.__header-navbar__, &.__footer-navbar__ {
-        padding-top: $navbar-height;
+        // padding-top: $navbar-height;
     }
     &.__header-navbar__.__footer-navbar__ {
-        padding-top: 2 * $navbar-height;
+        // padding-top: 2 * $navbar-height;
     }
 }
 
 .header-navbar, .footer-navbar {
+    display: none; // Hide navbars
     background-color: $navbar-bg;
     position: absolute;
     left: 0;
