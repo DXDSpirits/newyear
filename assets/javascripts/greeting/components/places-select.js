@@ -7,39 +7,28 @@ var places = App.places = new (Amour.Collection.extend({
 
 function initPlaceList() {
     var data = places.toJSON();
-    var fillProvinces = function($select, provinces) {
-        var $provinces = _.map(provinces, function(item) {
-            var cities = _.where(data, { category: 'city', parent: item.id });
-            return $('<option></option>').text(item.name).attr('value', item.id).data('cities', cities);
+    var fillPlaces = function($select, places, defaultValue, childCategory) {
+        var $places = _.map(places, function(item) {
+            var children = _.where(data, { category: childCategory, parent: item.id });
+            return $('<option></option>').text(item.name).attr('value', item.id).data('children', children);
         });
-        $select.html($provinces).prepend('<option value="">省</option>');
-    }
-    var fillCities = function($select, cities) {
-        var $cities = _.map(cities, function(item) {
-            var districts = _.where(data, { category: 'district', parent: item.id });
-            return $('<option></option>').text(item.name).attr('value', item.id).data('districts', districts);
-        });
-        $select.html($cities).prepend('<option value="">市</option>');
-    }
-    var fillDistricts = function($select, districts) {
-        var $districts = _.map(districts, function(item) {
-            return $('<option></option>').text(item.name).attr('value', item.id);
-        });
-        $select.html($districts).prepend('<option value="">区</option>');
-    }
+        $select.html($places).prepend($('<option value=""></option>').text(defaultValue));
+    };
     var $view = $('.places-select');
     $view.find('select[name="province"]').on('change', function() {
-        var cities = $(this).find('option:selected').data('cities') || [];
+        var cities = $(this).find('option:selected').data('children') || [];
         var $select = $(this).siblings('select[name="city"]');
-        fillCities($select, cities);
+        fillPlaces($select, cities, '市', 'district');
         $select.trigger('change');
     });
     $view.find('select[name="city"]').on('change', function() {
-        var districts = $(this).find('option:selected').data('districts') || [];
+        var districts = $(this).find('option:selected').data('children') || [];
         var $select = $(this).siblings('select[name="district"]');
-        fillDistricts($select, districts);
+        fillPlaces($select, districts, '区', null);
     });
-    fillProvinces($view.find('select[name="province"]'), _.where(data, {category: 'province'}));
+    var provinces = _.where(data, {category: 'province'});
+    var $select = $view.find('select[name="province"]');
+    fillPlaces($select, provinces, '省', 'city');
 }
 
 places.fetch({
