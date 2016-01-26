@@ -79,17 +79,14 @@ App.Pages.Search = new (PageView.extend({
         this.renderItems(placeId);
     },
     throttleLoading: _.throttle(function() {
-        console.log(this.fetching);
         if (this.fetching) return;
         var scrollTop = this.$('.wishes-loading').scrollTop();
-        console.log(scrollTop);
         var height = this.$('.wishes-loading').height();
         if (scrollTop + height >= this.$('.newyear-wishes-wrapper').height()) {
             this.fetchMore();
         }
     }, 200),
     fetchMore: function() {
-        console.log(22);
         this.fetching = true;
         this.$('.loading-more').button('loading');
         var self = this;
