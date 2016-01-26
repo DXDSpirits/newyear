@@ -1,7 +1,7 @@
 
 var App = require('./app');
-require('./components/places-select');
 require('./router');
+require('./components/autoload');
 require('./views/autoload');
 
 window.App = App;

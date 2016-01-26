@@ -4,7 +4,8 @@
 
 
 @import "greeting/layouts";
-@import "greeting/components";
+@import "greeting/components/apploader";
+@import "greeting/components/globalmenu";
 
 
 @import "greeting/views/prologue";
