@@ -1,3 +1,4 @@
+require('./prologue');
 require('./map');
 require('./search');
 require('./play');

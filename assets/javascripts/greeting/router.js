@@ -13,13 +13,17 @@ App.router = new (Backbone.Router.extend({
     },
     initialize: function(){
         this.route('*path', 'index');
+        this.route('prologue', 'prologue');
         this.route('map', 'map');
         this.route('search(/place/:id)', 'search');
         this.route('play/:id', 'play');
         this.route('record', 'record');
     },
     index: function(path) {
-        this.navigate('map', { replace: true });
+        this.navigate('prologue', { replace: true });
+    },
+    prologue: function() {
+        pageRouter.goTo('Prologue');
     },
     map: function() {
         pageRouter.goTo('Map');
