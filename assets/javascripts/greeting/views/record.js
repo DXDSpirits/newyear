@@ -38,9 +38,9 @@ var GreetingModel = Amour.Model.extend({
 App.Pages.Record = new (PageView.extend({
     events: {
         'click .btn-record': 'record',
+        'hidden.bs.modal .modal-record': 'record',
         'click .btn-play': 'play',
-        'click .btn-save': 'saveRecord',
-        'hidden.bs.modal .modal-record': 'endRecord'
+        'click .btn-save': 'saveRecord'
     },
     initPage: function() {
         this.greeting = new GreetingModel();
