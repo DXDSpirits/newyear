@@ -15,6 +15,7 @@ function initPlaceList() {
         $select.html($places).prepend($('<option value=""></option>').text(defaultValue));
     };
     var $view = $('.places-select');
+    $view.find('select').addClass('needsclick');
     $view.find('select[name="province"]').on('change', function() {
         var cities = $(this).find('option:selected').data('children') || [];
         var $select = $(this).siblings('select[name="city"]');
