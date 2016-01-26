@@ -14,6 +14,7 @@
          url('../fonts/qkbysjt-full-webfont.svg#FZQKBYSJW--GB1-0') format('svg');
 }
 
+
 //== Colors
 //
 //## Gray and brand colors for use across Bootstrap.
@@ -36,6 +37,9 @@ $brand-danger:          #d667cd !default;
 
 
 //== Scaffolding
+//
+//##
+
 $body-bg:               #eee !default;
 $text-color:            $gray-dark !default;
 // $text-color:            #363636 !default;
@@ -45,6 +49,9 @@ $link-hover-decoration: none !default;
 
 
 //== Typography
+//
+//##
+
 // $font-family-sans-serif:  "Helvetica Neue", "Microsoft Yahei", Helvetica, Arial, sans-serif !default;
 $font-family-sans-serif:  Avenir, "Helvetica Neue", Arial,
                           "Hiragino Sans GB", "Hiragino Sans GB W3",
@@ -150,7 +157,6 @@ $input-group-addon-border-color: transparent !default;
 //
 //##
 
-//** Popover body background color
 $popover-bg:                          #fff !default;
 $popover-max-width:                   240px !default;
 $popover-border-color:                transparent !default;
@@ -159,15 +165,45 @@ $popover-fallback-border-color:       transparent !default;
 $popover-arrow-width:                 10px !default;
 $popover-arrow-outer-width:           $popover-arrow-width !default;
 
+
 //== Type
+//
+//##
 $headings-small-color:        inherit !default;
 
 
 //== Panels
+//
+//##
 $panel-bg:                    #f0f0f0 !default;
 
 
+//== Modals
+//
+//##
+
+$modal-inner-padding:         15px !default;
+$modal-title-padding:         15px !default;
+$modal-title-line-height:     $line-height-base !default;
+
+$modal-content-bg:                             #fff !default;
+$modal-content-border-color:                   rgba(0,0,0,.2) !default;
+$modal-content-fallback-border-color:          #999 !default;
+
+$modal-backdrop-bg:           #000 !default;
+$modal-backdrop-opacity:      .7 !default;
+$modal-header-border-color:   #e5e5e5 !default;
+$modal-footer-border-color:   $modal-header-border-color !default;
+
+$modal-lg:                    900px !default;
+$modal-md:                    600px !default;
+$modal-sm:                    300px !default;
+
+
 //== Zindex
+//
+//##
+
 $zindex-max:                  5000;
 $zindex-modalview:            8000;
 $zindex-guide:                9000;

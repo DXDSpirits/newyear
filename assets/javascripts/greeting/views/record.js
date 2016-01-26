@@ -39,7 +39,8 @@ App.Pages.Record = new (PageView.extend({
     events: {
         'click .btn-record': 'record',
         'click .btn-play': 'play',
-        'click .btn-save': 'saveRecord'
+        'click .btn-save': 'saveRecord',
+        'hidden.bs.modal .modal-record': 'endRecord'
     },
     initPage: function() {
         this.greeting = new GreetingModel();
@@ -73,9 +74,10 @@ App.Pages.Record = new (PageView.extend({
         }
     },
     startRecord: function() {
+        this.stopVoice();
         this.$('.record-wrapper').addClass('recording');
         this.$('.record-seconds > span').text(0);
-        // this.$('.modal-record').modal('show');
+        this.$('.modal-record').modal('show');
         this.recording = true;
         (function tick(self) {
             if (!self.recording) return;
@@ -87,7 +89,7 @@ App.Pages.Record = new (PageView.extend({
     },
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
-        // this.$('.modal-record').modal('hide');
+        this.$('.modal-record').modal('hide');
         this.recording = false;
         translateVoice(localId, function(translateResult) {
             this.$('input[name="translation"]').val(translateResult);

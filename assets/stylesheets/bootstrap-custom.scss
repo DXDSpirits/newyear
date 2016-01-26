@@ -7,6 +7,12 @@
 
 //===========================================================================================
 
+.invisible {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Typography */
 
 a:hover, a:focus {
     color: $link-hover-color;
@@ -32,10 +38,7 @@ mark,
     padding: .2em;
 }
 
-.invisible {
-    opacity: 0;
-    visibility: hidden;
-}
+/* Forms */
 
 .form-control {
     @include box-shadow(none);
@@ -83,24 +86,7 @@ input[type="datetime-local"] {
     color: #fff;
 }
 
-// .input-group-addon {
-//     position: relative;
-//     border-width: 1px 0 1px 1px;
-//     border-style: solid;
-//     border-color: $input-border;
-//     &::after {
-//         content: "";
-//         position: absolute;
-//         right: 0;
-//         top: 15%;
-//         height: 70%;
-//         width: 1px;
-//         background-color: rgba($input-border, 0.7);
-//     }
-//     & + .form-control {
-//         border-left: 0;
-//     }
-// }
+/* Buttons */
 
 .btn {
     &, &:hover, &:focus,
@@ -156,6 +142,8 @@ input[type="datetime-local"] {
     }
 }
 
+/* Dropdowns */
+
 .dropdown-menu {
     margin: 0;
     padding: 0;
@@ -185,4 +173,20 @@ input[type="datetime-local"] {
 
 .progress {
     border-radius: 0;
+}
+
+/* Modals */
+
+.modal-footer {
+    text-align: center;
+}
+
+.modal-backdrop.in {
+    @include opacity($modal-backdrop-opacity);
+    @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+        opacity: 1;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        background-color: rgba(#000, 0.2);
+    }
 }
