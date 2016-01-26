@@ -3,7 +3,35 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100px;
-    height: 100px;
-    background-color: red;
+    .lantern, .dropdown-menu {
+        @include transition(transform .5s ease-in-out);
+    }
+    .lantern {
+        width: 40px;
+        height: 130px;
+        border: 0;
+        @include transform(translate3d(10px, -175px, 0));
+        background-position: top right;
+    }
+    &.open .lantern {
+        @include transform(translate3d(58px, 0, 0));
+        background-position: top left;
+    }
+    .dropdown-menu {
+        display: block;
+        position: relative;
+        float: none;
+        top: auto;
+        border: 0;
+        width: 160px;
+        height: 160px;
+        padding: 17px 0;
+        > li > a {
+            height: 42px;
+        }
+        @include transform(translate3d(0, -160px, 0));
+    }
+    &.open .dropdown-menu {
+        @include transform(translate3d(0, 0, 0));
+    }
 }

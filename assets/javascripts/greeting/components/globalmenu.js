@@ -5,8 +5,6 @@ var globalMenu = new (Amour.View.extend({
     events: {
         'click .btn-logout': 'logout'
     },
-    initView: function() {
-        this.$el.text('abc');
-    },
+    initView: function() {},
     render: function() {}
 }))({el: $('#global-menu')});
