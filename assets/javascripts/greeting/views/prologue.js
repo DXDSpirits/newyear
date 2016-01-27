@@ -3,7 +3,9 @@ var App = require('../app');
 var PageView = require('../pageview');
 
 App.Pages.Prologue = new (PageView.extend({
-    events: {},
+    events: {
+        'click': 'gotoMap'
+    },
     initPage: function() {},
     initPlayer: function() {
         var width = $(window).width();
@@ -11,11 +13,22 @@ App.Pages.Prologue = new (PageView.extend({
         var zoom = Math.min(1, $(window).height() / height);
         this.player = initPlayer(width, height, zoom);
     },
+    gotoMap: function() {
+        if (this.animationEnd) App.router.navigate('map');
+    },
     leave: function() {
-        this.player.stop();
+        this.player && this.player.stop();
     },
     render: function() {
-        this.player.play();
+        if (this.player) {
+            this.animationEnd = false;
+            this.player.play();
+            _.delay(_.bind(function() {
+                this.animationEnd = true;
+            }, this), 10000);
+        } else {
+            this.animationEnd = true;
+        }
     }
 }))({el: $('#view-prologue')});
 
