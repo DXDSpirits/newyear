@@ -3,6 +3,10 @@
     position: fixed;
     top: 0;
     left: 0;
+    height: 0;
+    &.open {
+        height: 160px;
+    }
     .lantern, .dropdown-menu {
         @include transition(transform .5s ease-in-out);
     }
@@ -29,6 +33,7 @@
         padding: 17px 0;
         > li > a {
             height: 42px;
+            background-color: transparent;
         }
         @include transform(translate3d(0, -160px, 0));
     }
