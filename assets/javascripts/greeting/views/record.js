@@ -159,5 +159,10 @@ App.Pages.Record = new (PageView.extend({
     render: function() {
         this.greeting.clear();
         this.$('.modal-places').modal('show');
+        App.user.getUserInfo(function() {
+            var profile = App.user.get('profile');
+            Amour.loadBgImage(this.$('.user-avatar'), profile.avatar);
+            this.$('.user-name').text(profile.name);
+        }, null, this)
     }
 }))({el: $('#view-record')});
