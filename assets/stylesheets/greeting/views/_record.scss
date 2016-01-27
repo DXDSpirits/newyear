@@ -1,12 +1,23 @@
 
+$gold: #663500;
+
 @include keyframes(discRotate) {
     from { @include transform(rotate(0deg)); }
     to { @include transform(rotate(360deg)); }
 }
 
+@include keyframes(recording) {
+    from { color: rgba($gold, 1); }
+    50% { color: rgba($gold, 0.3); }
+}
+
 #view-record {
+    color: $gold;
+    .form-control {
+        color: $gold;
+        background-color: transparent;
+    }
     .wrapper {
-        color: #663500;
         padding-top: 50px;
     }
     .btn-deco {
@@ -15,9 +26,20 @@
         padding: 12px;
         margin: 12px auto;
         width: 200px;
-        color: #663500;
-        background: transparent image-url("button-border.png") no-repeat center;
+        color: $gold;
+        background: transparent image-url("buttons/button-border.png") no-repeat center;
         background-size: 100% 100%;
+        &:active, &:hover {
+            opacity: 0.5;
+        }
+    }
+    .btn-img {
+        height: 44px;
+        width: 88px;
+        border-radius: 0;
+        border-color: transparent;
+        background-color: transparent;
+        background-size: contain;
         &:active, &:hover {
             opacity: 0.5;
         }
@@ -30,9 +52,6 @@
         font-size: 16px;
         .translation {
             height: 40px;
-            input {
-                background-color: transparent;
-            }
         }
     }
     /* play */
@@ -68,14 +87,9 @@
             border-radius: 50%;
             position: relative;
         }
-        .btn-play {}
         &.playing {
-            .needle {
-                @include transform(rotate(-10deg));
-            }
-            .disc {
-                @include animation(discRotate 8s linear infinite);
-            }
+            .needle { @include transform(rotate(-10deg)); }
+            .disc { @include animation(discRotate 8s linear infinite); }
         }
     }
     /* record */
@@ -91,24 +105,79 @@
         &.recording {}
     }
     /* record modal */
-    .modal-record {}
-    /* place modal */
-    .places-select {
-        margin: 30px auto;
-        select {
-            display: inline-block;
-            -webkit-appearance: none;
-            width: auto;
-            // min-width: 80px;
-            // max-width: 100px;
-            width: 30%;
+    .modal-record {
+        .microphone {
+            display: block;
+            width: 90px;
+            height: 90px;
+            line-height: 88px;
+            border: 1px solid #a58a63;
+            font-size: 45px;
+            text-align: center;
+            margin: 20px auto;
+            border-radius: 50%;
+            @include animation(recording 2s ease-in-out infinite);
+        }
+        .insp-title {
+            padding: 20px;
+        }
+        .btn-img {
+            width: 100px;
         }
     }
-    .modal {
-        top: 30%;
-        &.fade .modal-dialog {
-            @include transform(translate3d(0, 0, 0));
-            @include transition(none);
+    /* place modal */
+    .modal-places {
+        .places-select {
+            margin: 10px auto;
+            select {
+                display: inline-block;
+                -webkit-appearance: none;
+                width: 30%;
+                border: 1px solid $gold;
+                border-radius: 0;
+                height: 30px;
+            }
         }
+    }
+}
+
+#view-record .modal {
+    top: 50px;
+    .modal-dialog {
+        padding: 20px 30px;
+        position: relative;
+        &::before, &::after {
+            content: "";
+            z-index: 1;
+            @include position(absolute, 0 0 0 0);
+            background: image-url("record/cloud-deco.png") no-repeat;
+            background-size: contain;
+        }
+        &::before {
+            bottom: auto;
+            height: 40px;
+            background-position: left;
+        }
+        &::after {
+            top: auto;
+            height: 50px;
+            background-position: right;
+        }
+    }
+    .modal-content {
+        position: relative;
+        background: image-url("record/modal-bg.jpg") no-repeat center;
+        background-size: cover;
+        border: 0;
+        border-radius: 0;
+        padding: 7px;
+    }
+    .modal-body {
+        border: 1px solid #ad7b3a;
+        padding: 30px 15px;
+    }
+    &.fade .modal-dialog {
+        @include transform(translate3d(0, 0, 0));
+        @include transition(none);
     }
 }

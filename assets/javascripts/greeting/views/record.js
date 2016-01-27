@@ -39,6 +39,7 @@ App.Pages.Record = new (PageView.extend({
     events: {
         'click .btn-record': 'record',
         'hidden.bs.modal .modal-record': 'record',
+        'hidden.bs.modal .modal-places': 'selectPlace',
         'click .btn-play': 'play',
         'click .btn-save': 'saveRecord'
     },
@@ -58,6 +59,16 @@ App.Pages.Record = new (PageView.extend({
     },
     leave: function() {
         this.$('.modal').modal('hide');
+    },
+    selectPlace: function() {
+        var district = this.$('select[name="district"]').val();
+        var city = this.$('select[name="city"]').val();
+        var province = this.$('select[name="province"]').val();
+        var placeName = _.map([province, city, district], function(placeId) {
+            var place = App.places.findWhere({ id: +placeId });
+            return place ? place.get('name') : '';
+        }).join('');
+        this.$('.user-place').text(placeName);
     },
     record: function() {
         if (!this.recording) {
@@ -103,15 +114,15 @@ App.Pages.Record = new (PageView.extend({
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
         var translation = this.$('input[name="translation"]').val();
-        if (!this.localId) {
-            alert('请先录一段语音');
-        } else if (!selected) {
+        if (!selected) {
             alert('请选择省市');
             this.$('.modal-places').modal('show');
+        } else if (!this.localId) {
+            alert('请先录一段语音');
         } else {
             uploadVoice(this.localId, function(key, url) {
                 this.greeting.save({
-                    place_id: selected,
+                    place_id: +selected,
                     description: translation,
                     key: key,
                     url: url

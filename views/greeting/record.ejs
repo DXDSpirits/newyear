@@ -37,8 +37,9 @@
     </div>
     <div class="modal fade modal-places" data-backdrop="static">
         <div class="modal-dialog"><div class="modal-content">
-            <div class="modal-body">
-                <div class="text-center places-select">
+            <div class="modal-body text-center">
+                <p>请选择你的家乡</p>
+                <div class="places-select">
                     <select class="form-control" name="province">
                         <option value="">省</option>
                     </select>
@@ -49,25 +50,23 @@
                         <option value="">区</option>
                     </select>
                 </div>
-            </div>
-            <div class="modal-footer" data-dismiss="modal">
-                <button class="btn btn-primary">确定</button>
+                <button class="btn btn-img img" data-dismiss="modal"
+                    data-bg-src="images/buttons/confirm.jpg"></button>
             </div>
         </div></div>
     </div>
     <div class="modal fade modal-record" data-backdrop="static">
-        <div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-            <div class="modal-header">
-                <h4 class="modal-title text-center">正在录音</h4>
-                <div class="record-seconds text-center"><span>0</span>"</div>
-            </div>
+        <div class="modal-dialog"><div class="modal-content">
             <div class="modal-body">
-                <h1 class="text-center"><span class="fa fa-microphone"></span></h1>
+                <h4 class="record-seconds text-center">正在录音中 <span>0</span>"</h4>
+                <div class="microphone fa fa-microphone"></div>
+                <h4 class="insp-title">新年祝词提示</h4>
                 <div class="inspirations"></div>
+                <div class="text-center">
+                    <button class="btn btn-img img" data-dismiss="modal"
+                        data-bg-src="images/buttons/stop-record.jpg"></button>
+                </div>
             </div>
-            <div class="modal-footer" data-dismiss="modal">
-                <button class="btn btn-primary">完成</button>
-            </div>
-        </div></div></div>
+        </div></div>
     </div>
 </div>
