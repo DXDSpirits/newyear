@@ -1,7 +1,9 @@
 
 #view-search .search-wrapper{
+    width: 100%;
+    height: 100%;
+
     @include transition(all 2s ease-in-out);
-    // overflow: hidden;
     .places-select {
         margin: 30px auto;
         select {
@@ -16,16 +18,21 @@
         width: 100%;
         overflow: auto;
         position: relative;
-        margin: 10px auto;
+        margin: 0px auto 10px;
     }
 
     .input-wrapper {
         width: 100%;
+        padding: 10px;
+        padding-left: 60px;
         @include clearfix;
     }
     #search-input {
         float: left;
         // @include transition(all 2s ease-in-out);
+        @include placeholder {
+            color: #baa480;
+        }
     }
     .no-border-right {
         border-top-right-radius: 0px;
@@ -85,6 +92,7 @@
         .inline-div-name {
             width: 20%;
             .name {
+                color: #ab773f;
                 padding: 10px 0;
                 text-align: center;
                 width: 100%;
@@ -96,6 +104,8 @@
         .inline-div-place {
             width: 45%;
             .place {
+                color: #c3ad8d;
+                background-color: #b9a482;
                 padding: 10px 0;
                 text-align: center;
                 white-space: nowrap;
@@ -120,11 +130,18 @@
         .search-cancel {
             display: block;
             position: absolute;
-            right: 0;
-            top: 0;
+            right: 10px;
+            top: 10px;
         }
         ul#place-list-wrapper {
             display: block;
+            padding-left: 60px;
+            padding-right: 10px;
+            // border: 1px solid;
+            li {
+                border: 1px solid;
+                border-bottom: none;
+            }
         }
         .places-select {
             display: none;
@@ -135,4 +152,8 @@
         height: 306px;
         overflow: auto;
     }
+}
+
+#global-menu {
+    display: none;
 }

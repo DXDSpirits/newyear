@@ -26,7 +26,7 @@ App.Pages.Search = new (PageView.extend({
         'click span.search-cancel': 'cancel',
         'focus input#search-input': 'showFilters',
         // 'blur input#search-input' : 'hideFilters',
-        'click .btn-select-search': 'showItemsSelect',
+        // 'click .places-select option': 'showItemsSelect',
         'scroll .wishes-loading': 'throttleLoading'
     },
     initPage: function() {
@@ -36,6 +36,7 @@ App.Pages.Search = new (PageView.extend({
             el: $(".newyear-wishes-wrapper")
         });
         this.$('.wishes-loading').on('scroll', _.bind(this.throttleLoading, this));
+        this.$('.places-select').on('change', _.bind(this.showItemsSelect, this));
     },
     leave: function() {},
     cancel: function() {
@@ -57,11 +58,12 @@ App.Pages.Search = new (PageView.extend({
         this.$(".search-wrapper").removeClass('searching');
         App.router.navigate("search/place/" + itemID, {trigger: true});
     },
-    showItemsSelect: function() {
-        this.$("input#search-input").val('');
+    showItemsSelect: function(e) {
+        console.log(111);
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
+        console.log(selected);
         App.router.navigate("search/place/" + selected, {trigger: true});
     },
     renderItems: function(id) {
