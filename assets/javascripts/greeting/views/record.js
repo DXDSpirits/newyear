@@ -56,7 +56,9 @@ App.Pages.Record = new (PageView.extend({
             }
         });
     },
-    leave: function() {},
+    leave: function() {
+        this.$('.modal').modal('hide');
+    },
     record: function() {
         if (!this.recording) {
             this.startRecord();
