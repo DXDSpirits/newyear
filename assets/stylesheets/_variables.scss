@@ -57,10 +57,10 @@ $font-family-sans-serif:  Avenir, "Helvetica Neue", Arial,
                           "Hiragino Sans GB", "Hiragino Sans GB W3",
                           "Microsoft YaHei", "Wenquanyi Micro Hei",
                           sans-serif !default;
-$font-family-serif:       qkbysjt, Georgia, "Times New Roman", Times, serif !default;
+$font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 
-$font-family-base:        $font-family-sans-serif !default;
+$font-family-base:        qkbysjt, $font-family-sans-serif !default;
 
 $font-size-base:          14px !default;
 $font-size-large:         18px !default;

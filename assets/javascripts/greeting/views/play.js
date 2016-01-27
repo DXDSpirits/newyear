@@ -3,14 +3,64 @@ var App = require('../app');
 var PageView = require('../pageview');
 require('./search');
 
-var greetings = App.Pages.Search.greetings;
-
 var GreetingModel = Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/greeting/'
 });
 
 var PlayView = Amour.ModelView.extend({
-    template: $("#play-template").html(),
+    events: {
+        'click .disc-wrapper.no-playing': 'playAudio',
+        'click .listen-again': 'playAudio',
+        'click .disc-wrapper.playing': 'stopAudio'
+    },
+    template: App.getTemplate('play'),
+    initModelView: function() {
+        this.audio = new Audio();
+        this.audio.addEventListener('ended', function() {
+            this.stopAudio();
+        }.bind(this), false);
+    },
+    playAudio: function() {
+        this.audio.play();
+        this.$(".disc-wrapper").removeClass('no-playing').addClass('playing');
+    },
+    stopAudio: function() {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
+    },
+    descAnimation: function(w, l) {
+        var self = this;
+        (function tick() {
+            self.$('.description').animate({
+                'margin-left': w - l - 50
+            }, l * 12, "linear");
+            self.$('.description').animate({
+                'margin-left': 50
+            }, l * 12, "linear");
+            self.timer = setTimeout(tick, 100);
+        })();
+    },
+    renderDesc: function() {
+        if (this.timer) clearTimeout(this.timer);
+        var wrapperWidth = this.$el.closest('.wrapper').width() - 80;
+        var descLength = calcTextLength(this.model.get('description'));
+        if (descLength <= wrapperWidth) {
+            this.$('.description').addClass('text-center').css("margin-left", 0);;
+        } else {
+            this.$('.description').removeClass('text-center').css("margin-left", 50);
+            var self = this;
+            _.delay(function() {
+                self.descAnimation(wrapperWidth, descLength);
+            }, 2000);
+        }
+    },
+    render: function() {
+        Amour.ModelView.prototype.render.call(this);
+        this.audio.src = this.model.get('url');
+        this.renderDesc();
+        return this;
+    }
 });
 
 
@@ -25,10 +75,7 @@ function calcTextLength(someArray) {
 
 App.Pages.Play = new (PageView.extend({
     events: {
-        'click .disc-wrapper.no-playing' : 'playAudio',
-        'click .listen-againlisten-again': 'playAudio',
-        'click .disc-wrapper.playing'    : 'pauseAudio',
-        'click .start-record'            : 'startRecord',
+        'click .start-record': 'startRecord'
     },
     initPage: function() {
         this.greeting = new GreetingModel();
@@ -36,73 +83,20 @@ App.Pages.Play = new (PageView.extend({
             el: this.$('.audio-wrapper'),
             model: this.greeting
         });
-        this.audio = new Audio();
-        var self = this;
-        this.audio.addEventListener('ended', function() {
-            self.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
-        }, false);
+    },
+    startRecord: function() {
+        App.router.navigate('record');
     },
     leave: function() {},
     render: function() {
-        var w = $(".wrapper").width();
         var greetingId = this.options.playId;
-        var g = this.greeting.get(greetingId);
-
-        if (g) {
-            this.greeting.set(g.toJSON());
-            var descLength = calcTextLength(this.greeting.description);
-            if(descLength <= w) {
-                this.$('.description').addClass('text-center');
-            }else {
-                this.$('.description').css("margin-left", 50);
-                setTimeout(function() {
-                    descAnimation(w, descLength);
-                }, 2000);
-            }
-
-            this.audio.src = this.greeting.url;
+        var greeting = App.Pages.Search.greetings.get(greetingId);
+        if (greeting) {
+            this.greeting.set(greeting.toJSON());
         } else {
-            var self = this;
+            this.greeting.clear({ silent: true });
             this.greeting.set({ id: greetingId }, { silent: true });
-            this.greeting.fetch({
-                success: function(model) {
-                    var descLength = calcTextLength(model.toJSON().description);
-                    if(descLength <= w) {
-                        this.$('.description').addClass('text-center');
-                    }else {
-                        this.$('.description').css("margin-left", 50);
-                        setTimeout(function() {
-                            descAnimation(w, descLength);
-                        }, 2000);
-                    }
-                    self.audio.src = model.toJSON().url;
-                }
-            });
+            this.greeting.fetch();
         }
-    },
-    playAudio: function() {
-        this.audio.play();
-        this.$(".disc-wrapper").removeClass('no-playing').addClass('playing');
-    },
-    pauseAudio: function() {
-        this.audio.pause();
-        this.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
-    },
-    startRecord: function() {
-        location.href = '/#record';
     }
 }))({el: $('#view-play')});
-
-function descAnimation(w, l) {
-    setInterval(function() {
-        $('.description').animate({
-            'margin-left': w - l - 50
-        }, l * 12, "linear");
-
-        $('.description').animate({
-            'margin-left': 50
-        }, l * 12, "linear");
-    });
-}
-
-
