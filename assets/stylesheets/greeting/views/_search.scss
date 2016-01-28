@@ -2,34 +2,42 @@
 #view-search .search-wrapper{
     width: 100%;
     height: 100%;
-
-    @include transition(all 2s ease-in-out);
+    .form-control {
+        padding: 5px 10px;
+        height: 28px;
+    }
+    #places-select-wrapper {
+        padding: 10px 10px 15px 80px;
+        margin-bottom: 10px;
+        box-shadow: 1px 5px 7px rgba(#000, 0.23);
+    }
     .places-select {
-        margin: 30px auto;
         select {
             display: inline-block;
             -webkit-appearance: none;
-            width: auto;
-            min-width: 80px;
-            max-width: 100px;
+            @include calc(width, "33% - 2px");
         }
+    }
+    .form-control.needsclick {
+        color: #5a3914;
+        background-color: #a88d6d;
+        border: 1px solid #5a3914;
+        height: 24px;
+        padding: 3px 8px;
     }
     #places-search {
         width: 100%;
         overflow: auto;
         position: relative;
-        margin: 0px auto 10px;
     }
 
     .input-wrapper {
         width: 100%;
-        padding: 10px;
-        padding-left: 60px;
+        padding: 20px 10px 0px 80px;
         @include clearfix;
     }
     #search-input {
         float: left;
-        // @include transition(all 2s ease-in-out);
         @include placeholder {
             color: #baa480;
         }
@@ -45,19 +53,17 @@
     .search-cancel {
         display: none;
         text-align: center;
-        height: 34px;
-        padding: 10px;
+        height: 28px;
+        padding: 7px;
         float: right;
-        background-color: #eee;
+        color: #5a3914;
         border: #ccc;
-        // @include transition(all 2s ease-in-out);
     }
     ul#place-list-wrapper {
         display: none;
         list-style-type: none;
         padding: 0;
         margin-top: 0;
-        // @include transition(all 2s ease-in-out);
     }
     li.place-item {
         font-size: 14px;
@@ -68,32 +74,97 @@
         margin: 0;
     }
 
+    .wishes-container {
+        height: 330px;
+        width: 100%;
+        margin: 50px auto 30px;
+        position: relative;
+    }
+    .wishes-bg-bottom {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        margin-left: -145px;
+        width: 290px;
+        height: 290px;
+        background-color: rgba(#fff, 0.4);
+    }
+    .wishes-bg-top {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        margin-left: -135px;
+        width: 270px;
+        height: 310px;
+        background-color: rgba(#fff, 0.4);
+    }
+    .newyear-wishes-wrapper {
+        width: 250px;
+        height: 330px;
+        margin: 0 auto;
+        position: relative;
+        padding: 15px;
+        @include clearfix;
+        &::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            padding-top: 40px;
+            top: -25px;
+            left: 0;
+            background: image-url("search/clouds.png") no-repeat 60%;
+            background-size: contain;
+        }
+    }
+
     .wish-item {
-        display: block;
-        border-bottom: 1px solid #ddd;
+        display: inline-block;
+        float: left;
+        width: 33.333333%;
+        padding: 3% 7%;
         @include clearfix;
         .inline-div {
-            display: inline-block;
-            float: left;
-            border-right: 1px solid rgba(#ddd, 0.8);
-            &:last-child {
-                border-right-width: 0;
-            }
+            width: 100%;
         }
         .inline-div-avatar {
-            width: 15%;
             .avatar {
-                width: 39px;
-                padding-top: 39px;
+                width: 100%;
+                padding-top: 100%;
                 margin: 0 auto;
+                border-radius: 50%;
                 background-position: center;
+                position: relative;
+            }
+            .avatar:after {
+                content: '';
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                bottom: -5px;
+                left: -5px;
+                border: 1px solid #ab773f;
+                border-radius: 50%;
+
+            }
+            i.fa-play{
+                position: absolute;
+                font-size: 26px;
+                width: 26px;
+                height: 26px;
+                top: 50%;
+                left: 50%;
+                margin-left: -13px;
+                margin-top: -13px;
+                text-indent: 5px;
+                color: rgba(#fff, 0.8);
             }
         }
         .inline-div-name {
-            width: 20%;
+            margin-top: 6px;
             .name {
                 color: #ab773f;
-                padding: 10px 0;
+                padding: 2px;
+                font-size: 0.9em;
                 text-align: center;
                 width: 100%;
                 white-space: nowrap;
@@ -102,24 +173,30 @@
             }
         }
         .inline-div-place {
-            width: 45%;
             .place {
                 color: #c3ad8d;
-                background-color: #b9a482;
-                padding: 10px 0;
+                font-size: 0.8em;
+                background-color: rgba(#b9a482, 0.2);
+                padding: 1px;
                 text-align: center;
                 white-space: nowrap;
                 overflow:hidden;
                 text-overflow: ellipsis;
-            }
-        }
-        .inline-div-play {
-            width: 20%;
-            .play {
-                padding: 10px 0;
+                border-radius: 30%;
             }
         }
     }
+    .text-tips {
+        width: 150px;
+        text-align: center;
+        background-color: #977b5d;
+        color: #fff;
+        margin: 30px auto;
+        font-size: 1.1em;
+        padding: 2px;
+        border-radius: 13px;
+    }
+
     &.searching {
         .search-wrapper {
             position: relative;
@@ -131,25 +208,46 @@
             display: block;
             position: absolute;
             right: 10px;
-            top: 10px;
+            top: 20px;
         }
         ul#place-list-wrapper {
             display: block;
-            padding-left: 60px;
+            height: 90%;
+            width: 100%;
+            position: fixed;
+            padding-left: 80px;
             padding-right: 10px;
-            // border: 1px solid;
+            overflow: scroll;
             li {
                 border: 1px solid;
                 border-bottom: none;
             }
         }
-        .places-select {
+        .places-select, #places-select-wrapper, .wishes-container, .text-tips {
             display: none;
         }
     }
-    .wishes-loading {
-        width: 100%;
-        height: 306px;
-        overflow: auto;
+
+    // .wishes-loading {
+    //     width: 100%;
+    //     height: 306px;
+    //     overflow: auto;
+    // }
+    @include keyframes(mySlideOutLeft) {
+        0% {
+            @include transform(translateX(0));
+        }
+        100% {
+            visibility: hidden;
+            @include transform(translateX(-200%));
+        }
     }
+
+
+    .mySlideOutLeft {
+        // -webkit-animation-name: slideOutLeft;
+        // animation-name: slideOutLeft;
+        @include animation(mySlideOutLeft 400ms ease-in-out);
+    }
+
 }

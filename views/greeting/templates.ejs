@@ -4,20 +4,17 @@
 </script>
 
 <script id="wish-item-template" type="text/x-handlebars-template">
-    <div class="wish-item">
         <div class="inline-div inline-div-avatar">
-            <div class="avatar img img-cover" data-bg-src="{{profile.avatar}}"></div>
+            <div class="avatar img img-cover play" data-bg-src="{{profile.avatar}}">
+                <i class="fa fa-play"></i>
+            </div>
         </div>
         <div class="inline-div inline-div-name">
             <div class="name text-center">{{profile.name}}</div>
         </div>
         <div class="inline-div inline-div-place">
-            <div class="place text-center">{{places.0.name}},{{places.1.name}},{{places.2.name}}</div>
+            <div class="place text-center">{{formatted_place}}</div>
         </div>
-        <div class="inline-div inline-div-play">
-            <div class="play text-center">收听</div>
-        </div>
-    </div>
 </script>
 
 <script id="template-play" type="text/x-handlebars-template">

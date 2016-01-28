@@ -10,9 +10,18 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
         events: {
             'click .play': 'play'
         },
-        className: 'animated fadeIn',
+        className: 'wish-item',
         template: $("#wish-item-template").html(),
         initialize: function() {
+        },
+        serializeData: function() {
+            var data = this.model ? this.model.toJSON() : {};
+            var placesList = [];
+            _.each(data.places, function(place) {
+                placesList.push(place.name);
+            });
+            data.formatted_place = _.last(placesList)
+            return data;
         },
         play: function() {
             location.href = '/#play/' + this.model.id;
@@ -27,7 +36,8 @@ App.Pages.Search = new (PageView.extend({
         'focus input#search-input': 'showFilters',
         // 'blur input#search-input' : 'hideFilters',
         // 'click .places-select option': 'showItemsSelect',
-        'scroll .wishes-loading': 'throttleLoading'
+        'scroll .wishes-loading'  : 'throttleLoading',
+        // 'swipeleft #wishes-swiper': 'swipeleft'
     },
     initPage: function() {
         this.greetings = new GreetingsCollection();
@@ -35,8 +45,17 @@ App.Pages.Search = new (PageView.extend({
             collection: this.greetings,
             el: $(".newyear-wishes-wrapper")
         });
-        this.$('.wishes-loading').on('scroll', _.bind(this.throttleLoading, this));
-        this.$('.places-select').on('change', _.bind(this.showItemsSelect, this));
+        // this.$('.wishes-loading').on('scroll', _.bind(this.throttleLoading, this));
+        this.$('.places-select select').on('change', _.bind(this.showItemsSelect, this));
+
+        this.swiper = new Hammer(document.getElementById("wishes-swiper"));
+        this.swiper.on("swipeleft", _.bind(this.fetchNextPage, this));
+    },
+    swipeleft: function() {
+        if(this.greetings.next) {
+            this.$("#wishes-swiper").addClass('animated slideOutLeft');
+            _.delay(this.fetchNextPage, 1000);
+        }
     },
     leave: function() {},
     cancel: function() {
@@ -58,12 +77,11 @@ App.Pages.Search = new (PageView.extend({
         this.$(".search-wrapper").removeClass('searching');
         App.router.navigate("search/place/" + itemID, {trigger: true});
     },
-    showItemsSelect: function(e) {
-        console.log(111);
+    showItemsSelect: function() {
+        this.$("input#search-input").val('');
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        console.log(selected);
         App.router.navigate("search/place/" + selected, {trigger: true});
     },
     renderItems: function(id) {
@@ -80,29 +98,54 @@ App.Pages.Search = new (PageView.extend({
         var placeId = this.options.placeId;
         this.renderItems(placeId);
     },
-    throttleLoading: _.throttle(function() {
-        if (this.fetching) return;
-        var scrollTop = this.$('.wishes-loading').scrollTop();
-        var height = this.$('.wishes-loading').height();
-        if (scrollTop + height >= this.$('.newyear-wishes-wrapper').height()) {
-            this.fetchMore();
-        }
-    }, 200),
-    fetchMore: function() {
-        this.fetching = true;
-        this.$('.loading-more').button('loading');
+    // throttleLoading: _.throttle(function() {
+    //     if (this.fetching) return;
+    //     var scrollTop = this.$('.wishes-loading').scrollTop();
+    //     var height = this.$('.wishes-loading').height();
+    //     if (scrollTop + height >= this.$('.newyear-wishes-wrapper').height()) {
+    //         this.fetchMore();
+    //     }
+    // }, 200),
+    fetchNextPage: function() {
         var self = this;
-        var delayReset = function() {
-            self.fetching = false;
-            self.$('.loading-more').button('reset');
-        };
-        _.delay(function() {
-            self.greetings.fetchNext({
-                remove: false,
-                success: delayReset
-            });
-        }, 200);
+        if(this.greetings.next) {
+            this.$("#wishes-swiper").addClass('animated slideOutLeft');
+            _.delay(function() {
+                self.greetings.fetchNext({
+                    reset: true,
+                    remove: true,
+                    global: false,
+                    success: function() {
+                        self.$("#wishes-swiper").removeClass('animated slideOutLeft').fadeIn();
+                    }
+                });
+            }, 350);
+        }else {
+            this.$(".text-tips").addClass('animated shake').html("没有更多啦");
+            _.delay(function() {
+                self.$(".text-tips").removeClass('animated rubberBand');
+            }, 250);
+        }
     },
+    // fetchMore: function() {
+    //     this.fetching = true;
+    //     this.$('.loading-more').button('loading');
+    //     var self = this;
+    //     var delayReset = function() {
+    //         self.fetching = false;
+    //         self.$('.loading-more').button('reset');
+    //     };
+    //     _.delay(function() {
+    //         self.greetings.fetchNext({
+    //             // remove: false,
+    //             remove: true,
+    //             success: {
+    //                 delayReset;
+    //                 _.delay(this.$("#wishes-swiper").removeClass('animated slideOutLeft').fadeIn(), 3000);
+    //             },
+    //         });
+    //     }, 200);
+    // },
 }))({el: $('#view-search')});
 
 var options = {

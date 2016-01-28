@@ -30,12 +30,20 @@
                     <select class="form-control" name="district">
                         <option value="">区</option>
                     </select>
-                    <button class="btn btn-primary btn-select-search">确定</button>
+                    <!-- <button class="btn btn-primary btn-select-search">确定</button> -->
                 </div>
             </div>
-            <div class="wishes-loading">
-                <div class="newyear-wishes-wrapper"></div>
+            <!-- <div class="wishes-bg-container">
+                <div class="wishes-bg-bottom"></div>
+                <div class="wishes-bg-top"></div>
                 <div class="loading-more text-center hidden">正在加载...</div>
+            </div> -->
+            <div class="wishes-container">
+                <div class="wishes-bg-bottom"></div>
+                <div class="wishes-bg-top"></div>
+                <div class="img img-contain newyear-wishes-wrapper hidden" data-bg-src="images/search/wishes-list-wrapper-bg.jpg"></div>
+                <div id="wishes-swiper" class="img img-contain newyear-wishes-wrapper active" data-bg-src="images/search/wishes-list-wrapper-bg.jpg"></div>
+                <div class="text-tips">滑动卡片换一组</div>
             </div>
         </div>
     </div>
