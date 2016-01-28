@@ -53,7 +53,7 @@ App.Pages.Search = new (PageView.extend({
     },
     swipeleft: function() {
         if(this.greetings.next) {
-            this.$("#wishes-swiper").addClass('animated slideOutLeft');
+            this.$("#wishes-swiper").addClass('animated fadeOutLeft');
             _.delay(this.fetchNextPage, 1000);
         }
     },
@@ -113,14 +113,14 @@ App.Pages.Search = new (PageView.extend({
     fetchNextPage: function() {
         var self = this;
         if(this.greetings.next) {
-            this.$("#wishes-swiper").addClass('animated slideOutLeft');
+            this.$("#wishes-swiper").addClass('animated fadeOutLeft');
             _.delay(function() {
                 self.greetings.fetchNext({
                     reset: true,
                     remove: true,
                     // global: false,
                     success: function() {
-                        self.$("#wishes-swiper").removeClass('animated slideOutLeft').fadeIn();
+                        self.$("#wishes-swiper").removeClass('animated fadeOutLeft').fadeIn();
                     }
                 });
             }, 350);

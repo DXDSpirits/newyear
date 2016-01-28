@@ -2,6 +2,7 @@
 #view-search .search-wrapper{
     width: 100%;
     height: 100%;
+    overflow: auto;
     .form-control {
         padding: 5px 10px;
         height: 28px;
@@ -77,7 +78,7 @@
     .wishes-container {
         height: 330px;
         width: 100%;
-        margin: 50px auto 30px;
+        margin: 30px auto 45px;
         position: relative;
     }
     .wishes-bg-bottom {
@@ -193,7 +194,7 @@
         text-align: center;
         background-color: #977b5d;
         color: #fff;
-        margin: 30px auto;
+        margin: 10px auto;
         font-size: 1.1em;
         padding: 2px;
         border-radius: 13px;
@@ -230,11 +231,6 @@
         }
     }
 
-    // .wishes-loading {
-    //     width: 100%;
-    //     height: 306px;
-    //     overflow: auto;
-    // }
     @include keyframes(mySlideOutLeft) {
         0% {
             @include transform(translateX(0));
@@ -244,12 +240,62 @@
             @include transform(translateX(-200%));
         }
     }
-
-
     .mySlideOutLeft {
         // -webkit-animation-name: slideOutLeft;
         // animation-name: slideOutLeft;
         @include animation(mySlideOutLeft 400ms ease-in-out);
+    }
+
+    @media (min-width: 374px) {
+        .search-wrapper {
+            position: relative;
+            padding-top: 101px;
+        }
+        #places-search {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        #places-select-wrapper {
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: 100%;
+        }
+        .wishes-container {
+            height: 343px;
+            width: 100%;
+            margin: 60px auto 30px;
+            position: absolute;
+            top: 50%;
+            margin-top: -171px;
+        }
+        .wishes-bg-bottom {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            margin-left: -150px;
+            width: 300px;
+            height: 303px;
+        }
+        .wishes-bg-top {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            margin-left: -140px;
+            width: 280px;
+            height: 323px;
+        }
+        .newyear-wishes-wrapper {
+            width: 260px;
+            height: 343px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .text-tips {
+            margin-top: 30px;
+        }
     }
 
 }
