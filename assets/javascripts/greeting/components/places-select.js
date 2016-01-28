@@ -33,7 +33,6 @@ function stylePlaceList() {
 }
 
 function initPlaceList() {
-    stylePlaceList();
     var data = places.toJSON();
     var fillPlaces = function($select, places, defaultValue, childCategory) {
         var $places = _.map(places, function(item) {
@@ -58,6 +57,8 @@ function initPlaceList() {
     var $select = $view.find('select[name="province"]');
     fillPlaces($select, provinces, '省', 'city');
 }
+
+stylePlaceList();
 
 places.fetch({
     reset: true,
