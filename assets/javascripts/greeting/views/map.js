@@ -7,6 +7,8 @@ var ProvinceCollection = Amour.Collection.extend({
 
 App.Pages.Map = new (PageView.extend({
 
+    markers: [],
+
     events: {
         'click .btn-logout': 'logout'
     },
@@ -21,35 +23,53 @@ App.Pages.Map = new (PageView.extend({
     },
 
     leave: function() {
-
+        _.each(this.markers, function(marker){
+            marker.style.animationName = null;
+            marker.style.opacity = 1;
+        });
     },
 
-    render: function() {
-        maxRight = 620 - window.screen.width;  // 620 is map size
-        var map = $('.map');
-        //map.scrollLeft(maxRight); //init state
-
-        this.provinces.fetch({
+    animationShow: function(){
+        var maxRight = 620 - window.screen.width;  // 620 is map size
+        var self = App.Pages.Map;
+        self.provinces.fetch({
             reset: true,
             success: function(provinces){
                 // do somthing animation with map
                 _.each(provinces.models, function(province, index){
                     var id = province.get("id");
-                    var node = $(".province-" + id)[0];
-                    if (node == undefined) return;
-                    node.style.animationDuration = "2s";
-                    node.style.animationFillMode = "forwards";
-                    node.style.animationName = "bounce";
+                    var marker = $(".province-" + id)[0];
+                    if (marker == undefined) return;
+                    marker.style.animationDuration = "2s";
+                    marker.style.animationFillMode = "forwards";
+                    marker.style.animationName = "bounce";
 
                     var leftIndex = [3125, 2942, 3045, 2743, 2296, 2597].indexOf(id);
                     if ( leftIndex >= 0){ // left part
-                        node.style.animationDelay = leftIndex * 150 + "ms";
+                        marker.style.animationDelay = leftIndex * 150 + "ms";
                     }else{
-                        node.style.animationDelay = 6 * 200 + index * 50 + "ms";
+                        marker.style.animationDelay = 6 * 200 + index * 50 + "ms";
                     }
+                    self.markers.push(marker);
                 });
-                map.delay(1000).animate({scrollLeft: maxRight}, 3500, 'swing');
+                $('.map').delay(1000).animate({scrollLeft: maxRight}, 3800, 'swing', self.markerListener);
             }
         });
+    },
+
+    markerListener: function(){
+        $(".marker").on('click', function(event){
+            var className = event.currentTarget.classList[1]; //className like province-800
+            if (className == undefined) return;
+            var provinceID = className.substring(className.indexOf('-') + 1);
+            location.href = "#search/place/" + provinceID;
+        });
+    },
+
+    render: function() {
+        var initAnimation = _.once(this.animationShow);
+        if(this.provinces.length == 0){
+            initAnimation();
+        }
     }
 }))({el: $('#view-map')});

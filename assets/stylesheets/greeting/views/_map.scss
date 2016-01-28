@@ -16,7 +16,7 @@
 
   90% {
     @include transform ( translate3d(0,-4px,0));
- }
+  }
 
   100%{
     @include transform(scale(1));
@@ -31,7 +31,7 @@
 
 #view-map{
   ::-webkit-scrollbar {
-    //display: none;
+    display: none;
   }
   .canvas{
     width: 100%;
@@ -47,19 +47,10 @@
         #map-china-background, #map-background{
           position: relative;
         }
+        .marker{
+          opacity: 0;
+        }
       }
     }
-  }
-}
-
-//$left-provinces: 3125, 2942, 3045, 2743, 2296, 2597
-$collection: 1, 21, 39, 223, 354, 469, 584, 654, 800, 820, 940, 1042, 1165, 1260, 1371, 1529, 1707, 1828, 1965, 2110, 2234, 2254, 2296, 2499, 2597, 2743, 2824, 2942, 3045, 3097, 3125, 3242, 3262, 3271, 3296;
-@for $i from 1 through length($collection) {
-  .province-#{nth($collection, $i)}{
-    opacity: 0;
-    //@include transform(scale(0.5));
-    //transform: scale(0.5);
-    //@include animation(bounce 2s ease #{$i * 80+ 3000}ms);
-    //@include animation-fill-mode(forwards);
   }
 }
