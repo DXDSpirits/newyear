@@ -11,6 +11,9 @@
             @include transform(translate3d(0, 10%, 0));
         }
     }
+    .cover {
+        @include position(absolute, 0 0 0 0);
+    }
 }
 
 #prologue-canvas-wrapper {

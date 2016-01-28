@@ -14,30 +14,46 @@ App.Pages.Prologue = new (PageView.extend({
         this.player = initPlayer(width, height, zoom);
     },
     gotoMap: function() {
-        if (this.animationEnd) App.router.navigate('map');
-    },
-    toggleState: function(state) {
-        if (state == 'animating') {
-            this.$('.btn-start').addClass('invisible');
-            this.animationEnd = false;
-        } else {
-            this.$('.btn-start').removeClass('invisible');
-            this.animationEnd = true;
+        if (this.state == 'end') {
+            App.router.navigate('map');
+        } else if (this.state == 'initial') {
+            this.play();
         }
     },
-    leave: function() {
-        this.player && this.player.stop();
+    toggleState: function(state) {
+        // initial / animating / end
+        this.$('.cover').toggleClass('animated slideOutUp', state != 'initial');
+        this.$('.btn-start').toggleClass('invisible', state != 'end');
+        this.state = state;
     },
-    render: function() {
+    leave: function() {
+        this.player && this.player.pause();
+        _.delay(_.bind(function() {
+            this.toggleState('initial');
+            this.player && this.player.stop();
+        }, this), 350);
+        if (this.timers && this.timers.length > 0) {
+            for (var i=0; i<this.timers.length; i++) {
+                clearTimeout(this.timers[i]);
+            }
+        }
+    },
+    play: function() {
+        this.timers = [];
+        this.toggleState('animating');
         if (this.player) {
-            this.toggleState('animating');
-            this.player.play();
-            _.delay(_.bind(function() {
+            this.timers.push(_.delay(_.bind(function() {
+                this.player.play();
+            }, this), 1000));
+            this.timers.push(_.delay(_.bind(function() {
                 this.toggleState('end');
-            }, this), 10000);
+            }, this), 10000));
         } else {
             this.toggleState('end');
         }
+    },
+    render: function() {
+        this.toggleState('initial');
     }
 }))({el: $('#view-prologue')});
 
