@@ -118,7 +118,7 @@ App.Pages.Search = new (PageView.extend({
                 self.greetings.fetchNext({
                     reset: true,
                     remove: true,
-                    global: false,
+                    // global: false,
                     success: function() {
                         self.$("#wishes-swiper").removeClass('animated slideOutLeft').fadeIn();
                     }
@@ -131,25 +131,6 @@ App.Pages.Search = new (PageView.extend({
             }, 250);
         }
     },
-    // fetchMore: function() {
-    //     this.fetching = true;
-    //     this.$('.loading-more').button('loading');
-    //     var self = this;
-    //     var delayReset = function() {
-    //         self.fetching = false;
-    //         self.$('.loading-more').button('reset');
-    //     };
-    //     _.delay(function() {
-    //         self.greetings.fetchNext({
-    //             // remove: false,
-    //             remove: true,
-    //             success: {
-    //                 delayReset;
-    //                 _.delay(this.$("#wishes-swiper").removeClass('animated slideOutLeft').fadeIn(), 3000);
-    //             },
-    //         });
-    //     }, 200);
-    // },
 }))({el: $('#view-search')});
 
 var options = {
