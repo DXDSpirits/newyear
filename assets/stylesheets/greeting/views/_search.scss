@@ -8,23 +8,23 @@
     }
     #places-select-wrapper {
         padding: 10px 10px 15px 80px;
-        margin-bottom: 10px;
+        // margin-bottom: 10px;
         box-shadow: 1px 5px 7px rgba(#000, 0.23);
     }
-    .places-select {
-        select {
-            display: inline-block;
-            -webkit-appearance: none;
-            @include calc(width, "33% - 2px");
-        }
-    }
-    .form-control.needsclick {
-        color: #5a3914;
-        background-color: #a88d6d;
-        border: 1px solid #5a3914;
-        height: 24px;
-        padding: 3px 8px;
-    }
+    // .places-select {
+    //     select {
+    //         display: inline-block;
+    //         -webkit-appearance: none;
+    //         @include calc(width, "33% - 2px");
+    //     }
+    // }
+    // .form-control.needsclick {
+    //     color: #5a3914;
+    //     background-color: #a88d6d;
+    //     border: 1px solid #5a3914;
+    //     height: 24px;
+    //     padding: 3px 8px;
+    // }
     #places-search {
         width: 100%;
         overflow: auto;
@@ -162,6 +162,7 @@
         .inline-div-name {
             margin-top: 6px;
             .name {
+                height: 18px;
                 color: #ab773f;
                 padding: 2px;
                 font-size: 0.9em;
@@ -174,6 +175,7 @@
         }
         .inline-div-place {
             .place {
+                height: 17px;
                 color: #c3ad8d;
                 font-size: 0.8em;
                 background-color: rgba(#b9a482, 0.2);

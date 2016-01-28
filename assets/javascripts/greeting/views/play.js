@@ -10,8 +10,8 @@ var GreetingModel = Amour.Model.extend({
 var PlayView = Amour.ModelView.extend({
     events: {
         'click .disc-wrapper.no-playing': 'playAudio',
-        'click .listen-again': 'playAudio',
-        'click .disc-wrapper.playing': 'stopAudio'
+        'click .listen-again'           : 'playAudio',
+        'click .disc-wrapper.playing'   : 'stopAudio'
     },
     template: App.getTemplate('play'),
     initModelView: function() {
@@ -87,7 +87,9 @@ App.Pages.Play = new (PageView.extend({
     startRecord: function() {
         App.router.navigate('record');
     },
-    leave: function() {},
+    leave: function() {
+        this.playView.stopAudio();
+    },
     render: function() {
         var greetingId = this.options.playId;
         var greeting = App.Pages.Search.greetings.get(greetingId);

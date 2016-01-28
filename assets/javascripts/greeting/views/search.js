@@ -82,7 +82,11 @@ App.Pages.Search = new (PageView.extend({
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        App.router.navigate("search/place/" + selected, {trigger: true});
+        if(!selected) {
+            App.router.navigate('search');
+        }else {
+            App.router.navigate("search/place/" + selected, {trigger: true});
+        }
     },
     renderItems: function(id) {
         this.greetings.fetch({
