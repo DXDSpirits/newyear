@@ -13,7 +13,7 @@ $gold: #663500;
 
 #view-record {
     color: $gold;
-    .form-control {
+    input {
         color: $gold;
         background-color: transparent;
     }
@@ -129,14 +129,6 @@ $gold: #663500;
     .modal-places {
         .places-select {
             margin: 10px auto;
-            select {
-                display: inline-block;
-                -webkit-appearance: none;
-                width: 30%;
-                border: 1px solid $gold;
-                border-radius: 0;
-                height: 30px;
-            }
         }
     }
 }

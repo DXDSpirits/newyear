@@ -1,0 +1,47 @@
+
+.places-select {
+    $gold: #663500;
+    $gold-light: #a88d6d;
+    position: relative;
+    @include clearfix();
+    .select-wrapper {
+        display: block;
+        position: relative;
+        float: left;
+        width: 30%;
+        & + .select-wrapper {
+            margin-left: 5%;
+        }
+    }
+    [data-toggle="dropdown"] {
+        @include position(absolute, 0 0 0 0);
+    }
+    select {
+        background-color: $gold-light;
+        color: $gold;
+        display: inline-block;
+        -webkit-appearance: none;
+        border: 1px solid $gold;
+        border-radius: 0;
+        height: 30px;
+    }
+    .dropdown-menu {
+        background-color: $gold-light;
+        border: 0;
+        min-width: 100px;
+        max-height: 300px;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        &::after {
+            display: none;
+        }
+        > li > a {
+            padding: 7px 15px;
+            color: $gold;
+            &:focus, &:active, &:hover {
+                background-color: transparent;
+                opacity: 0.5;
+            }
+        }
+    }
+}
