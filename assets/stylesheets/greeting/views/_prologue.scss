@@ -1,5 +1,16 @@
 
 #view-prologue {
+    .btn-start {
+        position: absolute;
+        bottom: 30%;
+        left: 15%;
+        width: 12%;
+        padding-top: 60%;
+        @include transition(all 3s ease-in-out);
+        &.invisible {
+            @include transform(translate3d(0, 10%, 0));
+        }
+    }
 }
 
 #prologue-canvas-wrapper {

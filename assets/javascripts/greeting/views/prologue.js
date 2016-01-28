@@ -16,18 +16,27 @@ App.Pages.Prologue = new (PageView.extend({
     gotoMap: function() {
         if (this.animationEnd) App.router.navigate('map');
     },
+    toggleState: function(state) {
+        if (state == 'animating') {
+            this.$('.btn-start').addClass('invisible');
+            this.animationEnd = false;
+        } else {
+            this.$('.btn-start').removeClass('invisible');
+            this.animationEnd = true;
+        }
+    },
     leave: function() {
         this.player && this.player.stop();
     },
     render: function() {
         if (this.player) {
-            this.animationEnd = false;
+            this.toggleState('animating');
             this.player.play();
             _.delay(_.bind(function() {
-                this.animationEnd = true;
+                this.toggleState('end');
             }, this), 10000);
         } else {
-            this.animationEnd = true;
+            this.toggleState('end');
         }
     }
 }))({el: $('#view-prologue')});
