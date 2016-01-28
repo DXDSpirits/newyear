@@ -224,6 +224,9 @@
             li {
                 border: 1px solid;
                 border-bottom: none;
+                &:last-child {
+                    border-bottom: 1px solid;
+                }
             }
         }
         .places-select, #places-select-wrapper, .wishes-container, .text-tips {
