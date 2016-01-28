@@ -3,11 +3,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 0;
-    &.open {
-        height: 160px;
-    }
+    visibility: hidden;
+    // height: 0;
+    // &.open {
+    //     height: 160px;
+    // }
     .lantern, .dropdown-menu {
+        visibility: visible;
         @include transition(transform .3s ease-in-out);
     }
     .lantern {
