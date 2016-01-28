@@ -64,6 +64,7 @@ $gold: #663500;
         .clouds {
             @include position(absolute, 0 0 auto 0);
             height: 50px;
+            @include animation(pulse 8s linear infinite);
         }
         .controls {
             position: relative;
@@ -131,6 +132,9 @@ $gold: #663500;
         .inspirations {
             padding-left: 20px;
             font-size: 12px;
+            li {
+                margin-bottom: 5px;
+            }
         }
     }
     /* place modal */
@@ -174,7 +178,7 @@ $gold: #663500;
     }
     .modal-body {
         border: 1px solid #ad7b3a;
-        padding: 30px 15px;
+        padding: 20px 15px 10px;
     }
     &.fade .modal-dialog {
         @include transform(translate3d(0, 0, 0));
