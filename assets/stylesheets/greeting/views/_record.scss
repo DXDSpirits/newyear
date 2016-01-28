@@ -32,6 +32,10 @@ $gold: #663500;
         &:active, &:hover {
             opacity: 0.5;
         }
+        .fa {
+            position: relative;
+            left: -10px;
+        }
     }
     .btn-img {
         height: 44px;
@@ -119,10 +123,14 @@ $gold: #663500;
             @include animation(recording 2s ease-in-out infinite);
         }
         .insp-title {
-            padding: 20px;
+            padding: 10px 20px;
         }
         .btn-img {
             width: 100px;
+        }
+        .inspirations {
+            padding-left: 20px;
+            font-size: 12px;
         }
     }
     /* place modal */

@@ -35,32 +35,50 @@ var GreetingModel = Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/greeting/'
 });
 
+var InspirationCollection = Amour.Collection.extend({
+    url: Amour.APIRoot + 'greetings/inspiration/'
+});
+
+var InspirationsView = Amour.CollectionView.extend({
+    ModelView: Amour.ModelView.extend({
+        tagName: 'li',
+        template: '{{text}}'
+    }),
+    initCollectionView: function() {
+        // this.listenTo();
+    }
+});
+
 App.Pages.Record = new (PageView.extend({
     events: {
         'click .btn-record': 'record',
         'hidden.bs.modal .modal-record': 'record',
-        'hidden.bs.modal .modal-places': 'selectPlace',
+        'hidden.bs.modal .modal-places': 'onModalPlacesHidden',
         'click .btn-play': 'play',
         'click .btn-save': 'saveRecord'
     },
     initPage: function() {
         this.greeting = new GreetingModel();
-        var self = this;
+        this.inspirations = new InspirationCollection();
+        this.inspirationsView = new InspirationsView({
+            collection: this.inspirations,
+            el: this.$('.modal-record .inspirations')
+        });
         wx.onVoiceRecordEnd({
-            complete: function(res) {
-                self.endRecord(res.localId);
-            }
+            complete: _.bind(function(res) {
+                this.endRecord(res.localId);
+            }, this)
         });
         wx.onVoicePlayEnd({
-            success: function (res) {
-                self.stopVoice(res.localId);
-            }
+            success: _.bind(function (res) {
+                this.stopVoice(res.localId);
+            }, this)
         });
     },
     leave: function() {
         this.$('.modal').modal('hide');
     },
-    selectPlace: function() {
+    onModalPlacesHidden: function() {
         var district = this.$('select[name="district"]').val();
         var city = this.$('select[name="city"]').val();
         var province = this.$('select[name="province"]').val();
@@ -69,6 +87,10 @@ App.Pages.Record = new (PageView.extend({
             return place ? place.get('name') : '';
         }).join('');
         this.$('.user-place').text(placeName);
+        this.inspirations.fetch({
+            reset: true,
+            data: { place: province }
+        });
     },
     record: function() {
         if (!this.recording) {
