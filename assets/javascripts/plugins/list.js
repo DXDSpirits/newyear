@@ -1035,7 +1035,7 @@ module.exports = function(list) {
     list.handlers.searchStart = list.handlers.searchStart || [];
     list.handlers.searchComplete = list.handlers.searchComplete || [];
 
-    events.bind(getByClass(list.listContainer, list.searchClass), 'keyup', function(e) {
+    events.bind(getByClass(list.listContainer, list.searchClass), 'input', function(e) {
         var target = e.target || e.srcElement, // IE have srcElement
             alreadyCleared = (target.value === "" && !list.searched);
         if (!alreadyCleared) { // If oninput already have resetted the list, do nothing
@@ -1044,12 +1044,12 @@ module.exports = function(list) {
     });
 
     // Used to detect click on HTML5 clear button
-    events.bind(getByClass(list.listContainer, list.searchClass), 'input', function(e) {
-        var target = e.target || e.srcElement;
-        if (target.value === "") {
-            searchMethod('');
-        }
-    });
+    // events.bind(getByClass(list.listContainer, list.searchClass), 'input', function(e) {
+    //     var target = e.target || e.srcElement;
+    //     if (target.value === "") {
+    //         searchMethod('');
+    //     }
+    // });
 
     list.helpers.toString = toString;
     return searchMethod;
