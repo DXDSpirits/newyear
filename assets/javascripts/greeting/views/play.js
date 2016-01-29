@@ -7,6 +7,10 @@ var GreetingModel = Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/greeting/'
 });
 
+var GreetingLikesCollection = Amour.Collection.extend({
+    url: Amour.APIRoot + 'greetings/like/',
+});
+
 var PlayView = Amour.ModelView.extend({
     events: {
         'click .disc-wrapper.no-playing': 'playAudio',
@@ -75,7 +79,8 @@ function calcTextLength(someArray) {
 
 App.Pages.Play = new (PageView.extend({
     events: {
-        'click .start-record': 'startRecord'
+        'click .start-record': 'startRecord',
+        'click .like-wrapper[data-toggle="like"]': 'toggleLike',
     },
     initPage: function() {
         this.greeting = new GreetingModel();
@@ -83,6 +88,57 @@ App.Pages.Play = new (PageView.extend({
             el: this.$('.audio-wrapper'),
             model: this.greeting
         });
+        this.greetingLikes = new GreetingLikesCollection();
+    },
+    toggleLike: function() {
+        var self = this;
+        this.verifyLike(function(liked, likeObj) {
+            if (liked) {
+                likeObj.destroy({
+                    global: false,
+                    wait: true
+                });
+            } else {
+                this.greetingLikes.create({ greeting: this.greeting.get('id') }, {
+                    global: false,
+                    wait: true
+                });
+                ga('send', 'event', 'social', 'like');
+            }
+        }, this);
+    },
+    verifyLike: function(callback, context) {
+        var ctx = context || this;
+        var self = this;
+        App.user.getUserInfo(function() {
+            var likeObj = self.greetingLikes.findWhere({ owner_id: App.user.id });
+            callback && callback.call(ctx, (likeObj != null), likeObj);
+        }, function() {
+            callback && callback.call(ctx, false);
+        });
+    },
+    initLike: function(greetingId) {
+        this.greetingLikes.fetch({
+            reset: true,
+            data: {
+                greeting: greetingId
+            },
+            success: function(collection) {
+            },
+        });
+        var self = this;
+        var fillCount = function() {
+            var fakeCount = +self.greetingLikes.length || 0;
+            self.$('.like-count').html(fakeCount);
+            self.verifyLike(function(liked) {
+                self.$('.like-wrapper[data-toggle="like"]').toggleClass('liked', liked);
+            });
+        };
+        this.greetingLikes.on('reset add destroy', fillCount);
+        fillCount();
+        // $likeBtn.on('click', _.throttle(function() {
+        //     greetingLikes.toggleLike();
+        // }, 3000));
     },
     startRecord: function() {
         App.router.navigate('record');
@@ -100,5 +156,6 @@ App.Pages.Play = new (PageView.extend({
             this.greeting.set({ id: greetingId }, { silent: true });
             this.greeting.fetch();
         }
+        this.initLike(greetingId);
     }
 }))({el: $('#view-play')});
