@@ -51,9 +51,11 @@ var InspirationsView = Amour.CollectionView.extend({
 
 App.Pages.Record = new (PageView.extend({
     events: {
-        'click .btn-record': 'record',
-        'hidden.bs.modal .modal-record': 'record',
+        'click .btn-record': 'startRecord',
+        'hidden.bs.modal .modal-record': 'onModalRecordHidden',
         'hidden.bs.modal .modal-places': 'onModalPlacesHidden',
+        'hidden.bs.modal .modal-translation': 'onModalTranslationHidden',
+        'click .translation': 'onClickTranslation',
         'click .btn-play': 'play',
         'click .btn-save': 'saveRecord'
     },
@@ -77,6 +79,7 @@ App.Pages.Record = new (PageView.extend({
     },
     leave: function() {
         this.$('.modal').modal('hide');
+        this.stopVoice();
     },
     onModalPlacesHidden: function() {
         var district = this.$('select[name="district"]').val();
@@ -92,23 +95,28 @@ App.Pages.Record = new (PageView.extend({
             data: { place: province }
         });
     },
-    record: function() {
-        if (!this.recording) {
-            this.startRecord();
-            wx.startRecord();
+    onModalRecordHidden: function() {
+        if (Amour.isWeixin) {
+            wx.stopRecord({
+                success: function(res) {
+                    this.endRecord(res.localId);
+                }.bind(this)
+            });
         } else {
-            if (Amour.isWeixin) {
-                wx.stopRecord({
-                    success: function(res) {
-                        this.endRecord(res.localId);
-                    }.bind(this)
-                });
-            } else {
-                this.endRecord('');
-            }
+            this.endRecord('');
         }
     },
+    onModalTranslationHidden: function() {
+        var translation = this.$('.modal-translation textarea[name=translation]').val() || '';
+        this.$('.translation').text(translation);
+    },
+    onClickTranslation: function() {
+        this.$('.modal-translation').modal('show');
+        var translation = this.$('.translation').text();
+        this.$('.modal-translation textarea[name=translation]').val(translation);
+    },
     startRecord: function() {
+        if (this.recording) return;
         this.stopVoice();
         this.$('.record-wrapper').addClass('recording');
         this.$('.record-seconds > span').text(0);
@@ -121,13 +129,14 @@ App.Pages.Record = new (PageView.extend({
             });
             _.delay(tick, 1000, self);
         })(this);
+        wx.startRecord();
     },
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
         this.$('.modal-record').modal('hide');
         this.recording = false;
         translateVoice(localId, function(translateResult) {
-            this.$('input[name="translation"]').val(translateResult);
+            this.$('.translation').text(translateResult);
         }, this);
         this.localId = localId;
     },
@@ -135,7 +144,7 @@ App.Pages.Record = new (PageView.extend({
         var selected = this.$('select[name="district"]').val() ||
                        this.$('select[name="city"]').val() ||
                        this.$('select[name="province"]').val();
-        var translation = this.$('input[name="translation"]').val();
+        var translation = this.$('.translation').text();
         if (!selected) {
             alert('请选择省市');
             this.$('.modal-places').modal('show');
@@ -173,7 +182,9 @@ App.Pages.Record = new (PageView.extend({
         })();
     },
     play: function() {
-        if (!this.playing) {
+        if (!this.localId) {
+            alert('请先录一段语音');
+        } else if (!this.playing) {
             wx.playVoice({ localId: this.localId });
             this.playVoice();
         } else {
