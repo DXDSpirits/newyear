@@ -87,17 +87,17 @@
     }
     .like-wrapper {
         padding: 20px 0;
-        @include clearfix;
-        // .like-btn-wrapper, .like-count {
-        //     display: inline-block;
-        //     float: left;
-        // }
+        // @include clearfix;
+        .like-btn-wrapper, .like-count {
+            display: inline-block;
+            // float: left;
+        }
         span.iconfont {
             font-size: 1.1em;
         }
         .like-count {
             height: 14px;
-            padding: 2px 4px;
+            padding: 2px 0;
             font-size: 0.8em;
         }
         .icon-like { display: none; }
@@ -110,7 +110,7 @@
             }
         }
         span.like-count {
-            display: block;
+            // display: block;
             font-size: 10px;
         }
     }

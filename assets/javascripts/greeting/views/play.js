@@ -128,7 +128,7 @@ App.Pages.Play = new (PageView.extend({
         });
         var self = this;
         var fillCount = function() {
-            var fakeCount = +self.greetingLikes.length || 0;
+            var fakeCount = +self.greetingLikes.length || '';
             self.$('.like-count').html(fakeCount);
             self.verifyLike(function(liked) {
                 self.$('.like-wrapper[data-toggle="like"]').toggleClass('liked', liked);
