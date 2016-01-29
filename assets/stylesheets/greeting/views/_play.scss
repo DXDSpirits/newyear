@@ -88,10 +88,10 @@
     .like-wrapper {
         padding: 20px 0;
         @include clearfix;
-        .like-btn-wrapper, .like-count {
-            display: inline-block;
-            float: left;
-        }
+        // .like-btn-wrapper, .like-count {
+        //     display: inline-block;
+        //     float: left;
+        // }
         span.iconfont {
             font-size: 1.1em;
         }
