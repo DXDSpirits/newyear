@@ -931,13 +931,29 @@
                 <path class="st5" d="M297.2,157.3c-5.7,0-10.4,4.6-10.4,10.2c0,5.6,10.4,14.7,10.4,14.7s10.4-9.1,10.4-14.7
                                      C307.6,161.9,303,157.3,297.2,157.3L297.2,157.3L297.2,157.3z"/>
                 <ellipse class="st6" cx="297.2" cy="167.3" rx="7.8" ry="7.8"/>
-                <ellipse class="st9" cx="297.2" cy="167.4" rx="6.6" ry="6.6"/>
+                <ellipse class="st9" cx="297.2" cy="167.4" rx="6.6" ry="6.6">
+                </ellipse>
                 <g>
                     <path class="st5" d="M301,167.2c0,0.2-0.1,0.4-0.3,0.5l0,0l-4.1,2.7c0,0,0,0,0,0l0,0l0,0c-0.1,0.1-0.2,0.1-0.3,0.1
                                          c-0.4,0-0.7-0.3-0.7-0.6l0,0v-5.4l0,0c0-0.3,0.3-0.6,0.7-0.6c0.1,0,0.2,0,0.3,0.1l0,0l0,0c0,0,0,0,0,0l4.1,2.7l0,0
                                          C300.9,166.8,301,167,301,167.2L301,167.2z M301,167.2"/>
                 </g>
+                <g>
+		    <defs>
+			<ellipse id="SVGID_1_" cx="297.2" cy="167.4" rx="6.6" ry="6.6"/>
+		    </defs>
+		    <clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  overflow="visible"/>
+		    </clipPath>
+		    <g clip-path="url(#SVGID_2_)">
+
+			<image overflow="visible" width="720" height="641" xlink:href="../img.jpg"  transform="matrix(0.0229 0 0 0.0229 289.9699 159.6298)">
+			</image>
+		    </g>
+		</g>
+
                 <ellipse class="st8" cx="297.2" cy="185.3" rx="3" ry="1.1"/>
+                <!-- <image xlink:href="http://wx.qlogo.cn/mmopen/LB0icf6Q5rSSvy4EIS0jITQJo4tkELg2VCCVWJtBLvtkyqWomia7AgfzyVAyU3CbJFibQkNicDJWm0ibtYbEpGuaNXYib3ypEVS4Sp/0" x="290.2" y="160.3" height="15.6" width="15.6"/> -->
             </g>
             <g>
                 <path d="M292.5,155.8c-0.4,0-0.7,0-0.9,0.1l-0.3-0.2l2.3-0.1l0-4.2l0-1.1l0.8,0.2c0,0,0.1,0,0,0.1c-0.1,0-0.1,0.1-0.1,0.2l0,1.8

@@ -1,4 +1,3 @@
-
 var App = require('./app');
 
 var pageRouter = App.pageRouter;
@@ -14,7 +13,7 @@ App.router = new (Backbone.Router.extend({
     initialize: function(){
         this.route('*path', 'index');
         this.route('prologue', 'prologue');
-        this.route('map', 'map');
+        this.route('map/(:id)', 'map');
         this.route('search(/place/:id)', 'search');
         this.route('play/:id', 'play');
         this.route('record', 'record');
@@ -25,8 +24,8 @@ App.router = new (Backbone.Router.extend({
     prologue: function() {
         pageRouter.goTo('Prologue');
     },
-    map: function() {
-        pageRouter.goTo('Map');
+    map: function(id) {
+        pageRouter.goTo('Map', {greetingId: id});
     },
     search: function(id) {
         pageRouter.goTo('Search', {placeId: id});
