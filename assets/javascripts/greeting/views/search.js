@@ -89,12 +89,14 @@ App.Pages.Search = new (PageView.extend({
         }
     },
     renderItems: function(id) {
+        var self = this;
         this.greetings.fetch({
             reset: true,
             data: {
                 place: id,
             },
             success: function(collection) {
+                self.$(".text-tips").html("滑动卡片换一组");
             }
         });
     },
