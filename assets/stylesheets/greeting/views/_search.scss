@@ -3,6 +3,10 @@
     width: 100%;
     height: 100%;
     overflow: auto;
+    .places-search {
+        height: 100%;
+        overflow: scroll;
+    }
     .form-control {
         padding: 5px 10px;
         height: 28px;
@@ -204,6 +208,9 @@
         .search-wrapper {
             position: relative;
         }
+        .places-search {
+            height: 100%;
+        }
         #search-input {
             padding-right: 34px;
         }
@@ -215,12 +222,14 @@
         }
         ul#place-list-wrapper {
             display: block;
-            height: 90%;
+            height: auto;
+            // @include calc(max-height, "100% - 110px");
             width: 100%;
-            position: fixed;
+            // position: fixed;
+            position: relative;
             padding-left: 80px;
             padding-right: 10px;
-            overflow: scroll;
+            // overflow: scroll;
             li {
                 border: 1px solid;
                 border-bottom: none;
