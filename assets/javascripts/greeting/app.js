@@ -131,7 +131,7 @@ App.rediectWechatAuth = function() {
  * Ajax events
  */
 
-var timeout = 500;
+var timeout = 1000;
 var timeout_stop, timeout_error;
 
 Amour.ajax.on('start', function() {
@@ -143,7 +143,7 @@ Amour.ajax.on('start', function() {
 Amour.ajax.on('stop', function() {
     timeout_stop = setTimeout(function() {
         $('#apploader').addClass('invisible');
-        timeout = 500;
+        timeout = 1000;
     }, timeout);
 });
 
@@ -151,7 +151,7 @@ Amour.ajax.on('error', function() {
     $('#apploader .ajax-error').removeClass('hidden');
     timeout_error = setTimeout(function() {
         $('#apploader .ajax-error').addClass('hidden');
-    }, (timeout = 1500));
+    }, (timeout = 2000));
 });
 
 Amour.ajax.on('unauthorized', function() {
