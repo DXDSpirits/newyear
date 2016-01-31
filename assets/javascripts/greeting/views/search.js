@@ -30,8 +30,8 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
 
 App.Pages.Search = new(PageView.extend({
     events: {
-        'click li.place-item': 'showItemsSearch',
-        'click span.search-cancel': 'cancel',
+        'click .place-item': 'showItemsSearch',
+        'click span.search-cancel': 'hideFilters',
         'focus input#search-input': 'showFilters',
         'scroll .wishes-loading': 'throttleLoading',
         'change .places-select select': 'showItemsSelect'
@@ -46,23 +46,18 @@ App.Pages.Search = new(PageView.extend({
         this.swiper.on('swipeleft', _.bind(this.fetchNextPage, this));
     },
     leave: function() {},
-    cancel: function() {
-        this.$('.wrapper').removeClass('searching');
-    },
     showFilters: function() {
         this.$('.wrapper').addClass('searching');
     },
     hideFilters: function() {
-        this.cancel();
-        this.$('#places-select-wrapper').removeClass('hidden');
-        this.$('.newyear-wishes-wrapper').removeClass('hidden');
+        this.$('.wrapper').removeClass('searching');
     },
     showItemsSearch: function(e) {
         var itemID = $(e.currentTarget).find('.id').text();
         var itemName = $(e.currentTarget).find('.name').text();
         this.$('.places-select select').val('');
         this.$('input#search-input').val(itemName);
-        this.$('.wrapper').removeClass('searching');
+        this.hideFilters();
         App.router.navigate('search/place/' + itemID, {
             trigger: true
         });
@@ -87,7 +82,7 @@ App.Pages.Search = new(PageView.extend({
             data: {
                 place: id,
             },
-            success: function(collection) {
+            success: function() {
                 self.$('.text-tips').html('滑动卡片换一组');
             }
         });
@@ -124,7 +119,7 @@ App.Pages.Search = new(PageView.extend({
 var options = {
     valueNames: ['name', 'id'],
     page: 20,
-    item: '<li class="place-item"><p class="name"></p><p class="id hidden"></p></li>'
+    item: '<li class="place-item"><div class="name"></div><div class="id hidden"></div></li>'
 };
 
 var placesList = new List('places-search', options);
