@@ -13,7 +13,7 @@ App.router = new (Backbone.Router.extend({
     initialize: function(){
         this.route('*path', 'index');
         this.route('prologue', 'prologue');
-        this.route('map/(:id)', 'map');
+        this.route('map(/:id)', 'map');
         this.route('search(/place/:id)', 'search');
         this.route('play/:id', 'play');
         this.route('record', 'record');
