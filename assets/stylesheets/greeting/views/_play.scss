@@ -3,6 +3,8 @@
     color: #663500;
     .play-wrapper {
         position: relative;
+        overflow: hidden;
+        padding-bottom: 20px;
     }
     .monkey-stamp {
         display: block;
@@ -79,32 +81,29 @@
         }
     }
     .like-wrapper {
-        padding: 20px 0;
-        // @include clearfix;
-        .like-btn-wrapper, .like-count {
+        margin: 20px auto;
+        .like-btn {
+            padding: 6px;
             display: inline-block;
-            // float: left;
         }
-        span.iconfont {
+        .iconfont {
             font-size: 1.1em;
         }
         .like-count {
             height: 14px;
             padding: 2px 0;
-            font-size: 0.8em;
+            font-size: 10px;
         }
-        .icon-like { display: none; }
-        &.liked {
+        .icon-like {
+            display: none;
+        }
+        .like-btn.liked {
             .icon-like { display: inline-block; }
             .icon-like-o { display: none; }
             .iconfont {
                 color: $brand-primary;
                 @include animation(bounceIn 1s);
             }
-        }
-        span.like-count {
-            // display: block;
-            font-size: 10px;
         }
     }
     .frame-text {

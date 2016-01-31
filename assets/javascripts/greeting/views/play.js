@@ -1,4 +1,3 @@
-
 var App = require('../app');
 var PageView = require('../pageview');
 require('./search');
@@ -14,8 +13,8 @@ var GreetingLikesCollection = Amour.Collection.extend({
 var PlayView = Amour.ModelView.extend({
     events: {
         'click .disc-wrapper.no-playing': 'playAudio',
-        'click .listen-again'           : 'playAudio',
-        'click .disc-wrapper.playing'   : 'stopAudio'
+        'click .listen-again': 'playAudio',
+        'click .disc-wrapper.playing': 'stopAudio'
     },
     template: App.getTemplate('play'),
     initModelView: function() {
@@ -23,6 +22,8 @@ var PlayView = Amour.ModelView.extend({
         this.audio.addEventListener('ended', function() {
             this.stopAudio();
         }.bind(this), false);
+        this.greetingLikes = new GreetingLikesCollection();
+        this.listenTo(this.greetingLikes, 'reset add destroy', this.fillLikeCount);
     },
     playAudio: function() {
         this.audio.play();
@@ -32,6 +33,36 @@ var PlayView = Amour.ModelView.extend({
         this.audio.pause();
         this.audio.currentTime = 0;
         this.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
+    },
+    toggleLike: function() {
+        var self = this;
+        this.verifyLike(function(liked, likeObj) {
+            if (liked) {
+                likeObj.destroy({ global: false, wait: true });
+            } else {
+                this.greetingLikes.create({
+                    greeting: this.model.get('id')
+                }, { global: false, wait: true });
+            }
+        }, this);
+    },
+    verifyLike: function(callback, context) {
+        var ctx = context || this;
+        App.user.getUserInfo(function() {
+            var likeObj = this.greetingLikes.findWhere({
+                owner_id: App.user.id
+            });
+            callback && callback.call(ctx, (likeObj != null), likeObj);
+        }, function() {
+            callback && callback.call(ctx, false);
+        }, this);
+    },
+    fillLikeCount: function() {
+        var fakeCount = +this.greetingLikes.length || '';
+        this.$('.like-count').text(fakeCount);
+        this.verifyLike(function(liked) {
+            this.$('.like-btn').toggleClass('liked', liked);
+        });
     },
     descAnimation: function(w, l) {
         var self = this;
@@ -63,24 +94,28 @@ var PlayView = Amour.ModelView.extend({
         Amour.ModelView.prototype.render.call(this);
         this.audio.src = this.model.get('url');
         this.renderDesc();
+        this.greetingLikes.fetch({
+            reset: true,
+            data: { greeting: this.model.id }
+        });
         return this;
     }
 });
 
 
 function calcTextLength(someArray) {
-    if(!someArray) return;
+    if (!someArray) return;
     var count = 0;
-    for (var i=0; i<someArray.length; i++) {
+    for (var i = 0; i < someArray.length; i++) {
         count += someArray[i].charCodeAt() < 256 ? 0.5 : 1;
     }
     return count * 14;
 }
 
-App.Pages.Play = new (PageView.extend({
+App.Pages.Play = new(PageView.extend({
     events: {
         'click .start-record': 'startRecord',
-        'click .like-wrapper[data-toggle="like"]': 'toggleLike',
+        'click .like-btn': 'toggleLike'
     },
     initPage: function() {
         this.greeting = new GreetingModel();
@@ -88,57 +123,6 @@ App.Pages.Play = new (PageView.extend({
             el: this.$('.play-wrapper'),
             model: this.greeting
         });
-        this.greetingLikes = new GreetingLikesCollection();
-    },
-    toggleLike: function() {
-        var self = this;
-        this.verifyLike(function(liked, likeObj) {
-            if (liked) {
-                likeObj.destroy({
-                    global: false,
-                    wait: true
-                });
-            } else {
-                this.greetingLikes.create({ greeting: this.greeting.get('id') }, {
-                    global: false,
-                    wait: true
-                });
-                ga('send', 'event', 'social', 'like');
-            }
-        }, this);
-    },
-    verifyLike: function(callback, context) {
-        var ctx = context || this;
-        var self = this;
-        App.user.getUserInfo(function() {
-            var likeObj = self.greetingLikes.findWhere({ owner_id: App.user.id });
-            callback && callback.call(ctx, (likeObj != null), likeObj);
-        }, function() {
-            callback && callback.call(ctx, false);
-        });
-    },
-    initLike: function(greetingId) {
-        this.greetingLikes.fetch({
-            reset: true,
-            data: {
-                greeting: greetingId
-            },
-            success: function(collection) {
-            },
-        });
-        var self = this;
-        var fillCount = function() {
-            var fakeCount = +self.greetingLikes.length || '';
-            self.$('.like-count').html(fakeCount);
-            self.verifyLike(function(liked) {
-                self.$('.like-wrapper[data-toggle="like"]').toggleClass('liked', liked);
-            });
-        };
-        this.greetingLikes.on('reset add destroy', fillCount);
-        fillCount();
-        // $likeBtn.on('click', _.throttle(function() {
-        //     greetingLikes.toggleLike();
-        // }, 3000));
     },
     startRecord: function() {
         App.router.navigate('record');
@@ -156,6 +140,7 @@ App.Pages.Play = new (PageView.extend({
             this.greeting.set({ id: greetingId }, { silent: true });
             this.greeting.fetch();
         }
-        this.initLike(greetingId);
     }
-}))({el: $('#view-play')});
+}))({
+    el: $('#view-play')
+});
