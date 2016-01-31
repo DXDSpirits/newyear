@@ -10,41 +10,27 @@
             <i class="iconfont icon-check"></i>
         </div>
     </header>
-    <div class="wrapper">
-        <div class="search-wrapper img img-cover" data-bg-src="images/search/bg.jpg">
-            <div id="places-search">
-                <div class="input-wrapper">
-                    <input type="text" id="search-input" class="form-control search" placeholder="可直接输入省市">
-                    <span class="search-cancel has-border-right glyphicon glyphicon-remove"></span>
-                </div>
-                <ul id="place-list-wrapper" class="list"></ul>
+    <div class="wrapper img img-cover" data-bg-src="images/search/bg.jpg">
+        <div id="places-search">
+            <div class="input-wrapper">
+                <input type="text" id="search-input" class="form-control search" placeholder="可直接输入省市">
+                <span class="search-cancel has-border-right glyphicon glyphicon-remove"></span>
             </div>
-            <div id="places-select-wrapper">
-                <div class="text-center places-select">
-                    <select class="form-control" name="province">
-                        <option value="">省</option>
-                    </select>
-                    <select class="form-control" name="city">
-                        <option value="">市</option>
-                    </select>
-                    <select class="form-control" name="district">
-                        <option value="">区</option>
-                    </select>
-                    <!-- <button class="btn btn-primary btn-select-search">确定</button> -->
-                </div>
-            </div>
-            <!-- <div class="wishes-bg-container">
-                <div class="wishes-bg-bottom"></div>
-                <div class="wishes-bg-top"></div>
-                <div class="loading-more text-center hidden">正在加载...</div>
-            </div> -->
-            <div class="wishes-container">
-                <div class="wishes-bg-bottom"></div>
-                <div class="wishes-bg-top"></div>
-                <div class="img img-contain newyear-wishes-wrapper hidden" data-bg-src="images/search/wishes-list-wrapper-bg.jpg"></div>
-                <div id="wishes-swiper" class="img img-contain newyear-wishes-wrapper active" data-bg-src="images/search/wishes-list-wrapper-bg.jpg"></div>
-                <div class="text-tips"></div>
+            <ul id="place-list-wrapper" class="list"></ul>
+        </div>
+        <div id="places-select-wrapper">
+            <div class="text-center places-select">
+                <select class="form-control" name="province"><option value="">省</option></select>
+                <select class="form-control" name="city"><option value="">市</option></select>
+                <select class="form-control" name="district"><option value="">区</option></select>
             </div>
         </div>
+        <div class="wishes-container">
+            <div class="wishes-bg-bottom"></div>
+            <div class="wishes-bg-top"></div>
+            <div id="wishes-swiper" class="img img-contain newyear-wishes-wrapper"
+                data-bg-src="images/search/wishes-list-wrapper-bg.jpg"></div>
+        </div>
+        <div class="text-tips"></div>
     </div>
 </div>

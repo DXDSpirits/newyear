@@ -1,19 +1,18 @@
-
 var App = require('../app');
 var PageView = require('../pageview');
 
 var GreetingsCollection = Amour.Collection.extend({
     url: Amour.APIRoot + 'greetings/greeting/'
 });
+
 var GreetingsCollectionView = Amour.CollectionView.extend({
     ModelView: Amour.ModelView.extend({
         events: {
             'click .play': 'play'
         },
         className: 'wish-item',
-        template: $("#wish-item-template").html(),
-        initialize: function() {
-        },
+        template: $('#wish-item-template').html(),
+        initialize: function() {},
         serializeData: function() {
             var data = this.model ? this.model.toJSON() : {};
             var placesList = [];
@@ -24,68 +23,61 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
             return data;
         },
         play: function() {
-            location.href = '/#play/' + this.model.id;
+            App.router.navigate('play/' + this.model.id);
         },
     })
 });
 
-App.Pages.Search = new (PageView.extend({
+App.Pages.Search = new(PageView.extend({
     events: {
-        'click li.place-item'     : 'showItemsSearch',
+        'click li.place-item': 'showItemsSearch',
         'click span.search-cancel': 'cancel',
         'focus input#search-input': 'showFilters',
-        // 'blur input#search-input' : 'hideFilters',
-        // 'click .places-select option': 'showItemsSelect',
-        'scroll .wishes-loading'  : 'throttleLoading',
-        // 'swipeleft #wishes-swiper': 'swipeleft'
+        'scroll .wishes-loading': 'throttleLoading',
+        'change .places-select select': 'showItemsSelect'
     },
     initPage: function() {
         this.greetings = new GreetingsCollection();
         this.greetingsView = new GreetingsCollectionView({
             collection: this.greetings,
-            el: $(".newyear-wishes-wrapper")
+            el: $('.newyear-wishes-wrapper')
         });
-        // this.$('.wishes-loading').on('scroll', _.bind(this.throttleLoading, this));
-        this.$('.places-select select').on('change', _.bind(this.showItemsSelect, this));
-
-        this.swiper = new Hammer(document.getElementById("wishes-swiper"));
-        this.swiper.on("swipeleft", _.bind(this.fetchNextPage, this));
-    },
-    swipeleft: function() {
-        if(this.greetings.next) {
-            this.$("#wishes-swiper").addClass('animated fadeOutLeft');
-            _.delay(this.fetchNextPage, 1000);
-        }
+        this.swiper = new Hammer(this.$('.wishes-container')[0]);
+        this.swiper.on('swipeleft', _.bind(this.fetchNextPage, this));
     },
     leave: function() {},
     cancel: function() {
-        this.$(".search-wrapper").removeClass('searching');
+        this.$('.wrapper').removeClass('searching');
     },
     showFilters: function() {
-        this.$(".search-wrapper").addClass('searching');
+        this.$('.wrapper').addClass('searching');
     },
     hideFilters: function() {
         this.cancel();
-        this.$("#places-select-wrapper").removeClass('hidden');
-        this.$(".newyear-wishes-wrapper").removeClass('hidden');
+        this.$('#places-select-wrapper').removeClass('hidden');
+        this.$('.newyear-wishes-wrapper').removeClass('hidden');
     },
     showItemsSearch: function(e) {
         var itemID = $(e.currentTarget).find('.id').text();
         var itemName = $(e.currentTarget).find('.name').text();
-        this.$(".places-select select").val('');
-        this.$("input#search-input").val(itemName);
-        this.$(".search-wrapper").removeClass('searching');
-        App.router.navigate("search/place/" + itemID, {trigger: true});
+        this.$('.places-select select').val('');
+        this.$('input#search-input').val(itemName);
+        this.$('.wrapper').removeClass('searching');
+        App.router.navigate('search/place/' + itemID, {
+            trigger: true
+        });
     },
     showItemsSelect: function() {
-        this.$("input#search-input").val('');
+        this.$('input#search-input').val('');
         var selected = this.$('select[name="district"]').val() ||
-                       this.$('select[name="city"]').val() ||
-                       this.$('select[name="province"]').val();
-        if(!selected) {
+            this.$('select[name="city"]').val() ||
+            this.$('select[name="province"]').val();
+        if (!selected) {
             App.router.navigate('search');
-        }else {
-            App.router.navigate("search/place/" + selected, {trigger: true});
+        } else {
+            App.router.navigate('search/place/' + selected, {
+                trigger: true
+            });
         }
     },
     renderItems: function(id) {
@@ -96,7 +88,7 @@ App.Pages.Search = new (PageView.extend({
                 place: id,
             },
             success: function(collection) {
-                self.$(".text-tips").html("滑动卡片换一组");
+                self.$('.text-tips').html('滑动卡片换一组');
             }
         });
     },
@@ -104,39 +96,33 @@ App.Pages.Search = new (PageView.extend({
         var placeId = this.options.placeId;
         this.renderItems(placeId);
     },
-    // throttleLoading: _.throttle(function() {
-    //     if (this.fetching) return;
-    //     var scrollTop = this.$('.wishes-loading').scrollTop();
-    //     var height = this.$('.wishes-loading').height();
-    //     if (scrollTop + height >= this.$('.newyear-wishes-wrapper').height()) {
-    //         this.fetchMore();
-    //     }
-    // }, 200),
     fetchNextPage: function() {
         var self = this;
-        if(this.greetings.next) {
-            this.$("#wishes-swiper").addClass('animated fadeOutLeft');
+        if (this.greetings.next) {
+            var $swiper = this.$('#wishes-swiper').clone().removeAttr('id')
+                .addClass('cardOutLeft')
+                .insertAfter(this.$('#wishes-swiper'));
+            _.delay(function() {
+                $swiper.remove();
+            }, 1000);
             _.delay(function() {
                 self.greetings.fetchNext({
-                    reset: true,
-                    remove: true,
-                    // global: false,
-                    success: function() {
-                        self.$("#wishes-swiper").removeClass('animated fadeOutLeft').fadeIn();
-                    }
+                    reset: true
                 });
             }, 350);
-        }else {
-            this.$(".text-tips").addClass('animated shake').html("没有更多啦");
+        } else {
+            this.$('.text-tips').addClass('animated shake').html('没有更多啦');
             _.delay(function() {
-                self.$(".text-tips").removeClass('animated rubberBand');
+                self.$('.text-tips').removeClass('animated shake');
             }, 250);
         }
     },
-}))({el: $('#view-search')});
+}))({
+    el: $('#view-search')
+});
 
 var options = {
-    valueNames: ['name','id'],
+    valueNames: ['name', 'id'],
     page: 20,
     item: '<li class="place-item"><p class="name"></p><p class="id hidden"></p></li>'
 };
@@ -159,14 +145,13 @@ function piecePlaces(someObject) {
 function filterPlaces(result) {
     placesList.clear();
     _.each(result.toJSON(), function(item) {
-        // 填充所有省市（直辖市按省级）
-        if (item.category == "province") {
+        if (item.category == 'province') {
             placesList.add({
                 name: item.name,
                 id: item.id
             });
-        } else if (item.category == "city") {
-            if(_.indexOf(['北京', '天津', '重庆', '上海'], item.name) < 0) {
+        } else if (item.category == 'city') {
+            if (_.indexOf(['北京', '天津', '重庆', '上海'], item.name) < 0) {
                 placesList.add({
                     name: item.name,
                     id: item.id
