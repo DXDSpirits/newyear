@@ -1,0 +1,16 @@
+
+#global-loading-screen {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: image-url("bg.jpg") no-repeat center;
+    background-size: cover;
+}
+
+#loadingscreen-canvas-wrapper {
+    visibility: visible;
+    @include transition(opacity 1s ease-in-out);
+}
