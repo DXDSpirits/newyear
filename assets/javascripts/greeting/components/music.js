@@ -1,14 +1,21 @@
 
-(function dispatchMusic() {
-    var src = 'http://mm.8yinhe.cn/o_1aacb0b9rns617pi10klgri1ktma.mp3';
-    if (window.Audio) {
-        var audio = new Audio();
-        audio.loop = true;
-        audio.autoplay = true;
-        audio.src = src;
-        var play = function() { audio.play(); };
-        var pause = function() { audio.pause(); }
-        $('body').one('touchstart touchend click', play);
-        _.defer(play);
-    }
-})();
+var App = require('../app');
+
+if (window.Audio) {
+    var audio = new Audio();
+    audio.loop = true;
+    audio.autoplay = true;
+    audio.src = 'http://mm.8yinhe.cn/o_1aacb0b9rns617pi10klgri1ktma.mp3';
+    var play = _.once(function() {
+        audio.play();
+    });
+    $('body').one('touchstart touchend click', play);
+    _.defer(play);
+    App.router.on('route', function(name) {
+        if (name == 'play' || name == 'record') {
+            audio.pause();
+        } else {
+            audio.play();
+        }
+    });
+}
