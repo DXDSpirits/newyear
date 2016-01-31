@@ -3,7 +3,7 @@
     <!-- template content -->
 </script>
 
-<script id="wish-item-template" type="text/x-handlebars-template">
+<script id="template-wish-search-item" type="text/x-handlebars-template">
     <div class="avatar img play" data-bg-src="{{profile.avatar}}">
         <i class="fa fa-play"></i>
     </div>
@@ -16,7 +16,6 @@
 </script>
 
 <script id="template-play" type="text/x-handlebars-template">
-    <div class="play-wrapper"></div>
     <div class="monkey-stamp"></div>
     <div class="title">
         <p class="wish-title">来自『{{places.0.name}}·{{profile.name}}』的乡音祝福</p>
@@ -25,6 +24,7 @@
         </div>
     </div>
     <div class="disc-wrapper no-playing">
+        <div class="clouds img img-contain" data-bg-src="images/clouds.png"></div>
         <div class="disc-bg img img-contain" data-bg-src="/images/play/disc.png">
             <div class="wish-avatar img img-cover" data-bg-src="{{profile.avatar}}"></div>
         </div>

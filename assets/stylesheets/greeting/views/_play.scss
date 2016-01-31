@@ -1,20 +1,8 @@
 
 #view-play {
     color: #663500;
-    .audio-wrapper {
-        margin: 0px auto;
-        height: 100%;
-        position: relative;
-    }
     .play-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: image-url("play/play-bg.jpg") no-repeat center top;
-        background-size: cover;
-        z-index: -9;
+        position: relative;
     }
     .monkey-stamp {
         display: block;
@@ -46,6 +34,11 @@
         position: relative;
         padding-top: 50px;
         margin-top: 7%;
+        .clouds {
+            @include position(absolute, 0 0 auto 0);
+            height: 50px;
+            @include animation(pulse 8s linear infinite);
+        }
         .needle {
             position: absolute;
             top: 0;

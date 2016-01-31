@@ -85,7 +85,7 @@ App.Pages.Play = new (PageView.extend({
     initPage: function() {
         this.greeting = new GreetingModel();
         this.playView = new PlayView({
-            el: this.$('.audio-wrapper'),
+            el: this.$('.play-wrapper'),
             model: this.greeting
         });
         this.greetingLikes = new GreetingLikesCollection();

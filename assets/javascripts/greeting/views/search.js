@@ -11,7 +11,7 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
             'click .play': 'play'
         },
         className: 'wish-item',
-        template: $('#wish-item-template').html(),
+        template: App.getTemplate('wish-search-item'),
         initialize: function() {},
         serializeData: function() {
             var data = this.model ? this.model.toJSON() : {};
