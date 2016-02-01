@@ -28,11 +28,13 @@ var PlayView = Amour.ModelView.extend({
     },
     playAudio: function() {
         this.audio.play();
+        this.$(".wish-avatar").html('<i class="fa fa-pause"></i>');
         this.$(".disc-wrapper").removeClass('no-playing').addClass('playing');
     },
     stopAudio: function() {
         this.audio.pause();
         this.audio.currentTime = 0;
+        this.$(".wish-avatar").html('<i class="fa fa-play"></i>');
         this.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
     },
     toggleLike: function() {
