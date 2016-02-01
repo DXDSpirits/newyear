@@ -59,6 +59,13 @@ function initPlaceList() {
     fillPlaces($select, provinces, '全国', 'city');
 }
 
+$.fn.selectPlace = function(id) {
+    return this.each(function() {
+        var $this = $(this);
+        console.log(id);
+    });
+};
+
 stylePlaceList();
 
 places.reset(PLACE_DATA);
