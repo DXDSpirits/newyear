@@ -14,7 +14,8 @@ var PlayView = Amour.ModelView.extend({
     events: {
         'click .disc-wrapper.no-playing': 'playAudio',
         'click .listen-again': 'playAudio',
-        'click .disc-wrapper.playing': 'stopAudio'
+        'click .disc-wrapper.playing': 'stopAudio',
+        'click .like-btn': 'toggleLike'
     },
     template: App.getTemplate('play'),
     initModelView: function() {
@@ -115,7 +116,6 @@ function calcTextLength(someArray) {
 App.Pages.Play = new(PageView.extend({
     events: {
         'click .start-record': 'startRecord',
-        'click .like-btn': 'toggleLike'
     },
     initPage: function() {
         this.greeting = new GreetingModel();
