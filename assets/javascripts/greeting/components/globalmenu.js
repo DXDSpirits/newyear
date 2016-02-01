@@ -15,7 +15,7 @@ var globalMenu = new (Amour.View.extend({
 App.router.on('route', function(name) {
     if (name != 'index') {
         globalMenu.$el.toggleClass('hidden', name == 'prologue');
-        globalMenu.$('.monkey').toggleClass('invisible', name == 'search' || name == 'prologue');
+        globalMenu.$('.monkey').toggleClass('hidden', name == 'search' || name == 'prologue');
         if (globalMenu.$el.hasClass('open')) {
             globalMenu.$('.lantern').dropdown('toggle');
         }
