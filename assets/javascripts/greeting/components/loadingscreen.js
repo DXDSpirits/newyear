@@ -30,6 +30,15 @@
         $loadingscreen.animate({opacity: 0}, 1500, function() {
             $(this).css({opacity: 1}).addClass('hidden');
             player.stop();
+            Amour.LoadingScreenFinished = true;
+            Amour.trigger('LoadingScreenFinished');
+            /* in render method, check
+               if (Amour.LoadingScreenFinished) {
+                    do();
+               } else {
+                    Amour.on('LoadingScreenFinished', do);
+               }
+            */
         });
     };
 
