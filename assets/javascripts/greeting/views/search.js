@@ -108,6 +108,7 @@ App.Pages.Search = new(PageView.extend({
     render: function() {
         this.placeId = this.options.placeId;
         // this.fillSelector(App.places.toJSON(), this.placeId);
+        this.$('.places-select').selectPlace(this.placeId);
         this.renderItems(this.placeId);
     },
     fetchNextPage: function() {
