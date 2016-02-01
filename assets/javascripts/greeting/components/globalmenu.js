@@ -2,8 +2,13 @@
 var App = require('../app');
 
 var globalMenu = new (Amour.View.extend({
-    events: {},
+    events: {
+        'click .btn-share': 'share'
+    },
     initView: function() {},
+    share: function() {
+        $('#global-guideview-share').removeClass('hidden');
+    },
     render: function() {}
 }))({el: $('#global-menu')});
 

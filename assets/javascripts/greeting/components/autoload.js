@@ -1,3 +1,4 @@
 require('./globalmenu');
-require('./music')
+require('./music');
+require('./share');
 require('./places-select');

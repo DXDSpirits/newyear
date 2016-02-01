@@ -22,6 +22,12 @@ $('body').on('click', '[data-route]', function(e) {
     }
 });
 
+$('body').on('click', '.guideview', function() {
+    $(this).animate({opacity: 0}, 500, function() {
+        $(this).css({opacity: 1}).addClass('hidden');
+    });
+});
+
 /*
  * App
  */

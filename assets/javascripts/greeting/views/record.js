@@ -137,6 +137,7 @@ App.Pages.Record = new (PageView.extend({
         this.recording = false;
         translateVoice(localId, function(translateResult) {
             this.$('.translation').text(translateResult);
+            this.showTranslationGuide();
         }, this);
         this.localId = localId;
     },
@@ -162,6 +163,10 @@ App.Pages.Record = new (PageView.extend({
                 });
             }, this);
         }
+    },
+    showTranslationGuide: function() {
+        var offset = this.$('.translation').offset().top + 5;
+        this.$('.guideview').removeClass('hidden').css('padding-top', offset);
     },
     waitForPfop: function() {
         $('#apploader').removeClass('invisible');

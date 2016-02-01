@@ -1,0 +1,18 @@
+
+.guideview {
+    @include position(absolute, 0 0 0 0);
+    z-index: 10000;
+    overflow: hidden;
+    background-color: rgba(#000, 0.7);
+    @include animation(fadeIn .5s);
+    &.hidden {
+        @include animation(none);
+    }
+}
+
+#global-guideview-share {
+    background-image: image-url("guides/share.png");
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: auto 200px;
+}
