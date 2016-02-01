@@ -141,6 +141,14 @@
         background-size: contain;
         font-size: 1.4em;
     }
+    .listen-again {
+        @include transition(all 350ms);
+        opacity: 1;
+        visibility: visible;
+        &.invisible {
+            opacity: 0;
+        }
+    }
     @media (min-width: 320px) {
         i.audio-controller {
             position: absolute;
