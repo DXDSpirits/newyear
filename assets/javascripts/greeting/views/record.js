@@ -172,7 +172,11 @@ App.Pages.Record = new (PageView.extend({
                 global: false,
                 success: function(model) {
                     $('#apploader').addClass('invisible');
-                    App.router.navigate('play/' + model.id);
+                    App.user.getUserInfo(function() {
+                        App.router.navigate('map/' + App.user.id);
+                    }, function() {
+                        App.router.navigate('map');
+                    });
                 },
                 error: function() {
                     $('#apploader').removeClass('invisible');
