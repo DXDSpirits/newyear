@@ -133,13 +133,17 @@
         }
     }
     .frame-text {
+        cursor: pointer;
         width: 200px;
         height: 45px;
         padding: 10px 0;
         margin: 5% auto;
         background: image-url("play/frame.png") no-repeat top center;
         background-size: contain;
-        font-size: 1.4em;
+        font-size: 18px;
+        &:active, &:hover {
+            opacity: 0.5;
+        }
     }
     .listen-again {
         @include transition(all 350ms);

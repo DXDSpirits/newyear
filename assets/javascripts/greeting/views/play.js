@@ -21,7 +21,6 @@ var PlayView = Amour.ModelView.extend({
     initModelView: function() {
         this.audio = new Audio();
         this.audio.addEventListener('ended', function() {
-            this.$('.listen-again').removeClass('invisible');
             this.stopAudio();
         }.bind(this), false);
         this.greetingLikes = new GreetingLikesCollection();
@@ -37,6 +36,7 @@ var PlayView = Amour.ModelView.extend({
         this.audio.currentTime = 0;
         this.$(".wish-avatar").html('<i class="fa fa-play"></i>');
         this.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
+        this.$('.listen-again').removeClass('invisible');
     },
     toggleLike: function() {
         var self = this;
