@@ -12,8 +12,9 @@ var UserGreeting = Backbone.Model.extend({
 App.Pages.Map = new (PageView.extend({
 
     markers: [],
-
     currentVoice: null,
+    greetingId:   null,
+    provinceId:   null, //current greeting's province
 
     events: {
         'click .btn-logout': 'logout'
@@ -33,8 +34,8 @@ App.Pages.Map = new (PageView.extend({
 
     /////////////////////////// Init User Methods //////////////////////////////
 
-    createMask: function(province){
-        var ellipse = province.getElementsByTagName('ellipse')[1];
+    createMask: function(province_in_map){
+        var ellipse = province_in_map.getElementsByTagName('ellipse')[1];
         var x = ellipse.getAttribute('cx');
         var y = ellipse.getAttribute('cy');
         var mask = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
@@ -46,7 +47,7 @@ App.Pages.Map = new (PageView.extend({
         return mask;
     },
 
-    createAvatarClipPath: function(cx, cy, rx, ry, province_id, dom){
+    createAvatarClipPath: function(cx, cy, rx, ry, dom){
         // <defs>
         //   <ellipse id="defs-800" cx="297.2" cy="167.4" rx="6.6" ry="6.6"/>
         // </defs>
@@ -56,7 +57,7 @@ App.Pages.Map = new (PageView.extend({
         ellipse.setAttributeNS(null, 'cy', cy);
         ellipse.setAttributeNS(null, 'rx', '6.6');
         ellipse.setAttributeNS(null, 'ry', '6.6');
-        ellipse.setAttributeNS(null, 'id', 'defs-' + province_id);
+        ellipse.setAttributeNS(null, 'id', 'defs-' + this.province_id);
         defs.appendChild(ellipse);
         dom.appendChild(defs);
 
@@ -64,29 +65,27 @@ App.Pages.Map = new (PageView.extend({
         //   <use xlink:href="#defs-id" overflow="visible"/>
         // </clipPath>
         var clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-        clipPath.setAttributeNS(null, 'id', 'ellipse-' + province_id);
+        clipPath.setAttributeNS(null, 'id', 'ellipse-' + this.province_id);
         var useNode = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-        useNode.setAttributeNS('http://www.w3.org/1999/xlink','href', "#defs-" + province_id);
+        useNode.setAttributeNS('http://www.w3.org/1999/xlink','href', "#defs-" + this.province_id);
         useNode.setAttributeNS(null, 'visibility', 'visible');
         clipPath.appendChild(useNode);
         dom.appendChild(clipPath);
     },
 
     createAvatarImage: function(cx, cy, rx, ry, url){
-        var x = cx - rx;
-        var y = cy - ry;
         var img = document.createElementNS('http://www.w3.org/2000/svg','image');
         img.setAttributeNS(null,'height', ry * 2);
         img.setAttributeNS(null,'width', rx * 2);
         img.setAttributeNS('http://www.w3.org/1999/xlink','href', url);
         img.setAttributeNS(null, 'visibility', 'visible');
-        img.setAttributeNS(null, 'x', x);
-        img.setAttributeNS(null, 'y', y);
+        img.setAttributeNS(null, 'x', (cx - rx));
+        img.setAttributeNS(null, 'y', (cy - ry));
         return img;
     },
 
-    createAvatar: function(url, province_id){
-        var province_in_map = $(".province-" + province_id)[0];
+    createAvatar: function(url){
+        var province_in_map = $(".province-" + this.province_id)[0];
         var ellipse = province_in_map.getElementsByTagName('ellipse')[0];
         var cx = ellipse.getAttribute('cx');
         var cy = ellipse.getAttribute('cy');
@@ -94,10 +93,10 @@ App.Pages.Map = new (PageView.extend({
         var ry = ellipse.getAttribute('ry');
         var avatar = province_in_map.getElementsByClassName('avatar')[0];
         // set clipPath
-        this.createAvatarClipPath(cx, cy, rx, ry, province_id, avatar);
+        this.createAvatarClipPath(cx, cy, rx, ry, avatar);
 
         // set Avatar
-        avatar.setAttributeNS(null, 'clip-path', 'url(#ellipse-' + province_id +  ')');
+        avatar.setAttributeNS(null, 'clip-path', 'url(#ellipse-' + this.province_id +  ')');
         var img = this.createAvatarImage(cx, cy, rx, ry, url);
         var mask = this.createMask(province_in_map);
         var play = province_in_map.getElementsByClassName('play')[0];
@@ -106,24 +105,23 @@ App.Pages.Map = new (PageView.extend({
         avatar.appendChild(mask);
     },
 
-    initUserGreeting: function(greetingId){
-        this.userGreeting = new UserGreeting({id: greetingId});
+    initUserGreeting: function(){
         var self = this;
+        this.userGreeting = new UserGreeting({id: this.greetingId});
         this.userGreeting.fetch(
             {
                 global: false,
-                url: this.userGreeting.url() + "/",
+                url: self.userGreeting.url() + "/",
                 success: function(greeting){
-                    var province_id = null;
                     _.each(greeting.get('places'), function(place){
                         if(place['category'] == 'province'){ //just need province
-                            province_id = place['id'];
+                            self.province_id = place['id'];
                         }
                     });
                     self.currentVoice = greeting;
-                    if (province_id == null){ return; }
+                    if (self.province_id == null){ return; }
                     var avatar_url = greeting.get('profile')['avatar'];
-                    self.createAvatar(avatar_url, province_id);
+                    self.createAvatar(avatar_url);
                 }
             });
     },
@@ -140,10 +138,9 @@ App.Pages.Map = new (PageView.extend({
     },
 
     animationShow: function(){
-        var maxRight = 620 - window.screen.width;  // 620 is map size
+        var maxRight = Math.max((620 - window.screen.width), 0);  // 620 is map size
         var self = App.Pages.Map;
         self.provinces.fetch({
-            reset: true,
             success: function(provinces){
                 // do somthing animation with map
                 _.each(provinces.models, function(province, index){
@@ -183,14 +180,23 @@ App.Pages.Map = new (PageView.extend({
         }
     },
 
-    render: function() {
+    renderMap: function(){
         var initAnimation = _.once(this.animationShow);
-        if(this.provinces.length == 0){
+        if(this.provinces.length == 0){ // must be first time
             initAnimation();
-            var greetingId = this.options.greetingId;
-            if(greetingId){
-                this.initUserGreeting(greetingId);
-            }
+            if(this.greetingId){ this.initUserGreeting(); }
+        }
+    },
+
+    render: function() {
+
+        this.greetingId = this.options.greetingId;
+        if (Amour.LoadingScreenFinished){
+            this.renderMap();
+        }else{
+            Amour.on('LoadingScreenFinished', function(){
+                this.renderMap();
+            }, this);
         }
         //this.testAllAvatar();
     }
