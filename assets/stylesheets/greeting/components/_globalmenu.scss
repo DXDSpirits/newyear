@@ -4,10 +4,6 @@
     top: 0;
     left: 0;
     visibility: hidden;
-    // height: 0;
-    // &.open {
-    //     height: 160px;
-    // }
     .lantern, .dropdown-menu {
         visibility: visible;
         @include transition(transform .3s ease-in-out);
@@ -41,5 +37,11 @@
     }
     &.open .dropdown-menu {
         @include transform(translate3d(0, 0, 0));
+    }
+    .monkey {
+        @include position(fixed, 10px 10px auto auto);
+        width: 20px;
+        height: 30px;
+        visibility: visible;
     }
 }
