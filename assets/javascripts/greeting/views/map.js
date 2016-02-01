@@ -2,11 +2,11 @@ var App = require('../app');
 var PageView = require('../pageview');
 
 var ProvinceCollection = Amour.Collection.extend({
-    url: 'http://greeting.wedfairy.com/api/greetings/place/province/'
+    url: Amour.APIRoot + 'greetings/place/province/'
 });
 
 var UserGreeting = Backbone.Model.extend({
-    urlRoot: "http://greeting.wedfairy.com/api/greetings/usergreeting/"
+    urlRoot: Amour.APIRoot + 'greetings/usergreeting/'
 });
 
 App.Pages.Map = new (PageView.extend({
