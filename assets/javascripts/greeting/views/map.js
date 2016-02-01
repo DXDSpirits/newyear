@@ -5,7 +5,7 @@ var ProvinceCollection = Amour.Collection.extend({
     url: Amour.APIRoot + 'greetings/place/province/'
 });
 
-var UserGreeting = Backbone.Model.extend({
+var UserGreeting = Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/usergreeting/'
 });
 
@@ -25,7 +25,7 @@ App.Pages.Map = new (PageView.extend({
     testAllAvatar: function(){
         var url = 'http://img3.imgtn.bdimg.com/it/u=2301084881,3525366494&fm=206&gp=0.jpg';
         var self = this;
-        _.each($('.marker'), function(province){
+        _.each(this.$('.marker'), function(province){
             var className = province.classList[1];
             var id = className.substring(className.indexOf('-') + 1);
             self.createAvatar(url, id);
@@ -85,7 +85,7 @@ App.Pages.Map = new (PageView.extend({
     },
 
     createAvatar: function(url){
-        var province_in_map = $(".province-" + this.province_id)[0];
+        var province_in_map = this.$(".province-" + this.province_id)[0];
         var ellipse = province_in_map.getElementsByTagName('ellipse')[0];
         var cx = ellipse.getAttribute('cx');
         var cy = ellipse.getAttribute('cy');
@@ -107,11 +107,10 @@ App.Pages.Map = new (PageView.extend({
 
     initUserGreeting: function(){
         var self = this;
-        this.userGreeting = new UserGreeting({id: this.greetingId});
+        this.userGreeting.clear().set({id: this.greetingId});
         this.userGreeting.fetch(
             {
                 global: false,
-                url: self.userGreeting.url() + "/",
                 success: function(greeting){
                     _.each(greeting.get('places'), function(place){
                         if(place['category'] == 'province'){ //just need province
@@ -120,8 +119,10 @@ App.Pages.Map = new (PageView.extend({
                     });
                     self.currentVoice = greeting;
                     if (self.province_id == null){ return; }
-                    var avatar_url = greeting.get('profile')['avatar'];
-                    self.createAvatar(avatar_url);
+                    var profile = greeting.get('profile');
+                    if (profile) {  // profile may be null
+                        self.createAvatar(profile.avatar);
+                    }
                 }
             });
     },
@@ -129,7 +130,7 @@ App.Pages.Map = new (PageView.extend({
     //////////////////////////// Init Map Methods //////////////////////////////
 
     markerListener: function(){
-        $(".marker").on('click', function(event){
+        this.$(".marker").on('click', function(event){
             var className = event.currentTarget.classList[1]; //className like province-800
             if (className == undefined) return;
             var provinceID = className.substring(className.indexOf('-') + 1);
@@ -139,13 +140,13 @@ App.Pages.Map = new (PageView.extend({
 
     animationShow: function(){
         var maxRight = Math.max((620 - window.screen.width), 0);  // 620 is map size
-        var self = App.Pages.Map;
+        var self = this;
         self.provinces.fetch({
             success: function(provinces){
                 // do somthing animation with map
-                _.each(provinces.models, function(province, index){
+                provinces.forEach(function(province, index) {
                     var id = province.get("id");
-                    var marker = $(".province-" + id)[0];
+                    var marker = self.$(".province-" + id)[0];
                     if (marker == undefined) return;
                     marker.style.animationDuration = "2s";
                     marker.style.animationFillMode = "forwards";
@@ -159,15 +160,22 @@ App.Pages.Map = new (PageView.extend({
                     }
                     self.markers.push(marker);
                 });
-                $('.map').delay(1000).animate({scrollLeft: maxRight}, 3800, 'swing', self.markerListener);
+                self.$('.map').delay(1000).animate({scrollLeft: maxRight}, 3800, 'swing', function() {
+                    self.markerListener();
+                });
             }
         });
     },
+
+    initAnimation: _.once(function() {
+        this.animationShow();
+    }),
 
     //////////////////////////// System CallBack ///////////////////////////////
 
     initPage: function() {
         this.provinces = new ProvinceCollection();
+        this.userGreeting = new UserGreeting();
     },
 
     leave: function() {
@@ -180,22 +188,19 @@ App.Pages.Map = new (PageView.extend({
         }
     },
 
-    renderMap: function(){
-        var initAnimation = _.once(this.animationShow);
-        if(this.provinces.length == 0){ // must be first time
-            initAnimation();
-            if(this.greetingId){ this.initUserGreeting(); }
-        }
-    },
-
     render: function() {
 
+        // animation is triggered only once, initUserGreeting should be called every time
         this.greetingId = this.options.greetingId;
+        if (this.greetingId) {
+            this.initUserGreeting();
+        }
+
         if (Amour.LoadingScreenFinished){
-            this.renderMap();
+            this.initAnimation();
         }else{
             Amour.on('LoadingScreenFinished', function(){
-                this.renderMap();
+                this.initAnimation();
             }, this);
         }
         //this.testAllAvatar();
