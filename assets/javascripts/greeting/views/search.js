@@ -1,8 +1,23 @@
 var App = require('../app');
 var PageView = require('../pageview');
 
+var highlight;
+
 var GreetingsCollection = Amour.Collection.extend({
-    url: Amour.APIRoot + 'greetings/greeting/'
+    url: Amour.APIRoot + 'greetings/greeting/',
+    parse: function(response) {
+        var response = Amour.Collection.prototype.parse.call(this, response);
+        if (highlight) {
+            response = _.filter(response, function(item) {
+                return item.id != highlight.id;
+            });
+            highlight.highlighted = true;
+            response.unshift(highlight.toJSON());
+            response = response.slice(0, 9);
+            highlight = null;
+        }
+        return response;
+    }
 });
 
 var GreetingsCollectionView = Amour.CollectionView.extend({
@@ -19,7 +34,7 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
             _.each(data.places, function(place) {
                 placesList.push(place.name);
             });
-            data.formatted_place = _.last(placesList)
+            data.formatted_place = _.last(placesList);
             return data;
         },
         play: function() {
@@ -46,6 +61,9 @@ App.Pages.Search = new(PageView.extend({
         this.swiper.on('swipeleft', _.bind(this.fetchNextPage, this));
     },
     leave: function() {},
+    setHighlight: function(h) {
+        highlight = h;
+    },
     showFilters: function() {
         this.$('.wrapper').addClass('searching');
     },
@@ -88,8 +106,9 @@ App.Pages.Search = new(PageView.extend({
         });
     },
     render: function() {
-        var placeId = this.options.placeId;
-        this.renderItems(placeId);
+        this.placeId = this.options.placeId;
+        // this.fillSelector(App.places.toJSON(), this.placeId);
+        this.renderItems(this.placeId);
     },
     fetchNextPage: function() {
         var self = this;
@@ -112,6 +131,27 @@ App.Pages.Search = new(PageView.extend({
             }, 250);
         }
     },
+    fillSelector: function(someArray, id) {
+        id = +id;
+        var matchItem = _.findWhere(someArray, {'id': id});
+        if(matchItem.category == "province") {
+            this.$('select[name="province"]').val(matchItem.id);
+        }else if(matchItem.category == "city") {
+            var matchProvinceItem = _.findWhere(someArray, {"id": +matchItem.parent});
+            this.$('select[name="province"]').val(matchProvinceItem.id);
+            this.$('select[name="province"]').trigger('change');
+            this.$('select[name="city"]').val(matchItem.id);
+        }else {
+            var matchDistrictID = id;
+            var matchCityItem = _.findWhere(someArray, {"id": +matchItem.parent});
+            var matchProvinceItem = _.findWhere(someArray, {"id": +matchCityItem.parent});
+            this.$('select[name="province"]').val(matchProvinceItem.id);
+            this.$('select[name="province"]').trigger('change');
+            this.$('select[name="city"]').val(matchCityItem.id);
+            this.$('select[name="city"]').trigger('change');
+            this.$('select[name="district"]').val(matchItem.id);
+        }
+    }
 }))({
     el: $('#view-search')
 });
@@ -155,3 +195,4 @@ function filterPlaces(result) {
         }
     });
 }
+
