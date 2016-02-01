@@ -43,13 +43,13 @@ function initPlaceList() {
         $select.html($places).prepend($('<option value=""></option>').text(defaultValue));
     };
     var $view = $('.places-select');
-    $view.find('select[name="province"]').on('change', function() {
+    $view.find('select[name="province"]').on('change update', function() {
         var cities = $(this).find('option:selected').data('children') || [];
         var $select = $(this).closest('.places-select').find('select[name="city"]');
         fillPlaces($select, cities, '全省', 'district');
-        $select.trigger('change');
+        $select.trigger('update');
     });
-    $view.find('select[name="city"]').on('change', function() {
+    $view.find('select[name="city"]').on('change update', function() {
         var districts = $(this).find('option:selected').data('children') || [];
         var $select = $(this).closest('.places-select').find('select[name="district"]');
         fillPlaces($select, districts, '全市', null);
@@ -62,7 +62,17 @@ function initPlaceList() {
 $.fn.selectPlace = function(id) {
     return this.each(function() {
         var $this = $(this);
-        console.log(id);
+        var ids = [];
+        var i = +id;
+        while (!!i) {
+            ids.push(i);
+            var place = App.places.get(i);
+            i = place ? +place.get('parent') : null;
+        }
+        ids = ids.reverse();
+        $(this).find('select[name="province"]').val(ids[0]).trigger('update');
+        $(this).find('select[name="city"]').val(ids[1]).trigger('update');
+        $(this).find('select[name="district"]').val(ids[2]).trigger('update');
     });
 };
 
