@@ -46,17 +46,17 @@ function initPlaceList() {
     $view.find('select[name="province"]').on('change', function() {
         var cities = $(this).find('option:selected').data('children') || [];
         var $select = $(this).closest('.places-select').find('select[name="city"]');
-        fillPlaces($select, cities, '市', 'district');
+        fillPlaces($select, cities, '全省', 'district');
         $select.trigger('change');
     });
     $view.find('select[name="city"]').on('change', function() {
         var districts = $(this).find('option:selected').data('children') || [];
         var $select = $(this).closest('.places-select').find('select[name="district"]');
-        fillPlaces($select, districts, '区', null);
+        fillPlaces($select, districts, '全市', null);
     });
     var provinces = _.where(data, {category: 'province'});
     var $select = $view.find('select[name="province"]');
-    fillPlaces($select, provinces, '省', 'city');
+    fillPlaces($select, provinces, '全国', 'city');
 }
 
 stylePlaceList();
