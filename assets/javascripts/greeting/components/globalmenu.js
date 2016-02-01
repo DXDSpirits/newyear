@@ -13,9 +13,11 @@ var globalMenu = new (Amour.View.extend({
 }))({el: $('#global-menu')});
 
 App.router.on('route', function(name) {
-    globalMenu.$el.toggleClass('hidden', name == 'prologue');
-    globalMenu.$('.monkey').toggleClass('invisible', name == 'search' || name == 'prologue');
-    if (globalMenu.$el.hasClass('open')) {
-        globalMenu.$('.lantern').dropdown('toggle');
+    if (name != 'index') {
+        globalMenu.$el.toggleClass('hidden', name == 'prologue');
+        globalMenu.$('.monkey').toggleClass('invisible', name == 'search' || name == 'prologue');
+        if (globalMenu.$el.hasClass('open')) {
+            globalMenu.$('.lantern').dropdown('toggle');
+        }
     }
 });

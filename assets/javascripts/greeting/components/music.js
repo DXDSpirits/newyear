@@ -12,6 +12,7 @@ if (window.Audio) {
     $('body').one('touchstart touchend click', play);
     _.defer(play);
     App.router.on('route', function(name) {
+        play();
         if (name == 'play' || name == 'record') {
             audio.pause();
         } else {
