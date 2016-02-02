@@ -10,6 +10,7 @@
 .cardOutLeft {
     @include transform(translate3d(0, 0, 0));
     @include animation(cardOutLeft 0.5s linear);
+    @include animation-fill-mode(forwards);
 }
 
 #view-search {
@@ -67,7 +68,7 @@
         position: relative;
         height: 330px;
         width: 290px;
-        margin: 50px auto 20px;
+        margin: 30px auto 20px;
     }
     .wishes-bg-bottom {
         @include position(absolute, 20px 0 20px 0);
@@ -106,6 +107,7 @@
         .wishes-container {
             height: 345px;
             width: 300px;
+            margin-top: 50px;
         }
     }
     .wish-item {

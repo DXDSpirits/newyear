@@ -117,6 +117,7 @@ App.Pages.Search = new(PageView.extend({
             var $swiper = this.$('#wishes-swiper').clone().removeAttr('id')
                 .addClass('cardOutLeft')
                 .insertAfter(this.$('#wishes-swiper'));
+            this.$('#wishes-swiper .wish-item').animate({opacity: 0}, 350);
             _.delay(function() {
                 $swiper.remove();
             }, 1000);
