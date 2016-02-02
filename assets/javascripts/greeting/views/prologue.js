@@ -6,7 +6,10 @@ App.Pages.Prologue = new (PageView.extend({
     events: {
         'click': 'gotoMap'
     },
-    initPage: function() {},
+    initPage: function() {
+        var swiper = new Hammer(this.$('.cover')[0]);
+        swiper.on('swipeup', _.bind(this.play, this));
+    },
     initPlayer: function() {
         var width = $(window).width();
         var height = width * 1.6;
@@ -17,7 +20,7 @@ App.Pages.Prologue = new (PageView.extend({
         if (this.state == 'end') {
             App.router.navigate('map');
         } else if (this.state == 'initial') {
-            this.play();
+            // this.play();
         }
     },
     toggleState: function(state) {

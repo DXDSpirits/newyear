@@ -13,6 +13,27 @@
     }
     .cover {
         @include position(absolute, 0 0 0 0);
+        .gesture {
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            height: 20px;
+            &::before, &::after {
+                content: "";
+                height: 20px;
+                @include position(absolute, 0 -10px auto -10px);
+                @include transform(rotate(45deg));
+                border-style: solid;
+                border-color: #663500;
+                border-width: 2px 0 0 2px;
+            }
+            &::after {
+                height: 14px;
+                @include position(absolute, 7px -7px auto -7px);
+                opacity: 0.9;
+            }
+            @include animation(fadeInUp 1s ease-in-out infinite);
+        }
     }
 }
 
