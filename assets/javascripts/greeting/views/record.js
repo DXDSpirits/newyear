@@ -179,6 +179,9 @@ App.Pages.Record = new (PageView.extend({
                     $('#apploader').addClass('invisible');
                     App.user.getUserInfo(function() {
                         App.router.navigate('map/' + App.user.id);
+                        _.delay(function() {
+                            $('#global-guideview-share').removeClass('hidden');
+                        }, 350);
                     }, function() {
                         App.router.navigate('map');
                     });
