@@ -30,8 +30,10 @@ var pageView = Amour.View.extend({
     go: function(options) {
         this.options = options || {};
         this.reset();
-        var render = this.render;
+        var render = this.render,
+            title = this.$('.header-navbar .navbar-title').text();
         var pageOpen = _.once(function() {
+            $('head title').text(title);
             render();
         });
         _.delay(pageOpen, 1000);
@@ -51,7 +53,7 @@ var pageView = Amour.View.extend({
             var closeCurPage = _.once(function() {
                 $curPage.removeClass('view-prev').removeClass('view-prev-reverse')
                         .addClass('view-hidden');
-                $curPage.find('input').blur();
+                $curPage.find('input, textarea').blur();
             });
             $curPage.addClass('view-prev');
             if (options.reverse) $curPage.addClass('view-prev-reverse');
@@ -61,7 +63,7 @@ var pageView = Amour.View.extend({
             var $nextPage = this.$el;
             var openNextPage = _.once(function() {
                 $nextPage.removeClass('view-next').removeClass('view-next-reverse');
-                $nextPage.find('input').blur();
+                $nextPage.find('input, textarea').blur();
                 window.scrollTo(0, 0);
             });
             $nextPage.removeClass('view-hidden');
