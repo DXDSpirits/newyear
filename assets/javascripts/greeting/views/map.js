@@ -13,7 +13,7 @@ App.Pages.Map = new (PageView.extend({
 
     markers: [],
     currentVoice: null,
-    greetingId:   null,
+    greetingId:   0,
     provinceId:   null, //current greeting's province
 
     events: {
@@ -127,14 +127,19 @@ App.Pages.Map = new (PageView.extend({
             });
     },
 
+    restoreUserGreeting: function(){
+        $('.avatar').empty();
+        _.each($('.play'), function(play){
+            play.style.fill = '#FFD95B';
+        });
+    },
+
     //////////////////////////// Init Map Methods //////////////////////////////
 
     markerListener: function(){
         this.$(".marker").on('click', function(event){
-            var className = event.currentTarget.classList[1]; //className like province-800
-            if (className == undefined) return;
-            var provinceID = className.substring(className.indexOf('-') + 1);
-            location.href = "#search/place/" + provinceID;
+            provinceID = event.currentTarget.getAttribute('data-id');
+            App.router.navigate("search/place/" + provinceID);
         });
     },
 
@@ -147,11 +152,12 @@ App.Pages.Map = new (PageView.extend({
                 provinces.forEach(function(province, index) {
                     var id = province.get("id");
                     var marker = self.$(".province-" + id)[0];
-                    if (marker == undefined) return;
-                    marker.style.animationDuration = "2s";
-                    marker.style.animationFillMode = "forwards";
-                    marker.style.animationName = "bounce";
-
+                    if (marker == null) return;
+                    marker.className.baseVal += ' marker-animation';
+                    marker.setAttributeNS(null, 'data-id', id);
+                    // marker.style.animationDuration = "2s";
+                    // marker.style.animationFillMode = "forwards";
+                    // marker.style.animationName = "bounce";
                     var leftIndex = [3125, 2942, 3045, 2743, 2296, 2597].indexOf(id);
                     if ( leftIndex >= 0){ // left part
                         marker.style.animationDelay = leftIndex * 150 + "ms";
@@ -180,7 +186,11 @@ App.Pages.Map = new (PageView.extend({
 
     leave: function() {
         _.each(this.markers, function(marker){
-            marker.style.animationName = null;
+            var className = marker.className.baseVal;
+            var index = className.indexOf('marker-animation');
+            if (index > 0){
+                marker.className.baseVal = className.substring(0, index);
+            }
             marker.style.opacity = 1;
         });
         if(this.currentVoice != null){
@@ -191,9 +201,12 @@ App.Pages.Map = new (PageView.extend({
     render: function() {
 
         // animation is triggered only once, initUserGreeting should be called every time
-        this.greetingId = this.options.greetingId;
-        if (this.greetingId) {
-            this.initUserGreeting();
+        if(this.options.greetingId){
+            if( this.greetingId != this.options.greetingId){
+                this.restoreUserGreeting();
+                this.greetingId = this.options.greetingId;
+                this.initUserGreeting();
+            }
         }
 
         if (Amour.LoadingScreenFinished){

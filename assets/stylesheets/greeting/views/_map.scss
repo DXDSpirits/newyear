@@ -50,6 +50,12 @@
         .marker{
           opacity: 0;
         }
+        .marker-animation{
+          @include animation-name(bounce);
+          @include animation-fill-mode(forwards);
+          @include animation-duration(2s);
+          @include animation-delay(2s);
+        }
       }
     }
   }
