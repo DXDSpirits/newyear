@@ -1,10 +1,11 @@
 @include keyframes (bounce) {
-  20%, 53%, 80% {
+  20%, /* 53%, */ 80% {
+    @include transform(scale(0));
     animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
     @include transform ( translate3d(0,0,0));
   }
 
-  40%, 43% {
+  40%/* , 43% */ {
     animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
     @include transform ( translate3d(0, -10px, 0));
   }
@@ -19,7 +20,7 @@
   }
 
   100%{
-    @include transform(scale(1));
+    //@include transform(scale(1));
     opacity: 1;
   }
 }
@@ -53,8 +54,8 @@
         .marker-animation{
           @include animation-name(bounce);
           @include animation-fill-mode(forwards);
-          @include animation-duration(2s);
-          @include animation-delay(2s);
+          @include animation-duration(1s);
+          //@include animation-delay(2s);
         }
       }
     }
