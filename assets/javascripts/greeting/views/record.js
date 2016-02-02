@@ -85,10 +85,10 @@ App.Pages.Record = new (PageView.extend({
         var district = this.$('select[name="district"]').val();
         var city = this.$('select[name="city"]').val();
         var province = this.$('select[name="province"]').val();
-        var placeName = _.map([province, city, district], function(placeId) {
+        var placeName = _.chain([province, city, district]).map(function(placeId) {
             var place = App.places.findWhere({ id: +placeId });
             return place ? place.get('name') : '';
-        }).join('');
+        }).uniq().value().join('');
         this.$('.user-place').text(placeName);
         this.inspirations.fetch({
             reset: true,

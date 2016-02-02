@@ -18,6 +18,11 @@ var PlayView = Amour.ModelView.extend({
         'click .like-btn': 'toggleLike'
     },
     template: App.getTemplate('play'),
+    serializeData: function() {
+        var data = this.model.toJSON();
+        data.placeName = _.chain(data.places).pluck('name').uniq().value().join('');
+        return data;
+    },
     initModelView: function() {
         this.audio = new Audio();
         this.audio.addEventListener('ended', function() {
