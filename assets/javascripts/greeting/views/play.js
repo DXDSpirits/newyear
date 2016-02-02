@@ -112,7 +112,8 @@ var PlayView = Amour.ModelView.extend({
             reset: true,
             data: { greeting: this.model.id }
         });
-        App.setWxShare(this.$('.wish-title').text());
+        App.setWxShare(this.$('.wish-title').text(),
+                       (this.model.get('profile') || {}).avatar);
         return this;
     }
 });
