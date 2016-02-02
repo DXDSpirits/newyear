@@ -122,7 +122,7 @@ App.Pages.Map = new (PageView.extend({
             {
                 global: false,
                 success: function(greeting){
-                    this.setWxShare();
+                    self.setWxShare();
                     _.each(greeting.get('places'), function(place){
                         if(place['category'] == 'province'){ //just need province
                             self.province_id = place['id'];
