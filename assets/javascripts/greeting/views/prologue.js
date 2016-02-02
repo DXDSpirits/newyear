@@ -4,12 +4,10 @@ var PageView = require('../pageview');
 
 App.Pages.Prologue = new (PageView.extend({
     events: {
-        'click': 'gotoMap'
+        'click': 'gotoMap',
+        'touchend .cover': 'play'
     },
-    initPage: function() {
-        var swiper = new Hammer(this.$('.cover')[0]);
-        swiper.on('swipeup', _.bind(this.play, this));
-    },
+    initPage: function() {},
     initPlayer: function() {
         var width = $(window).width();
         var height = width * 1.6;
@@ -20,12 +18,12 @@ App.Pages.Prologue = new (PageView.extend({
         if (this.state == 'end') {
             App.router.navigate('map');
         } else if (this.state == 'initial') {
-            // this.play();
+            this.play();
         }
     },
     toggleState: function(state) {
         // initial / animating / end
-        this.$('.cover').toggleClass('animated slideOutUp', state != 'initial');
+        this.$('.cover').toggleClass('animated fadeOutUp', state != 'initial');
         this.$('.btn-start').toggleClass('invisible', state != 'end');
         this.state = state;
     },
