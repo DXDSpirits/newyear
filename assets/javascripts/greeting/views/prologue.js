@@ -17,6 +17,7 @@ App.Pages.Prologue = new (PageView.extend({
     gotoMap: function() {
         if (this.state == 'end') {
             var onPrologueEnd = Amour.storage.get('on-prologue-end');
+            Amour.storage.del('on-prologue-end');
             App.router.navigate(onPrologueEnd || 'map');
         } else if (this.state == 'initial') {
             this.play();
