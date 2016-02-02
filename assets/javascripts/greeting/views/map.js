@@ -215,11 +215,14 @@ App.Pages.Map = new (PageView.extend({
         }
 
         // animation is triggered only once, initUserGreeting should be called every time
-        if(this.options.greetingId){
-            if( this.greetingId != this.options.greetingId){
+        if (this.options.greetingId){
+            if (this.greetingId != this.options.greetingId) {
                 this.restoreUserGreeting();
                 this.greetingId = this.options.greetingId;
                 this.initUserGreeting();
+            } else {
+                // on returning from the search view, reset weixin share
+                this.setWxShare();
             }
         }
 
