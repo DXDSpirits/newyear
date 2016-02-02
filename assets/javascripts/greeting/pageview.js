@@ -58,7 +58,7 @@ var pageView = Amour.View.extend({
             _.delay(closeCurPage, 1000);
             $curPage.one('pageClose', closeCurPage);
 
-            $('head title').text(this.$('.header-navbar .navbar-title').text());
+            // $('head title').text(this.$('.header-navbar .navbar-title').text());
             var $nextPage = this.$el;
             var openNextPage = _.once(function() {
                 $nextPage.removeClass('view-next').removeClass('view-next-reverse');
