@@ -146,7 +146,7 @@ App.Pages.Map = new (PageView.extend({
     },
 
     animationShow: function(){
-        var maxRight = Math.max((620 - window.screen.width), 0);  // 620 is map size
+        var maxRight = Math.abs(620 - window.screen.width);  // 620 is map size
         var self = this;
         self.provinces.fetch({
             success: function(provinces){
