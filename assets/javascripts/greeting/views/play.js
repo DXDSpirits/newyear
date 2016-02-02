@@ -36,13 +36,18 @@ var PlayView = Amour.ModelView.extend({
         this.$(".wish-avatar").html('<i class="fa fa-pause"></i>');
         this.$(".disc-wrapper").removeClass('no-playing').addClass('playing');
     },
-    stopAudio: function() {
+    stopAudio: function(e) {
         this.audio.pause();
         this.audio.currentTime = 0;
         this.$(".wish-avatar").html('<i class="fa fa-play"></i>');
         this.$(".disc-wrapper").removeClass('playing').addClass('no-playing');
-        this.$('.listen-again').removeClass('invisible');
+        if (e !== 'fetchingNext') {
+            this.$('.listen-again').removeClass('invisible');
+        }
     },
+    // showListenAgain: function() {
+    //     this.$('.listen-again').removeClass('invisible');
+    // },
     toggleLike: function() {
         var self = this;
         this.verifyLike(function(liked, likeObj) {
@@ -131,6 +136,9 @@ App.Pages.Play = new(PageView.extend({
             el: this.$('.play-wrapper'),
             model: this.greeting
         });
+        this.swiper = new Hammer(this.$('.wrapper')[0]);
+        this.swiper.on('swipeleft .desc-bg', _.bind(this.fetchNextWish, this));
+        var self = this;
     },
     startRecord: function() {
         App.router.navigate('record');
@@ -140,13 +148,38 @@ App.Pages.Play = new(PageView.extend({
     },
     render: function() {
         var greetingId = this.options.playId;
-        var greeting = App.Pages.Search.greetings.get(greetingId);
+        this.greetingsCollection = App.Pages.Search.greetings;
+        var greeting = this.greetingsCollection.get(greetingId);
+        var self = this;
         if (greeting) {
             this.greeting.set(greeting.toJSON());
         } else {
             this.greeting.clear({ silent: true });
             this.greeting.set({ id: greetingId }, { silent: true });
             this.greeting.fetch();
+        }
+        this.index = 0;
+    },
+    fetchNextWish: function() {
+        this.playView.stopAudio('fetchingNext');
+        var self = this;
+        var l = this.greetingsCollection.length;
+        if(this.index < l - 1) {
+            _.each(this.greetingsCollection.models, function(val, key) {
+                if(val.toJSON().id == self.greeting.toJSON().id) {
+                    self.index = key + 1;
+                }
+            });
+            var $swiper = this.$('.disc-bg').clone()
+                .addClass('animated bounceOutLeft')
+                .insertAfter(this.$('.disc-bg'));
+            this.$('.disc-bg').animate({opacity: 0}, 350);
+            _.delay(function() {
+                $swiper.remove();
+            }, 1000);
+            _.delay(function() {
+                self.greeting.set(self.greetingsCollection.models[self.index].toJSON());
+            }, 350);
         }
     }
 }))({
