@@ -29,9 +29,9 @@
         border: 0;
         width: 160px;
         height: $dh;
-        padding: 17px 0;
+        padding: 17px 0 23px;
         > li > a {
-            height: 42px;
+            height: 40px;
             background-color: transparent;
         }
         @include transform(translate3d(0, -$dh, 0));
