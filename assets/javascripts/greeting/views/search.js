@@ -101,7 +101,7 @@ App.Pages.Search = new(PageView.extend({
                 place: id,
             },
             success: function() {
-                // self.$('.text-tips').html('滑动卡片换一组');
+                self.$('.text-tips').html('滑动卡片换一组');
             }
         });
     },
@@ -127,10 +127,10 @@ App.Pages.Search = new(PageView.extend({
                 });
             }, 350);
         } else {
-            // this.$('.text-tips').addClass('animated shake').html('没有更多啦');
-            // _.delay(function() {
-            //     self.$('.text-tips').removeClass('animated shake');
-            // }, 250);
+            this.$('.text-tips').addClass('animated shake').html('没有更多啦');
+            _.delay(function() {
+                self.$('.text-tips').removeClass('animated shake');
+            }, 250);
         }
     },
     fillSelector: function(someArray, id) {
