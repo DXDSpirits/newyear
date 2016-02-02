@@ -16,6 +16,8 @@ App.Pages.Map = new (PageView.extend({
     greetingId:   0,
     provinceId:   null, //current greeting's province
 
+    delayProp:  'animation-delay', //default value
+
     events: {
         'click .btn-logout': 'logout'
     },
@@ -155,14 +157,11 @@ App.Pages.Map = new (PageView.extend({
                     if (marker == null) return;
                     marker.className.baseVal += ' marker-animation';
                     marker.setAttributeNS(null, 'data-id', id);
-                    // marker.style.animationDuration = "2s";
-                    // marker.style.animationFillMode = "forwards";
-                    // marker.style.animationName = "bounce";
                     var leftIndex = [3125, 2942, 3045, 2743, 2296, 2597].indexOf(id);
                     if ( leftIndex >= 0){ // left part
-                        marker.style.animationDelay = leftIndex * 150 + "ms";
+                        marker.style.setProperty(self.delayProp, leftIndex * 150 + 'ms');
                     }else{
-                        marker.style.animationDelay = 6 * 200 + index * 50 + "ms";
+                        marker.style.setProperty(self.delayProp, 1200 + index * 50 + 'ms');
                     }
                     self.markers.push(marker);
                 });
@@ -199,6 +198,12 @@ App.Pages.Map = new (PageView.extend({
     },
 
     render: function() {
+        var style = window.getComputedStyle($('body')[0]);
+        if (style.getPropertyValue('-webkit-animation-delay')) {
+            this.delayProp = '-webkit-animation-delay';
+        } else if (style.getPropertyValue('-moz-animation-delay')) {
+            this.delayProp = '-moz-animation-delay';
+        }
 
         // animation is triggered only once, initUserGreeting should be called every time
         if(this.options.greetingId){
