@@ -17,6 +17,7 @@ App.router = new (Backbone.Router.extend({
         this.route('search(/place/:id)', 'search');
         this.route('play/:id', 'play');
         this.route('record', 'record');
+        this.route('about', 'about');
     },
     index: function(path) {
         this.navigate('prologue', { replace: true });
@@ -35,6 +36,9 @@ App.router = new (Backbone.Router.extend({
     },
     record: function() {
         pageRouter.goTo('Record');
+    },
+    about: function() {
+        pageRouter.goTo('About');
     }
 }))();
 
