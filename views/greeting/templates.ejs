@@ -7,10 +7,10 @@
     <div class="avatar img play" data-bg-src="{{profile.avatar}}">
         <i class="fa fa-play"></i>
     </div>
-    <div class="name text-center">
+    <div class="name text-center sans-serif">
         <span class="ellipsis">{{profile.name}}</span>
     </div>
-    <div class="place text-center">
+    <div class="place text-center sans-serif">
         <span class="ellipsis">{{formatted_place}}</span>
     </div>
 </script>
@@ -18,7 +18,7 @@
 <script id="template-play" type="text/x-handlebars-template">
     <div class="monkey-stamp"></div>
     <div class="title">
-        <p class="wish-title">来自『{{places.0.name}}·{{profile.name}}』的乡音祝福</p>
+        <p class="wish-title">来自『<span class="sans-serif">{{places.0.name}}</span>·<span class="sans-serif">{{profile.name}}</span>』的乡音祝福</p>
         <div class="description-wrapper">
             <p class="description">{{description}}</p>
         </div>
