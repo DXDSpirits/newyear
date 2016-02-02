@@ -1,5 +1,6 @@
 
 #global-menu {
+    $dh: 240px;
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +13,7 @@
         width: 40px;
         height: 130px;
         border: 0;
-        @include transform(translate3d(10px, -175px, 0));
+        @include transform(translate3d(10px, -($dh + 15px), 0));
         background-position: top right;
     }
     &.open .lantern {
@@ -27,13 +28,13 @@
         top: auto;
         border: 0;
         width: 160px;
-        height: 160px;
+        height: $dh;
         padding: 17px 0;
         > li > a {
             height: 42px;
             background-color: transparent;
         }
-        @include transform(translate3d(0, -160px, 0));
+        @include transform(translate3d(0, -$dh, 0));
     }
     &.open .dropdown-menu {
         @include transform(translate3d(0, 0, 0));

@@ -3,11 +3,16 @@ var App = require('../app');
 
 var globalMenu = new (Amour.View.extend({
     events: {
-        'click .btn-share': 'share'
+        'click .btn-share': 'share',
+        'click .btn-prologue': 'prologue'
     },
     initView: function() {},
     share: function() {
         $('#global-guideview-share').removeClass('hidden');
+    },
+    prologue: function() {
+        Amour.storage.set('on-prologue-end', location.hash.slice(1));
+        App.router.navigate('prologue');
     },
     render: function() {}
 }))({el: $('#global-menu')});
