@@ -66,9 +66,9 @@
     }
     .wishes-container {
         position: relative;
-        height: 330px;
-        width: 290px;
-        margin: 30px auto 20px;
+        height: 380px;
+        width: 320px;
+        margin: 50px auto;
     }
     .wishes-bg-bottom {
         @include position(absolute, 20px 0 20px 0);
@@ -79,7 +79,7 @@
         background-color: rgba(#fff, 0.4);
     }
     .newyear-wishes-wrapper {
-        padding: 25px 15px 10px;
+        padding: 20px 15px 10px;
         @include position(absolute, 0 20px 0 20px);
         @include clearfix();
         &::before {
@@ -94,6 +94,7 @@
         }
     }
     .text-tips {
+        @include position(absolute, auto 0 -60px 0);
         width: 150px;
         text-align: center;
         background-color: #977b5d;
@@ -103,18 +104,18 @@
         padding: 2px;
         border-radius: 13px;
     }
-    @media (min-width: 375px) {
+    @media (max-width: 360px) {
         .wishes-container {
-            height: 345px;
-            width: 300px;
-            margin-top: 50px;
+            @include transform(scale(0.8, 0.8));
+            @include transform-origin(50% 0);
+            margin: 40px auto;
         }
     }
     .wish-item {
         display: inline-block;
         float: left;
         width: 33.333333%;
-        padding: 3% 7%;
+        padding: 5% 7%;
         text-align: center;
         @include clearfix();
         .avatar {
@@ -187,8 +188,7 @@
                 }
             }
         }
-        #places-select-wrapper,
-        .wishes-container, .text-tips {
+        #places-select-wrapper, .wishes-container {
             display: none;
         }
     }
