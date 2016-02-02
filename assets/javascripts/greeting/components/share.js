@@ -27,4 +27,9 @@ if (window.wx) {
     };
     setWxShare();
     wx.ready(setWxShare);
+    App.router.on('route', function(name) {
+        if (name != 'index') {
+            setWxShare();
+        }
+    });
 }
