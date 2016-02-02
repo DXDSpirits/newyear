@@ -107,6 +107,14 @@ App.Pages.Map = new (PageView.extend({
         avatar.appendChild(mask);
     },
 
+    setWxShare: function() {
+        var profile = greeting.get('profile') || {};
+        var userName = profile.name || '老乡';
+        var placeName = _.chain(greeting.get('places')).pluck('name').uniq().value().join('');
+        var text = ['来自『', placeName, '·', userName, '』的乡音祝福'].join('');
+        App.setWxShare(text);
+    },
+
     initUserGreeting: function(){
         var self = this;
         this.userGreeting.clear().set({id: this.greetingId});
@@ -114,6 +122,7 @@ App.Pages.Map = new (PageView.extend({
             {
                 global: false,
                 success: function(greeting){
+                    this.setWxShare();
                     _.each(greeting.get('places'), function(place){
                         if(place['category'] == 'province'){ //just need province
                             self.province_id = place['id'];
