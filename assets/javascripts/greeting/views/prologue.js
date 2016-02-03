@@ -19,11 +19,13 @@ App.Pages.Prologue = new (PageView.extend({
         var zoom = 1;
         this.player = initPlayer(width, height, zoom);
     },
+    setPrologueEnd: function(onPrologueEnd) {
+        this.onPrologueEnd = onPrologueEnd;
+    },
     gotoMap: function() {
         if (this.state == 'end') {
-            var onPrologueEnd = Amour.storage.get('on-prologue-end');
-            Amour.storage.del('on-prologue-end');
-            App.router.navigate(onPrologueEnd || 'map');
+            location.hash = this.onPrologueEnd || '#map';
+            this.onPrologueEnd = null;
         } else if (this.state == 'initial') {
             this.play();
         }

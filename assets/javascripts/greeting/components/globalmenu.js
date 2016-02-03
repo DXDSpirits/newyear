@@ -11,7 +11,7 @@ var globalMenu = new (Amour.View.extend({
         $('#global-guideview-share').removeClass('hidden');
     },
     prologue: function() {
-        Amour.storage.set('on-prologue-end', location.hash.slice(1));
+        App.Pages.Prologue.setPrologueEnd(location.hash);
         App.router.navigate('prologue');
     },
     render: function() {}
