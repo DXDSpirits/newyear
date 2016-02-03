@@ -121,6 +121,7 @@ App.Pages.Record = new (PageView.extend({
         this.$('.record-wrapper').addClass('recording');
         this.$('.record-seconds > span').text(0);
         this.$('.modal-record').modal('show');
+        this.$('.btn-save').addClass('invisible');
         this.recording = true;
         (function tick(self) {
             if (!self.recording) return;
@@ -134,6 +135,7 @@ App.Pages.Record = new (PageView.extend({
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
         this.$('.modal-record').modal('hide');
+        this.$('.btn-save').removeClass('invisible');
         this.recording = false;
         translateVoice(localId, function(translateResult) {
             this.$('.translation').text(translateResult);
@@ -215,12 +217,13 @@ App.Pages.Record = new (PageView.extend({
         this.playing = false;
     },
     render: function() {
+        this.$('.btn-save').addClass('invisible');
         this.greeting.clear();
         this.$('.modal-places').modal('show');
         App.user.getUserInfo(function() {
             var profile = App.user.get('profile');
             Amour.loadBgImage(this.$('.user-avatar'), profile.avatar);
             this.$('.user-name').text(profile.name);
-        }, null, this)
+        }, null, this);
     }
 }))({el: $('#view-record')});
