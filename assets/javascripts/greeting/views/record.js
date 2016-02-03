@@ -140,6 +140,8 @@ App.Pages.Record = new (PageView.extend({
             this.showTranslationGuide();
         }, this);
         this.localId = localId;
+        this.stopVoice();
+        this.play();
     },
     saveRecord: function() {
         var selected = this.$('select[name="district"]').val() ||
