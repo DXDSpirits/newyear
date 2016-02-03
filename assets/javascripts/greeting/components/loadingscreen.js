@@ -17,4 +17,6 @@ var onceImagesLoaded = _.once(function() {
 });
 
 _.delay(onceImagesLoaded, 10000);
-$(window).load(onceImagesLoaded);
+$(window).load(function() {
+    _.delay(onceImagesLoaded, 2000);
+});
