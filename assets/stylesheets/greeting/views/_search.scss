@@ -117,11 +117,10 @@
         border-radius: 13px;
     }
     .btn-reset-search {
-        @include position(absolute, 50% 0 auto 0);
-        font-size: 18px;
+        @include position(absolute, 75% 0 auto 0);
         padding: 12px;
-        margin: 12px auto;
-        width: 200px;
+        margin: 0 auto;
+        width: 160px;
         color: #663500;
         background: transparent image-url("buttons/button-border.png") no-repeat center;
         background-size: 100% 100%;
