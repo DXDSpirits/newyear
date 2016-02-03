@@ -30,6 +30,8 @@ if (window.wx) {
         }
         var description = description || '乡音无改，录制你的乡音祝福，送给大家';
         var link = [location.origin, '/?radius=', radius, location.hash].join('');
+        var default_image_url = 'http://up.img.8yinhe.cn/o_1aail0mdr13v4rbmhf5ptqkm2a.jpg';
+        var img_url = default_image_url;
         if (img_url) {
             onMenuShare(title, description, link, img_url);
         } else {
