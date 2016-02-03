@@ -2,7 +2,12 @@
 (function initPlayer() {
     var width = $(window).width();
     var height = width * 1.6;
-    var zoom = Math.min(1, $(window).height() / height);
+    if ($(window).height() < height) {
+        height = $(window).height();
+        width = parseInt(height / 1.6);
+    }
+    // var zoom = Math.min(1, $(window).height() / height);
+    var zoom = 1;
     var playerParams = {
         zoom: zoom,
         width: width,

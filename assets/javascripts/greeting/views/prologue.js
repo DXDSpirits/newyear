@@ -11,7 +11,12 @@ App.Pages.Prologue = new (PageView.extend({
     initPlayer: function() {
         var width = $(window).width();
         var height = width * 1.6;
-        var zoom = Math.min(1, $(window).height() / height);
+        if ($(window).height() < height) {
+            height = $(window).height();
+            width = parseInt(height / 1.6);
+        }
+        // var zoom = Math.min(1, $(window).height() / height);
+        var zoom = 1;
         this.player = initPlayer(width, height, zoom);
     },
     gotoMap: function() {
