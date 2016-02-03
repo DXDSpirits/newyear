@@ -17,8 +17,17 @@
     0% {
         @include transform(translate3d(0, 0, 0));
     }
-    50% {
+    20% {
         @include transform(translate3d(0, -30%, 0));
+    }
+    40% {
+        @include transform(translate3d(0, 0, 0));
+    }
+    45% {
+        @include transform(translate3d(0, -5%, 0));
+    }
+    50% {
+        @include transform(translate3d(0, 0, 0));
     }
     100% {
         @include transform(translate3d(0, 0, 0));
@@ -189,7 +198,7 @@
         &.highlight-true > .avatar{
             @include transform-origin(center center);
             @include transform(translate3d(0, 0, 0));
-            @include animation(highlighted 1.5s infinite);
+            @include animation(highlighted 1s infinite);
         }
     }
     .wrapper.searching {

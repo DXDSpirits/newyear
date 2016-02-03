@@ -180,7 +180,11 @@ App.Pages.Play = new(PageView.extend({
                 $swiper.remove();
             }, 1000);
             _.delay(function() {
-                self.greeting.set(self.greetingsCollection.models[self.index].toJSON());
+                var next = self.greetingsCollection.at(self.index);
+                // self.greeting.set(self.greetingsCollection.models[self.index].toJSON());
+                App.router.navigate('play/' + next.id, {
+                    replace: true
+                });
             }, 350);
         }
     }
