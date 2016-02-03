@@ -100,11 +100,11 @@ App.Pages.Map = new (PageView.extend({
         // set Avatar
         avatar.setAttributeNS(null, 'clip-path', 'url(#ellipse-' + this.province_id +  ')');
         var img = this.createAvatarImage(cx, cy, rx, ry, url);
-        var mask = this.createMask(province_in_map);
+        //var mask = this.createMask(province_in_map);
         var play = province_in_map.getElementsByClassName('play')[0];
-        play.style.fill = 'white';
+        play.style.visibility = 'hidden';
         avatar.appendChild(img);
-        avatar.appendChild(mask);
+        //avatar.appendChild(mask);
     },
 
     setWxShare: function() {
@@ -142,7 +142,7 @@ App.Pages.Map = new (PageView.extend({
     restoreUserGreeting: function(){
         $('.avatar').empty();
         _.each($('.play'), function(play){
-            play.style.fill = '#FFD95B';
+            play.style.visibility = 'visible';
         });
     },
 
