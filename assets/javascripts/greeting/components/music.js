@@ -5,7 +5,8 @@ if (window.Audio) {
     var audio = new Audio();
     audio.loop = true;
     audio.autoplay = true;
-    audio.src = 'http://mm.8yinhe.cn/o_1aacb0b9rns617pi10klgri1ktma.mp3';
+    // audio.src = 'http://mm.8yinhe.cn/o_1aacb0b9rns617pi10klgri1ktma.mp3';
+    audio.src = 'http://mm.8yinhe.cn/o_1aaikcosd1o39hak14bg11g5719a.mp3';
     var play = _.once(function() {
         audio.play();
     });
