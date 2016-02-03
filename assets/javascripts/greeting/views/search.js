@@ -11,7 +11,7 @@ var GreetingsCollection = Amour.Collection.extend({
             response = _.filter(response, function(item) {
                 return item.id != highlight.id;
             });
-            highlight.highlighted = true;
+            highlight.set('highlighted', true);
             response.unshift(highlight.toJSON());
             response = response.slice(0, 9);
             highlight = null;
@@ -40,6 +40,14 @@ var GreetingsCollectionView = Amour.CollectionView.extend({
         play: function() {
             App.router.navigate('play/' + this.model.id);
         },
+        render: function() {
+            Amour.ModelView.prototype.render.call(this);
+            if(this.model.get('highlighted')) {
+                // this.className = 'wish-item highlighted';
+                $(this.el).addClass('highlight-true');
+            }
+            return this;
+        }
     })
 });
 

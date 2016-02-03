@@ -13,6 +13,18 @@
     @include animation-fill-mode(forwards);
 }
 
+@include keyframes(highlighted) {
+    0% {
+        @include transform(translate3d(0, 0, 0));
+    }
+    50% {
+        @include transform(translate3d(0, -30%, 0));
+    }
+    100% {
+        @include transform(translate3d(0, 0, 0));
+    }
+}
+
 #view-search {
     width: 100%;
     height: 100%;
@@ -117,6 +129,7 @@
         width: 33.333333%;
         padding: 5% 7%;
         text-align: center;
+        // @include transition(all .35s)
         .avatar {
             position: relative;
             width: 100%;
@@ -160,6 +173,11 @@
         }
         .ellipsis {
             @include ellipsis();
+        }
+        &.highlight-true > .avatar{
+            @include transform-origin(center center);
+            @include transform(translate3d(0, 0, 0));
+            @include animation(highlighted 1.5s infinite);
         }
     }
     .wrapper.searching {
