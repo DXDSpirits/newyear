@@ -59,7 +59,7 @@ App.Pages.Map = new (PageView.extend({
         ellipse.setAttributeNS(null, 'cy', cy);
         ellipse.setAttributeNS(null, 'rx', '6.6');
         ellipse.setAttributeNS(null, 'ry', '6.6');
-        ellipse.setAttributeNS(null, 'id', 'defs-' + this.province_id);
+        ellipse.setAttributeNS(null, 'id', 'defs-' + this.provinceId);
         defs.appendChild(ellipse);
         dom.appendChild(defs);
 
@@ -67,9 +67,9 @@ App.Pages.Map = new (PageView.extend({
         //   <use xlink:href="#defs-id" overflow="visible"/>
         // </clipPath>
         var clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-        clipPath.setAttributeNS(null, 'id', 'ellipse-' + this.province_id);
+        clipPath.setAttributeNS(null, 'id', 'ellipse-' + this.provinceId);
         var useNode = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-        useNode.setAttributeNS('http://www.w3.org/1999/xlink','href', "#defs-" + this.province_id);
+        useNode.setAttributeNS('http://www.w3.org/1999/xlink','href', "#defs-" + this.provinceId);
         useNode.setAttributeNS(null, 'visibility', 'visible');
         clipPath.appendChild(useNode);
         dom.appendChild(clipPath);
@@ -87,7 +87,7 @@ App.Pages.Map = new (PageView.extend({
     },
 
     createAvatar: function(url){
-        var province_in_map = this.$(".province-" + this.province_id)[0];
+        var province_in_map = this.$(".province-" + this.provinceId)[0];
         var ellipse = province_in_map.getElementsByTagName('ellipse')[0];
         var cx = ellipse.getAttribute('cx');
         var cy = ellipse.getAttribute('cy');
@@ -98,7 +98,7 @@ App.Pages.Map = new (PageView.extend({
         this.createAvatarClipPath(cx, cy, rx, ry, avatar);
 
         // set Avatar
-        avatar.setAttributeNS(null, 'clip-path', 'url(#ellipse-' + this.province_id +  ')');
+        avatar.setAttributeNS(null, 'clip-path', 'url(#ellipse-' + this.provinceId +  ')');
         var img = this.createAvatarImage(cx, cy, rx, ry, url);
         //var mask = this.createMask(province_in_map);
         var play = province_in_map.getElementsByClassName('play')[0];
@@ -127,11 +127,11 @@ App.Pages.Map = new (PageView.extend({
                     self.setWxShare();
                     _.each(greeting.get('places'), function(place){
                         if(place['category'] == 'province'){ //just need province
-                            self.province_id = place['id'];
+                            self.provinceId = place['id'];
                         }
                     });
                     self.currentVoice = greeting;
-                    if (self.province_id == null){ return; }
+                    if (self.provinceId == null){ return; }
                     var profile = greeting.get('profile');
                     if (profile) {  // profile may be null
                         self.createAvatar(profile.avatar);
@@ -150,9 +150,13 @@ App.Pages.Map = new (PageView.extend({
     //////////////////////////// Init Map Methods //////////////////////////////
 
     markerListener: function(){
+        var self = this;
         this.$(".marker").on('click', function(event){
-            provinceID = event.currentTarget.getAttribute('data-id');
-            App.router.navigate("search/place/" + provinceID);
+            var clickProvinceID = event.currentTarget.getAttribute('data-id');
+            if(self.currentVoice != null && self.provinceId == parseInt(clickProvinceID)){
+                App.Pages.Search.setHighlight(self.currentVoice);
+            }
+            App.router.navigate("search/place/" + clickProvinceID);
         });
     },
 
@@ -203,9 +207,6 @@ App.Pages.Map = new (PageView.extend({
             }
             marker.style.opacity = 1;
         });
-        if(this.currentVoice != null){
-            App.Pages.Search.setHighlight(this.currentVoice);
-        }
     },
 
     render: function() {
