@@ -116,6 +116,19 @@
         padding: 2px;
         border-radius: 13px;
     }
+    .btn-reset-search {
+        @include position(absolute, 50% 0 auto 0);
+        font-size: 18px;
+        padding: 12px;
+        margin: 12px auto;
+        width: 200px;
+        color: #663500;
+        background: transparent image-url("buttons/button-border.png") no-repeat center;
+        background-size: 100% 100%;
+        &:active, &:hover {
+            opacity: 0.5;
+        }
+    }
     @media (max-width: 360px) {
         .wishes-container {
             @include transform(scale(0.8, 0.8));

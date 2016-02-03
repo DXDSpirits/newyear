@@ -65,6 +65,9 @@ App.Pages.Search = new(PageView.extend({
             collection: this.greetings,
             el: $('.newyear-wishes-wrapper')
         });
+        this.listenTo(this.greetings, 'reset', function() {
+            this.$('.btn-reset-search').toggleClass('hidden', this.greetings.length > 6);
+        });
         this.swiper = new Hammer(this.$('.wishes-container')[0]);
         this.swiper.on('swipeleft', _.bind(this.fetchNextPage, this));
     },
