@@ -1,4 +1,44 @@
 
+@include keyframes(bounceFan) {
+    from { @include transform(translate3d(0, 0, 0)); }
+    to { @include transform(translate3d(0, 5%, 0)); }
+}
+
+@include keyframes(fadeText) {
+    from { opacity: 1; }
+    to { opacity: 0.7; }
+}
+
+@include keyframes(fadeFlower1) {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@include keyframes(fadeFlower2) {
+    0% { opacity: 0; }
+    20% { opacity: 0; }
+    40% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@include keyframes(fadeFlower3) {
+    0% { opacity: 0; }
+    40% { opacity: 0; }
+    60% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@include keyframes(fadeFlower4) {
+    0% { opacity: 0; }
+    60% { opacity: 0; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 #global-loading-screen {
     position: fixed;
     z-index: 9999;
@@ -8,10 +48,32 @@
     height: 100%;
     background: image-url("bg.jpg") no-repeat center;
     background-size: cover;
-}
-
-#loadingscreen-canvas-wrapper {
-    margin: 0 auto;
-    visibility: visible;
-    @include transition(opacity 1s ease-in-out);
+    .svg-wrapper {
+        @include position(absolute, 40% 20% auto 20%);
+        margin-top: -30%;
+    }
+    svg {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+    .fan {
+        @include animation(bounceFan 2s ease-in alternate);
+    }
+    .text-loading {
+        // @include animation(fadeText 2s ease-in-out alternate);
+    }
+    .flowers {
+        .flower {
+            @include animation-duration(4s);
+        }
+        .flower:nth-of-type(1) { @include animation-name(fadeFlower1); }
+        .flower:nth-of-type(2) { @include animation-name(fadeFlower2); }
+        .flower:nth-of-type(3) { @include animation-name(fadeFlower3); }
+        .flower:nth-of-type(4) { @include animation-name(fadeFlower4); }
+    }
+    .fan, .text-loading, .flower {
+        @include transform(translate3d(0, 0, 0));
+        @include animation-iteration-count(infinite);
+    }
 }
