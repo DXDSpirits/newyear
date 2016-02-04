@@ -112,7 +112,6 @@ App.Pages.Map = new (PageView.extend({
         var userName = profile.name || '老乡';
         var placeName = _.chain(this.userGreeting.get('places')).pluck('name').uniq().value().join('');
         var text = ['来自『', placeName, '·', userName, '』的乡音祝福'].join('');
-        text = '我是全国第' + (this.userGreeting.id * 17) + '个送出乡音祝福的人。' + text;
         App.setWxShare(text);
     },
 

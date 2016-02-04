@@ -16,9 +16,9 @@ function onWxShareSuccess() {
 
 function onWxShareCancel() {}
 
-function onMenuShare(title, description, link, img_url) {
+function onMenuShare(title, desc, link, img_url) {
     wx.onMenuShareTimeline({
-        title: description + title,
+        title: desc + title,
         link: link,
         imgUrl: img_url,
         success: onWxShareSuccess,
@@ -26,7 +26,7 @@ function onMenuShare(title, description, link, img_url) {
     });
     wx.onMenuShareAppMessage({
         title: title,
-        desc: description,
+        desc: desc,
         link: link,
         imgUrl: img_url,
         success: onWxShareSuccess,
@@ -42,10 +42,16 @@ function getPageTitle() {
     }
 }
 
-var setWxShare = App.setWxShare = function(description) {
+function getShareText(text) {
+    var desc = '#新年祝福接力# 我是全国第' + shares.count + '个分享乡音祝福的人。'];
+    desc += text || '乡音无改，录制你的乡音祝福，送给大家';
+    return desc;
+}
+
+var setWxShare = App.setWxShare = function(text) {
     var radius = +window.location.query.radius || 0;
     var title = getPageTitle();
-    var description = description || '乡音无改，录制你的乡音祝福，送给大家';
+    var desc = getShareText(text);
     var img_url = 'http://up.img.8yinhe.cn/o_1aail0mdr13v4rbmhf5ptqkm2a.jpg';
     App.user.getUserInfo(function() {
         var queryStr = Amour.encodeQueryString({
@@ -53,7 +59,7 @@ var setWxShare = App.setWxShare = function(description) {
             relay: App.user.id
         });
         var link = [location.origin, '/?', queryStr, location.hash].join('');
-        onMenuShare(title, description, link, img_url);
+        onMenuShare(title, desc, link, img_url);
     });
 };
 

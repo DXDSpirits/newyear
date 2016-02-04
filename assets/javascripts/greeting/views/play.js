@@ -112,7 +112,7 @@ var PlayView = Amour.ModelView.extend({
             reset: true,
             data: { greeting: this.model.id }
         });
-        var text = '我是全国第' + (this.model.id * 17) + '个送出乡音祝福的人。' + this.$('.wish-title').text();
+        var text = this.$('.wish-title').text();
         App.setWxShare(text);
         return this;
     }
