@@ -42,11 +42,13 @@ var setWxShare = App.setWxShare = function(description) {
     });
 };
 
-setWxShare();
 wx.ready(setWxShare);
 
-App.router.on('route', function(name) {
-    if (name != 'index') {
-        setWxShare();
-    }
-});
+_.delay(function() {
+    setWxShare();
+    App.router.on('route', function(name) {
+        if (name != 'index') {
+            setWxShare();
+        }
+    });
+}, 1000);
