@@ -199,6 +199,7 @@ App.userGreeting = new (Amour.Model.extend({
         if (this.isNew()) {
             App.user.getUserInfo(function() {
                 App.userGreeting.fetch({
+                    global: false,
                     url: Amour.APIRoot + 'greetings/usergreeting/' + App.user.id + '/',
                     success: success,
                     error: error
