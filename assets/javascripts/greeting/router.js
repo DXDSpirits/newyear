@@ -20,7 +20,7 @@ App.router = new (Backbone.Router.extend({
         this.route('about', 'about');
     },
     index: function(path) {
-        this.navigate('prologue', { replace: true });
+        this.navigate('map', { replace: true });
     },
     prologue: function() {
         pageRouter.goTo('Prologue');
