@@ -1,21 +1,36 @@
 
 var App = require('../app');
 
+var shares = new (Amour.Collection.extend({
+    url: Amour.APIRoot + 'greetings/share/'
+}))();
+
+(function tick() {
+    shares.fetch();
+    _.delay(tick, 1000);
+})();
+
+function onWxShareSuccess() {
+    shares.create({});
+}
+
+function onWxShareCancel() {}
+
 function onMenuShare(title, description, link, img_url) {
     wx.onMenuShareTimeline({
         title: description + title,
         link: link,
         imgUrl: img_url,
-        success: function () {},
-        cancel: function () {}
+        success: onWxShareSuccess,
+        cancel: onWxShareCancel
     });
     wx.onMenuShareAppMessage({
         title: title,
         desc: description,
         link: link,
         imgUrl: img_url,
-        success: function () {},
-        cancel: function () {}
+        success: onWxShareSuccess,
+        cancel: onWxShareCancel
     });
 }
 
