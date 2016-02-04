@@ -113,8 +113,7 @@ var PlayView = Amour.ModelView.extend({
             data: { greeting: this.model.id }
         });
         var text = '我是全国第' + (this.model.id * 17) + '个送出乡音祝福的人。' + this.$('.wish-title').text();
-        var avatar = (this.model.get('profile') || {}).avatar;
-        App.setWxShare(text, avatar);
+        App.setWxShare(text);
         return this;
     }
 });
