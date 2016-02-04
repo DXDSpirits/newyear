@@ -179,12 +179,38 @@ App.vent = new Amour.EventAggregator();
  * Authorizations
  */
 
-App.user = new Amour.Models.User();
-
 if (!Amour.TokenAuth.get()) {
     Amour.storage.set('redirect-on-login', location.href);
     App.rediectWechatAuth();
 }
+
+App.user = new Amour.Models.User();
+
+App.userGreeting = new (Amour.Model.extend({
+    urlRoot: Amour.APIRoot + 'greetings/greeting/',
+    verify: function(callback, context) {
+        var ctx = context || this;
+        var success = _.bind(function() {
+            callback && callback.call(ctx, true, this);
+        }, this)
+        var error = _.bind(function() {
+            callback && callback.call(ctx, false);
+        }, this)
+        if (this.isNew()) {
+            App.user.getUserInfo(function() {
+                App.userGreeting.fetch({
+                    url: Amour.APIRoot + 'greetings/usergreeting/' + App.user.id + '/',
+                    success: success,
+                    error: error
+                });
+            }, error, this);
+        } else {
+            success();
+        }
+    }
+}))();
+
+App.userGreeting.verify();
 
 /*
  * Start application
