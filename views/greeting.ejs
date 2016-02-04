@@ -39,15 +39,17 @@
 <!-- The views end -->
 
 <% include greeting/templates %>
-<script>
-    var WX_CONFIG = <%- JSON.stringify(wx_config) %>
-</script>
 
 <% include includes/javascripts %>
 
-<script src="<%= static_url %>javascripts/plugins/list.js?v=<%= build_no %>"></script>
-
 <!-- <script src="http://api.map.baidu.com/api?v=2.0&ak=FWQSbKcHs6QABLjn6zkOIRGk"></script> -->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    var WX_CONFIG = <%- JSON.stringify(wx_config) %>
+    wx.config(WX_CONFIG);
+</script>
+
+<script src="<%= static_url %>javascripts/plugins/list.js?v=<%= build_no %>"></script>
 
 <script src="<%= static_url %>javascripts/greeting/components/loadingscreen.js?v=<%= build_no %>"></script>
 <script src="<%= static_url %>javascripts/greeting-built.js?v=<%= build_no %>"></script>
