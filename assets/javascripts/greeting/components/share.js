@@ -43,7 +43,8 @@ function getPageTitle() {
 }
 
 function getShareText(text) {
-    var desc = '#新年祝福接力# 我是全国第' + shares.count + '个分享乡音祝福的人。';
+    var count = shares.isEmpty() ? 3370 : _.max(shares.pluck('id'));
+    var desc = '#新年祝福接力# 我是全国第' + count + '个分享乡音祝福的人。';
     desc += text || '乡音无改，录制你的乡音祝福，送给大家';
     return desc;
 }
