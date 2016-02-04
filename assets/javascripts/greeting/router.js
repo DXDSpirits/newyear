@@ -18,6 +18,7 @@ App.router = new (Backbone.Router.extend({
         this.route('play/:id', 'play');
         this.route('record', 'record');
         this.route('about', 'about');
+        this.route('relay', 'relay');
     },
     index: function(path) {
         this.navigate('map', { replace: true });
@@ -39,6 +40,9 @@ App.router = new (Backbone.Router.extend({
     },
     about: function() {
         pageRouter.goTo('About');
+    },
+    relay: function() {
+        pageRouter.goTo('Relay');
     }
 }))();
 

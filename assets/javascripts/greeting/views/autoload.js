@@ -4,3 +4,4 @@ require('./search');
 require('./play');
 require('./record');
 require('./about');
+require('./relay');
