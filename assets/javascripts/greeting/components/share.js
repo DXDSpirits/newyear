@@ -54,14 +54,15 @@ function getShareText() {
 }
 
 function setWxShare() {
-    var radius = +window.location.query.radius || 0;
+    var radius = +location.query.radius || 0;
     var title = getPageTitle();
     var desc = getShareText();
     var img_url = 'http://up.img.8yinhe.cn/o_1aail0mdr13v4rbmhf5ptqkm2a.jpg';
-    App.user.getUserInfo(function() {
+    App.userGreeting.verify(function(exists) {
+        var relay = exists ? App.user.id : (location.query.relay || '');
         var queryStr = Amour.encodeQueryString({
             radius: radius + 1,
-            relay: App.user.id
+            relay: relay
         });
         var link = [location.origin, '/?', queryStr, location.hash].join('');
         onMenuShare(title, desc, link, img_url);
