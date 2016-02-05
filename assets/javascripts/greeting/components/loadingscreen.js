@@ -1,25 +1,23 @@
 
 var $loadingscreen = $('#global-loading-screen');
-var loadingEnd = function() {
+var loadingEnd = _.once(function() {
+    downloadFontface();
     $loadingscreen.animate({opacity: 0}, 1500, function() {
         $(this).css({opacity: 1}).addClass('hidden');
         Amour.LoadingScreenFinished = true;
         Amour.trigger('LoadingScreenFinished');
     });
-};
-
-var onceImagesLoaded = _.once(function() {
-    downloadFontface();
-    if (Amour.imagesLoaded) {
-        loadingEnd();
-    } else {
-        Amour.on('ImagesLoaded', loadingEnd);
-    }
 });
 
-_.delay(onceImagesLoaded, 10000);
+_.delay(loadingEnd, 10000);
 $(window).load(function() {
-    _.delay(onceImagesLoaded, 2000);
+    _.delay(function() {
+        if (Amour.imagesLoaded) {
+            loadingEnd();
+        } else {
+            Amour.on('ImagesLoaded', loadingEnd);
+        }
+    }, 2000);
 });
 
 function downloadFontface() {
