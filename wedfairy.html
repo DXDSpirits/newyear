@@ -25,6 +25,33 @@
     </div>
     <!-- The views begin here -->
     <div class="views-wrapper" style="height: 603px;">
+        <div class="view view-hidden" id="view-relay">
+            <header class="header-navbar">
+                <div class="navbar-body">
+                    <span class="navbar-title">乡音祝福接力</span>
+                </div>
+                <div class="btn btn-link pull-left" data-route="return">
+                    <i class="iconfont icon-angle-left"></i>
+                </div>
+            </header>
+            <div class="wrapper img img-contain" data-bg-src="images/bg.jpg">
+                <div class="relay-wrapper">
+                    <ul class="nav nav-pills">
+                      <li class="active"><a href="#view-relay .ranking" data-toggle="tab">排行榜</a></li>
+                      <li><a href="#view-relay .guide" data-toggle="tab">我的</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active ranking">
+                            <table class="table table-condensed">
+                                <tr><th>排名</th><th>用户</th><th>接力祝福人数</th></tr>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane guide">guide</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="view view-hidden __header-navbar__" id="view-prologue">
             <header class="header-navbar">
                 <div class="navbar-body">
