@@ -112,7 +112,7 @@ App.Pages.Map = new (PageView.extend({
         var userName = profile.name || '老乡';
         var placeName = _.chain(this.userGreeting.get('places')).pluck('name').uniq().value().join('');
         var text = ['来自『', placeName, '·', userName, '』的乡音祝福'].join('');
-        App.setWxShare(text);
+        App.setWxShareText(text);
     },
 
     initUserGreeting: function(){

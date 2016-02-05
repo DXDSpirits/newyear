@@ -6,7 +6,10 @@ var shares = new (Amour.Collection.extend({
 }))();
 
 (function tick() {
-    shares.fetch({ global: false });
+    shares.fetch({
+        global: false,
+        success: setWxShare;
+    });
     _.delay(tick, 10000);
 })();
 
@@ -42,17 +45,18 @@ function getPageTitle() {
     }
 }
 
-function getShareText(text) {
+var shareText = '乡音无改，录制你的乡音祝福，送给大家';
+function getShareText() {
     var count = shares.isEmpty() ? 3370 : _.max(shares.pluck('id')) + 1;
     var desc = '#新年祝福接力# 我是全国第' + count + '个分享乡音祝福的人。';
-    desc += text || '乡音无改，录制你的乡音祝福，送给大家';
+    desc += shareText;
     return desc;
 }
 
-var setWxShare = App.setWxShare = function(text) {
+function setWxShare() {
     var radius = +window.location.query.radius || 0;
     var title = getPageTitle();
-    var desc = getShareText(text);
+    var desc = getShareText();
     var img_url = 'http://up.img.8yinhe.cn/o_1aail0mdr13v4rbmhf5ptqkm2a.jpg';
     App.user.getUserInfo(function() {
         var queryStr = Amour.encodeQueryString({
@@ -64,13 +68,18 @@ var setWxShare = App.setWxShare = function(text) {
     });
 };
 
-wx.ready(setWxShare);
+var setWxShareText = App.setWxShareText = function(text) {
+    shareText = text || '乡音无改，录制你的乡音祝福，送给大家';
+    setWxShare();
+}
+
+wx.ready(setWxShareText);
 
 _.delay(function() {
-    setWxShare();
+    setWxShareText();
     App.router.on('route', function(name) {
         if (name != 'index') {
-            setWxShare();
+            setWxShareText();
         }
     });
 }, 1000);
