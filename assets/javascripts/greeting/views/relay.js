@@ -67,7 +67,7 @@ App.Pages.Relay = new (PageView.extend({
         $('#global-guideview-share').removeClass('hidden');
     },
     render: function() {
-        this.renderRankingOnce();
+        // this.renderRankingOnce();
         App.userGreeting.verify(function(exists) {
             if (exists) {
                 this.countChildrenOnce();
