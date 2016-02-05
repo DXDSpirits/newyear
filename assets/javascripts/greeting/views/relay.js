@@ -8,7 +8,8 @@ var apiRoot = 'http://testpayapi.wedfairy.com/api/v1/new_year/';
 var RankView = Amour.CollectionView.extend({
     ModelView: Amour.ModelView.extend({
         tagName: 'tr',
-        template: '<td>NO.{{rank}}</td><td class="sans-serif">{{nick_name}}</td><td>{{children_count}}</td>',
+        className: 'sans-serif',
+        template: '<td>NO.{{rank}}</td><td>{{nick_name}}</td><td>{{children_count}}</td>',
         serializeData: function() {
             var data = Amour.ModelView.prototype.serializeData.call(this);
             data.rank = this.model.collection.indexOf(this.model) + 1;
