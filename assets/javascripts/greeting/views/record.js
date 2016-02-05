@@ -163,7 +163,7 @@ App.Pages.Record = new (PageView.extend({
                     key: key,
                     url: url
                 }, {
-                    success: _.bind(this.waitForPfop, this)
+                    success: _.bind(this.dontWaitForPfop, this)
                 });
             }, this);
         }
@@ -171,6 +171,27 @@ App.Pages.Record = new (PageView.extend({
     showTranslationGuide: function() {
         var offset = this.$('.translation').offset().top + 5;
         this.$('.guideview').removeClass('hidden').css('padding-top', offset);
+    },
+    relay: function() {
+        App.userGreeting.set(this.greeting.toJSON());
+        var relayParent = location.query.relay;
+        if (relayParent) {
+            var relay = new (Amour.Model.extend({
+                urlRoot: Amour.APIRoot + 'greetings/relay/'
+            }))();
+            relay.save({ parent_id: relayParent });
+        }
+    },
+    dontWaitForPfop: function() {
+        this.relay();
+        App.user.getUserInfo(function() {
+            App.router.navigate('map/' + App.user.id);
+            _.delay(function() {
+                $('#global-guideview-share').removeClass('hidden');
+            }, 350);
+        }, function() {
+            App.router.navigate('map');
+        });
     },
     waitForPfop: function() {
         $('#apploader').removeClass('invisible');
