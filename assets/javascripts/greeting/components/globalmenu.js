@@ -4,9 +4,13 @@ var App = require('../app');
 var globalMenu = new (Amour.View.extend({
     events: {
         'click .btn-share': 'share',
-        'click .btn-prologue': 'prologue'
+        'click .btn-prologue': 'prologue',
+        'click .money': 'moneyStopTada'
     },
     initView: function() {},
+    moneyStopTada: function() {
+        this.$('.money').removeClass('animated tada infinite');
+    },
     share: function() {
         $('#global-guideview-share').removeClass('hidden');
     },
