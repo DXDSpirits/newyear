@@ -179,7 +179,11 @@ App.Pages.Record = new (PageView.extend({
             var relay = new (Amour.Model.extend({
                 urlRoot: Amour.APIRoot + 'greetings/relay/'
             }))();
-            relay.save({ parent_id: relayParent });
+            relay.save({
+                parent_id: relayParent
+            }, {
+                global: false
+            });
         }
     },
     dontWaitForPfop: function() {
