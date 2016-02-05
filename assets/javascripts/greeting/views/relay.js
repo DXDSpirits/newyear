@@ -22,7 +22,9 @@ var RankView = Amour.CollectionView.extend({
 });
 
 App.Pages.Relay = new (PageView.extend({
-    events: {},
+    events: {
+        'click .btn-share': 'share'
+    },
     initPage: function() {
         this.children = new Amour.Collection();
         this.listenTo(this.children, 'reset', this.renderMy);
@@ -53,13 +55,24 @@ App.Pages.Relay = new (PageView.extend({
         });
     }),
     renderMy: function() {
-        this.$('.my .children').text(this.children.length);
+        this.$('.win').removeClass('hidden');
+        this.$('.fail').addClass('hidden');
+        this.$('.my .children-count').text(this.children.length);
+    },
+    renderGuide: function() {
+        this.$('.fail').removeClass('hidden');
+        this.$('.win').addClass('hidden');
+    },
+    share: function() {
+        $('#global-guideview-share').removeClass('hidden');
     },
     render: function() {
         this.renderRankingOnce();
         App.userGreeting.verify(function(exists) {
             if (exists) {
                 this.countChildrenOnce();
+            } else {
+                this.renderGuide();
             }
         }, this);
     }

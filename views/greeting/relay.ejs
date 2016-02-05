@@ -31,9 +31,14 @@
                     </table>
                 </div>
                 <div role="tabpanel" class="tab-pane my">
-                    <div class="text-center">你已经传递祝福给<span class="children">100000000</span>个人</div>
-                    <div class="text-center">你还没有参与接力，感快去参加吧</div>
-                    <button class="btn btn-link" data-route="record"></button>
+                    <div class="win hidden">
+                        <div>你的乡音祝福已被<span class="children-count">10</span>个人接力。再接再厉，继续分享自己的语音祝福给更多的好友吧！</div>
+                        <button class="btn btn-share btn-deco transition">分享我的乡音祝福</button>
+                    </div>
+                    <div class="fail">
+                        <div>啊噢，你还没有录制乡音祝福，还无法参加祝福接力袄。快戳下面的按钮，赶紧来参与吧！</div>
+                        <button class="btn btn-deco transition" data-route="record">我要录制乡音祝福</button>
+                    </div>
                 </div>
             </div>
         </div>
