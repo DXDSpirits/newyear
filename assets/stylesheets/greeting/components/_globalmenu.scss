@@ -51,5 +51,7 @@
         height: 40px;
         visibility: visible;
         cursor: pointer;
+        @include animation-delay(3s);
+        @include animation-iteration-count(3);
     }
 }

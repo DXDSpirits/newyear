@@ -9,7 +9,7 @@ var globalMenu = new (Amour.View.extend({
     },
     initView: function() {},
     moneyStopTada: function() {
-        this.$('.money').removeClass('animated tada infinite');
+        this.$('.money').removeClass('animated tada');
     },
     share: function() {
         $('#global-guideview-share').removeClass('hidden');

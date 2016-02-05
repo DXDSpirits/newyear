@@ -1,5 +1,6 @@
 
 #view-relay {
+    $gold: #663500;
     $gold-light: #ffce8f;
     .wrapper {
         background-repeat: repeat;
@@ -8,6 +9,7 @@
     }
     .img-title {
         height: 20px;
+        margin-bottom: 20px;
     }
     .blossom {
         height: 100px;
@@ -74,6 +76,34 @@
         .children-count {
             display: inline-block;
             padding: 0.2em;
+        }
+    }
+    .instruction {
+        color: $gold;
+        text-align: justify;
+        line-height: 1.7em;
+        word-break: break-all;
+        word-wrap: break-word;
+        padding: 0 20px;
+        text-indent: 2em;
+        h4, p, ul {
+            margin-bottom: 20px;
+        }
+        h4 {
+            font-size: 16px;
+            margin-top: 30px;
+            line-height: 1.4;
+            font-weight: bold;
+        }
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        .qr {
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+            box-shadow: 0 0 20px rgba(#000, 0.2);
         }
     }
 }
