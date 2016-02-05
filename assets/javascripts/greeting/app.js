@@ -191,12 +191,12 @@ App.userGreeting = new (Amour.Model.extend({
     verify: function(callback, context) {
         var ctx = context || this;
         var success = _.bind(function() {
-            if (history.pushState) {
-                location.query.relay = App.user.id;
-                var search = '?' + Amour.encodeQueryString(location.query);
-                var url = location.origin + location.pathname + search + location.hash;
-                history.pushState({path: url}, '', url);
-            }
+            // if (history.pushState) {
+            //     location.query.relay = App.user.id;
+            //     var search = '?' + Amour.encodeQueryString(location.query);
+            //     var url = location.origin + location.pathname + search + location.hash;
+            //     history.pushState({path: url}, '', url);
+            // }
             callback && callback.call(ctx, true, this);
         }, this)
         var error = _.bind(function() {
