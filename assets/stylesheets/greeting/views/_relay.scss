@@ -3,11 +3,20 @@
     $gold-light: #ffce8f;
     .wrapper {
         background-repeat: repeat;
+        padding-top: 80px;
+        padding-bottom: 100px;
+    }
+    .img-title {
+        height: 20px;
+    }
+    .blossom {
+        height: 100px;
+        background-position: left center;
     }
     .relay-wrapper {
         border-width: 15px 15px 30px;
         @include border-image(image-url("relay/ranking-bg.png") 29 36 59 fill stretch);
-        margin: 60px 30px;
+        margin: 20px 30px;
         padding: 10px;
     }
     .nav {
