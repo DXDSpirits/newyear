@@ -65,13 +65,15 @@ App.Pages.Search = new(PageView.extend({
             collection: this.greetings,
             el: $('.newyear-wishes-wrapper')
         });
-        this.listenTo(this.greetings, 'reset', function() {
-            this.$('.btn-reset-search').toggleClass('hidden', this.greetings.length > 6);
-        });
+        this.listenTo(this.greetings, 'reset', this.onGreetingsReset);
         this.swiper = new Hammer(this.$('.wishes-container')[0]);
         this.swiper.on('swipeleft', _.bind(this.fetchNextPage, this));
     },
     leave: function() {},
+    onGreetingsReset: function() {
+        this.$('.btn-reset-search').toggleClass('hidden', this.greetings.length > 6 || this.greetings.length == 0);
+        this.$('.text-empty-tips').toggleClass('hidden', this.greetings.count > 0);
+    },
     setHighlight: function(h) {
         highlight = h;
     },

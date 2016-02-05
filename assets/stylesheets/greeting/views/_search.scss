@@ -125,8 +125,12 @@
         padding: 2px;
         border-radius: 13px;
     }
-    .btn-reset-search {
-        @include position(absolute, 75% 0 auto 0);
+    .text-empty-tips {
+        @include position(absolute, 25% 20% auto 20%);
+        color: #663500;
+        text-align: center;
+    }
+    .btn-reset-search, .btn-goto-record {
         padding: 12px;
         margin: 0 auto;
         width: 160px;
@@ -136,6 +140,12 @@
         &:active, &:hover {
             opacity: 0.5;
         }
+    }
+    .btn-reset-search {
+        @include position(absolute, 75% 0 auto 0);
+    }
+    .btn-goto-record {
+        margin-top: 20px;
     }
     @media (max-width: 360px) {
         .wishes-container {
