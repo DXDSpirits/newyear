@@ -65,7 +65,10 @@ App.Pages.Relay = new (PageView.extend({
         this.$('.win').addClass('hidden');
     },
     share: function() {
-        $('#global-guideview-share').removeClass('hidden');
+        App.router.navigate('map/' + App.user.id);
+        _.delay(function() {
+            $('#global-guideview-share').removeClass('hidden');
+        }, 350);
     },
     render: function() {
         // this.renderRankingOnce();
