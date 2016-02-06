@@ -45,7 +45,7 @@ App.Pages.Relay = new (PageView.extend({
             }, this)
         });
     }),
-    countChildrenOnce: _.once(function() {
+    countChildren: function() {
         $.ajax({
             url: apiRoot + 'relations/' + App.user.id + '/children.json',
             data: { api_key: api_key },
@@ -54,7 +54,7 @@ App.Pages.Relay = new (PageView.extend({
                 this.children.reset(data);
             }, this)
         });
-    }),
+    },
     renderMy: function() {
         this.$('.win').removeClass('hidden');
         this.$('.fail').addClass('hidden');
@@ -74,7 +74,7 @@ App.Pages.Relay = new (PageView.extend({
         // this.renderRankingOnce();
         App.userGreeting.verify(function(exists) {
             if (exists) {
-                this.countChildrenOnce();
+                this.countChildren();
             } else {
                 this.renderGuide();
             }
