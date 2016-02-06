@@ -225,7 +225,7 @@ App.Pages.Map = new (PageView.extend({
                 // on returning from the search view, reset weixin share
                 // this.setWxShare();
                 App.userGreeting.verify(function(exists) {
-                    if (exists && this.greetingId != App.user.id} {
+                    if (exists && this.greetingId != App.user.id) {
                         this.restoreUserGreeting();
                         this.greetingId = App.user.id;
                         this.initUserGreeting();
