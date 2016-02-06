@@ -207,6 +207,17 @@ App.Pages.Map = new (PageView.extend({
         });
     },
 
+    renderUserGreeting: function(userId) {
+        if (this.greetingId != userId) {
+            this.restoreUserGreeting();
+            this.greetingId = userId;
+            this.initUserGreeting();
+        } else {
+            // on returning from the search view, reset weixin share
+            this.setWxShare();
+        }
+    },
+
     render: function() {
         var style = window.getComputedStyle($('body')[0]);
         if (style.getPropertyValue('-webkit-animation-delay')) {
@@ -217,21 +228,13 @@ App.Pages.Map = new (PageView.extend({
 
         // animation is triggered only once, initUserGreeting should be called every time
         if (this.options.greetingId){
-            if (this.greetingId != this.options.greetingId) {
-                this.restoreUserGreeting();
-                this.greetingId = this.options.greetingId;
-                this.initUserGreeting();
-            } else {
-                // on returning from the search view, reset weixin share
-                // this.setWxShare();
-                App.userGreeting.verify(function(exists) {
-                    if (exists && this.greetingId != App.user.id) {
-                        this.restoreUserGreeting();
-                        this.greetingId = App.user.id;
-                        this.initUserGreeting();
-                    }
-                }, this);
-            }
+            this.renderUserGreeting(this.options.greetingId);
+        } else {
+            App.userGreeting.verify(function(exists) {
+                if (exists) {
+                    this.renderUserGreeting(App.user.id);
+                }
+            }, this);
         }
 
         if (Amour.LoadingScreenFinished){
