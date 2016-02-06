@@ -18,7 +18,8 @@
     .relay-wrapper {
         border-width: 15px 15px 30px;
         @include border-image(image-url("relay/ranking-bg.png") 29 36 59 fill stretch);
-        margin: 20px 30px;
+        margin: 20px auto;
+        max-width: 320px;
         padding: 10px;
     }
     .nav {
@@ -68,6 +69,9 @@
         th, td {
             text-align: center;
             border: 0;
+        }
+        td > span {
+            @include ellipsis(80px);
         }
     }
     .my {

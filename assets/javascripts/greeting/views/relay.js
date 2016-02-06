@@ -9,7 +9,7 @@ var RankView = Amour.CollectionView.extend({
     ModelView: Amour.ModelView.extend({
         tagName: 'tr',
         className: 'sans-serif',
-        template: '<td>NO.{{rank}}</td><td>{{nick_name}}</td><td>{{children_count}}</td>',
+        template: '<td>NO.{{rank}}</td><td><span>{{nick_name}}</span></td><td>{{children_count}}</td>',
         serializeData: function() {
             var data = Amour.ModelView.prototype.serializeData.call(this);
             data.rank = this.model.collection.indexOf(this.model) + 1;
@@ -41,7 +41,9 @@ App.Pages.Relay = new (PageView.extend({
             data: { api_key: api_key },
             dataType: 'json',
             success: _.bind(function(data) {
-                this.ranks.reset(data);
+                this.ranks.reset(_.filter(data, function(item) {
+                    return item.user_id > 0;
+                }));
             }, this)
         });
     }),
