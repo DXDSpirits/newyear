@@ -52,6 +52,9 @@ App.Pages.Relay = new (PageView.extend({
             dataType: 'json',
             success: _.bind(function(data) {
                 this.children.reset(data);
+            }, this),
+            error: _.bind(function() {
+                this.children.reset([]);
             }, this)
         });
     },
