@@ -223,7 +223,14 @@ App.Pages.Map = new (PageView.extend({
                 this.initUserGreeting();
             } else {
                 // on returning from the search view, reset weixin share
-                this.setWxShare();
+                // this.setWxShare();
+                App.userGreeting.verify(function(exists) {
+                    if (exists && this.greetingId != App.user.id} {
+                        this.restoreUserGreeting();
+                        this.greetingId = App.user.id;
+                        this.initUserGreeting();
+                    }
+                }, this);
             }
         }
 
