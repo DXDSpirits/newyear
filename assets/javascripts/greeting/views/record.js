@@ -111,6 +111,7 @@ App.Pages.Record = new (PageView.extend({
         this.$('.translation').text(translation);
     },
     onClickTranslation: function() {
+        if (!this.localId) return;
         this.$('.modal-translation').modal('show');
         var translation = this.$('.translation').text();
         this.$('.modal-translation textarea[name=translation]').val(translation);
@@ -121,7 +122,7 @@ App.Pages.Record = new (PageView.extend({
         this.$('.record-wrapper').addClass('recording');
         this.$('.record-seconds > span').text(0);
         this.$('.modal-record').modal('show');
-        this.$('.btn-save').addClass('invisible');
+        this.$('.btn-save').addClass('hidden');
         this.recording = true;
         (function tick(self) {
             if (!self.recording) return;
@@ -135,7 +136,7 @@ App.Pages.Record = new (PageView.extend({
     endRecord: function(localId) {
         this.$('.record-wrapper').removeClass('recording');
         this.$('.modal-record').modal('hide');
-        this.$('.btn-save').removeClass('invisible');
+        this.$('.btn-save').removeClass('hidden');
         this.recording = false;
         translateVoice(localId, function(translateResult) {
             this.$('.translation').text(translateResult);
@@ -264,7 +265,7 @@ App.Pages.Record = new (PageView.extend({
         this.$('.user-place').text(placeName);
     },
     render: function() {
-        this.$('.btn-save').addClass('invisible');
+        this.$('.btn-save').addClass('hidden');
         this.greeting.clear();
         this.inspirations.fetch({ reset: true });
         // this.$('.modal-places').modal('show');

@@ -106,7 +106,9 @@ $gold: #663500;
             margin: 20px auto;
         }
         .btn-record {}
-        .btn-save {}
+        .btn-save.hidden {
+            @include animation(none);
+        }
         &.recording {}
     }
     /* record modal */
