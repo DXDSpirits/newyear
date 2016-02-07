@@ -151,7 +151,7 @@ App.Pages.Record = new (PageView.extend({
                        this.$('select[name="province"]').val();
         var translation = this.$('.translation').text();
         if (!selected) {
-            alert('请选择省市');
+            // alert('请选择省市');
             this.$('.modal-places').modal('show');
         } else if (!this.localId) {
             alert('请先录一段语音');
@@ -244,7 +244,7 @@ App.Pages.Record = new (PageView.extend({
     render: function() {
         this.$('.btn-save').addClass('invisible');
         this.greeting.clear();
-        this.$('.modal-places').modal('show');
+        // this.$('.modal-places').modal('show');
         App.user.getUserInfo(function() {
             var profile = App.user.get('profile');
             Amour.loadBgImage(this.$('.user-avatar'), profile.avatar);

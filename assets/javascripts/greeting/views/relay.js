@@ -33,7 +33,7 @@ App.Pages.Relay = new (PageView.extend({
     },
     initPage: function() {
         this.children = new ChildrenModel();
-        this.listenTo(this.children, 'change', this.renderMy);
+        // this.listenTo(this.children, 'change', this.renderMy);
         this.ranks = new RankCollection();
         this.rankView = new RankView({
             collection: this.ranks,
@@ -48,12 +48,15 @@ App.Pages.Relay = new (PageView.extend({
         }, {
             silent: true
         });
-        this.children.fetch();
+        this.children.fetch({
+            success: _.bind(this.renderMy, this),
+            error: _.bind(this.renderMy, this)
+        });
     },
     renderMy: function() {
         this.$('.win').removeClass('hidden');
         this.$('.fail').addClass('hidden');
-        this.$('.my .children-count').text(this.children.get('count'));
+        this.$('.my .children-count').text(this.children.get('count') || 0);
     },
     renderGuide: function() {
         this.$('.fail').removeClass('hidden');
