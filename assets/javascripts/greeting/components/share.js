@@ -37,19 +37,21 @@ function onMenuShare(title, desc, link, img_url) {
     });
 }
 
+var shareText = '乡音无改，录制你的乡音祝福，送给大家';
 function getPageTitle() {
-    var title = '【乡音祝福 - 八音盒】';
+    // var title = '【乡音祝福 - 八音盒】';
+    var title = '【乡音祝福 - 八音盒】'
     if (App.pageRouter.history.active) {
         title = App.pageRouter.history.active.$('.header-navbar .navbar-title').text();
         title = '【' + title + '】';
     }
+    return shareText + title;
 }
 
-var shareText = '乡音无改，录制你的乡音祝福，送给大家';
 function getShareText() {
     var count = shares.isEmpty() ? 3370 : _.max(shares.pluck('id')) + 1;
     var desc = '#新年祝福接力# 我是全国第' + count + '个分享乡音祝福的人。';
-    desc += shareText;
+    // desc += shareText;
     return desc;
 }
 
