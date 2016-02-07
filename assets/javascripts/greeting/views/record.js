@@ -235,22 +235,24 @@ App.Pages.Record = new (PageView.extend({
         } else {
             App.userGreeting.verify(function(exists) {
                 if (exists) {
+                    App.userGreeting.once('stopVoice', this.stopVoice, this);
                     App.userGreeting.playVoice();
                 } else {
                     alert('请先录一段语音');
                 }
-            });
+            }, this);
         }
         this.$('.play-wrapper').addClass('playing');
         this.playing = true;
     },
     stopVoice: function() {
+        App.userGreeting.off('stopVoice');
         if (this.localId) {
             wx.stopVoice({ localId: this.localId });
         } else {
             App.userGreeting.verify(function(exists) {
                 if (exists) App.userGreeting.stopVoice();
-            });
+            }, this);
         }
         this.$('.play-wrapper').removeClass('playing');
         this.playing = false;

@@ -193,6 +193,9 @@ App.userGreeting = new (Amour.Model.extend({
         this.on('change', function() {
             this.audio.src = this.get('url');
         }, this);
+        this.audio.addEventListener('ended', _.bind(function() {
+            this.trigger('stopVoice');
+        }, this), false);
     },
     playVoice: function() {
         this.audio.play();
