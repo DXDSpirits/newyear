@@ -265,6 +265,7 @@ App.Pages.Record = new (PageView.extend({
     render: function() {
         this.$('.btn-save').addClass('invisible');
         this.greeting.clear();
+        this.inspirations.fetch({ reset: true });
         // this.$('.modal-places').modal('show');
         App.userGreeting.verify(function(exists) {
             var profile = App.user.get('profile');
