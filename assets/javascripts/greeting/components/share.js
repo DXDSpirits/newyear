@@ -7,8 +7,8 @@ var shares = new (Amour.Collection.extend({
 
 (function tick() {
     shares.fetch({
-        global: false,
-        success: setWxShare
+        // global: false,
+        // success: setWxShare
     });
     _.delay(tick, 10000);
 })();
