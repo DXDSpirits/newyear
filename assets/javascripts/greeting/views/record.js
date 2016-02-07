@@ -166,7 +166,8 @@ App.Pages.Record = new (PageView.extend({
                     key: key,
                     url: url
                 }, {
-                    success: _.bind(this.dontWaitForPfop, this)
+                    // success: _.bind(this.dontWaitForPfop, this)
+                    success: _.bind(this.waitForPfop, this)
                 });
             }, this);
         }
@@ -210,14 +211,7 @@ App.Pages.Record = new (PageView.extend({
                 global: false,
                 success: function(model) {
                     $('#apploader').addClass('invisible');
-                    App.user.getUserInfo(function() {
-                        App.router.navigate('map/' + App.user.id);
-                        _.delay(function() {
-                            $('#global-guideview-share').removeClass('hidden');
-                        }, 350);
-                    }, function() {
-                        App.router.navigate('map');
-                    });
+                    self.dontWaitForPfop();
                 },
                 error: function() {
                     $('#apploader').removeClass('invisible');
