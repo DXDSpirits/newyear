@@ -188,6 +188,19 @@ App.user = new Amour.Models.User();
 
 App.userGreeting = new (Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/greeting/',
+    initModel: function() {
+        this.audio = new Audio();
+        this.on('change', function() {
+            this.audio.src = this.get('url');
+        }, this);
+    },
+    playVoice: function() {
+        this.audio.play();
+    },
+    stopVoice: function() {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+    },
     verify: function(callback, context) {
         var ctx = context || this;
         var success = _.bind(function() {

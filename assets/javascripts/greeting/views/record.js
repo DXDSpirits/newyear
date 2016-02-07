@@ -73,7 +73,7 @@ App.Pages.Record = new (PageView.extend({
         });
         wx.onVoicePlayEnd({
             success: _.bind(function (res) {
-                this.stopVoice(res.localId);
+                this.stopVoice();
             }, this)
         });
     },
@@ -223,32 +223,52 @@ App.Pages.Record = new (PageView.extend({
         })();
     },
     play: function() {
-        if (!this.localId) {
-            alert('请先录一段语音');
-        } else if (!this.playing) {
-            wx.playVoice({ localId: this.localId });
+        if (!this.playing) {
             this.playVoice();
         } else {
-            wx.stopVoice({ localId: this.localId });
             this.stopVoice();
         }
     },
     playVoice: function() {
+        if (this.localId) {
+            wx.playVoice({ localId: this.localId });
+        } else {
+            App.userGreeting.verify(function(exists) {
+                if (exists) {
+                    App.userGreeting.playVoice();
+                } else {
+                    alert('请先录一段语音');
+                }
+            });
+        }
         this.$('.play-wrapper').addClass('playing');
         this.playing = true;
     },
     stopVoice: function() {
+        if (this.localId) {
+            wx.stopVoice({ localId: this.localId });
+        } else {
+            App.userGreeting.verify(function(exists) {
+                if (exists) App.userGreeting.stopVoice();
+            });
+        }
         this.$('.play-wrapper').removeClass('playing');
         this.playing = false;
+    },
+    renderUserGreeting: function() {
+        this.$('.translation').text(App.userGreeting.get('description'));
+        var placeName = _.chain(App.userGreeting.get('places')).pluck('name').uniq().value().join('');
+        this.$('.user-place').text(placeName);
     },
     render: function() {
         this.$('.btn-save').addClass('invisible');
         this.greeting.clear();
         // this.$('.modal-places').modal('show');
-        App.user.getUserInfo(function() {
+        App.userGreeting.verify(function(exists) {
             var profile = App.user.get('profile');
             Amour.loadBgImage(this.$('.user-avatar'), profile.avatar);
             this.$('.user-name').text(profile.name);
-        }, null, this);
+            if (exists) this.renderUserGreeting();
+        }, this);
     }
 }))({el: $('#view-record')});
