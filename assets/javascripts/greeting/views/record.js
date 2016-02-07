@@ -189,13 +189,14 @@ App.Pages.Record = new (PageView.extend({
     dontWaitForPfop: function() {
         this.relay();
         App.user.getUserInfo(function() {
-            App.router.navigate('map/' + App.user.id);
+            // App.router.navigate('map/' + App.user.id);
+            App.router.navigate('play/' + this.greeting.id);
             _.delay(function() {
                 $('#global-guideview-share').removeClass('hidden');
             }, 350);
         }, function() {
             App.router.navigate('map');
-        });
+        }, this);
     },
     waitForPfop: function() {
         $('#apploader').removeClass('invisible');
