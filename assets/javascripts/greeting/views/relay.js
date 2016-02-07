@@ -5,11 +5,15 @@ var PageView = require('../pageview');
 var api_key = 'f4c47fdb0a42dd2e4807716efaff039a17ea6d38';
 var apiRoot = 'http://testpayapi.wedfairy.com/api/v1/new_year/';
 
+var RankCollection = Amour.Collection.extend({
+    url: Amour.APIRoot + 'greetings/ranking/'
+});
+
 var RankView = Amour.CollectionView.extend({
     ModelView: Amour.ModelView.extend({
         tagName: 'tr',
         className: 'sans-serif',
-        template: '<td>NO.{{rank}}</td><td><span>{{nick_name}}</span></td><td>{{children_count}}</td>',
+        template: '<td>NO.{{rank}}</td><td><span>{{name}}</span></td><td>{{count}}</td>',
         serializeData: function() {
             var data = Amour.ModelView.prototype.serializeData.call(this);
             data.rank = this.model.collection.indexOf(this.model) + 1;
@@ -29,24 +33,12 @@ App.Pages.Relay = new (PageView.extend({
     initPage: function() {
         this.children = new Amour.Collection();
         this.listenTo(this.children, 'reset', this.renderMy);
-        this.ranks = new Amour.Collection();
+        this.ranks = new RankCollection();
         this.rankView = new RankView({
             collection: this.ranks,
             el: this.$('.ranking table')
         })
     },
-    renderRankingOnce: _.once(function() {
-        $.ajax({
-            url: apiRoot + 'relations/rank.json',
-            data: { api_key: api_key },
-            dataType: 'json',
-            success: _.bind(function(data) {
-                this.ranks.reset(_.filter(data, function(item) {
-                    return item.user_id > 0;
-                }));
-            }, this)
-        });
-    }),
     countChildren: function() {
         $.ajax({
             url: apiRoot + 'relations/' + App.user.id + '/children.json',
@@ -76,7 +68,7 @@ App.Pages.Relay = new (PageView.extend({
         }, 350);
     },
     render: function() {
-        // this.renderRankingOnce();
+        this.ranks.fetch({ reset: true });
         App.userGreeting.verify(function(exists) {
             if (exists) {
                 this.countChildren();
