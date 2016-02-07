@@ -2,8 +2,9 @@
 var App = require('../app');
 var PageView = require('../pageview');
 
-var api_key = 'f4c47fdb0a42dd2e4807716efaff039a17ea6d38';
-var apiRoot = 'http://testpayapi.wedfairy.com/api/v1/new_year/';
+var ChildrenModel = Amour.Model.extend({
+    urlRoot: Amour.APIRoot + 'greetings/ranking/'
+});
 
 var RankCollection = Amour.Collection.extend({
     url: Amour.APIRoot + 'greetings/ranking/'
@@ -31,8 +32,8 @@ App.Pages.Relay = new (PageView.extend({
         'click .btn-share': 'share'
     },
     initPage: function() {
-        this.children = new Amour.Collection();
-        this.listenTo(this.children, 'reset', this.renderMy);
+        this.children = new ChildrenModel();
+        this.listenTo(this.children, 'change', this.renderMy);
         this.ranks = new RankCollection();
         this.rankView = new RankView({
             collection: this.ranks,
@@ -40,22 +41,19 @@ App.Pages.Relay = new (PageView.extend({
         })
     },
     countChildren: function() {
-        $.ajax({
-            url: apiRoot + 'relations/' + App.user.id + '/children.json',
-            data: { api_key: api_key },
-            dataType: 'json',
-            success: _.bind(function(data) {
-                this.children.reset(data);
-            }, this),
-            error: _.bind(function() {
-                this.children.reset([]);
-            }, this)
+        this.children.clear({
+            silent: true
+        }).set({
+            id: App.user.id
+        }, {
+            silent: true
         });
+        this.children.fetch();
     },
     renderMy: function() {
         this.$('.win').removeClass('hidden');
         this.$('.fail').addClass('hidden');
-        this.$('.my .children-count').text(this.children.length);
+        this.$('.my .children-count').text(this.children.get('count'));
     },
     renderGuide: function() {
         this.$('.fail').removeClass('hidden');
