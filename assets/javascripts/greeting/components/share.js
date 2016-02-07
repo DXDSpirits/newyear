@@ -76,11 +76,9 @@ var setWxShareText = App.setWxShareText = function(text) {
 
 wx.ready(setWxShareText);
 
-_.delay(function() {
-    setWxShareText();
-    App.router.on('route', function(name) {
-        if (name != 'index') {
-            setWxShareText();
-        }
-    });
-}, 1000);
+setWxShareText();
+App.router.on('route', function(name) {
+    if (name != 'index') {
+        setWxShareText();
+    }
+});

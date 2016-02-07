@@ -152,8 +152,10 @@ App.Pages.Record = new (PageView.extend({
                        this.$('select[name="province"]').val();
         var translation = this.$('.translation').text();
         if (!selected) {
-            // alert('请选择省市');
             this.$('.modal-places').modal('show');
+            this.$('.modal-places').one('hidden.bs.modal', _.bind(function() {
+                this.saveRecord();
+            }, this));
         } else if (!this.localId) {
             alert('请先录一段语音');
         } else {
