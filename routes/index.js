@@ -9,6 +9,10 @@ router.get('/corslogin/:token', function(req, res, next) {
     });
 });
 
+router.get('/logout', function(req, res, next) {
+    res.render('logout');
+});
+
 router.get('/', function(req, res) {
     res.render('greeting', {
         title: 'Greeting'
