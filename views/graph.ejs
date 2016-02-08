@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="no-js">
+
+<head>
+    <title>乡音祝福 - 八音盒</title>
+
+    <% include includes/metadata %>
+
+    <style>
+        .node {
+            stroke: #fff;
+            stroke-width: 1.5px;
+        }
+        .link {
+            stroke: #999;
+            stroke-opacity: .6;
+        }
+        .text {
+            font-size: 9px;
+        }
+    </style>
+
+    <script>
+        window.onpageshow = function(e) { if (e.persisted) location.reload(); }
+    </script>
+    <script src="<%= tat_static %>javascripts/vendor/modernizr-2.7.1.min.js"></script>
+</head>
+<body>
+
+<!-- The views end -->
+
+<% include includes/javascripts %>
+
+<script crossorigin="anonymous" src="<%= tat_static %>javascripts/plugins/d3.min.js?v=<%= build_no %>"></script>
+<script>
+    (function() {
+        var width = 1000,
+            height = 1000;
+
+        var color = d3.scale.category20();
+
+        var force = d3.layout.force()
+            .charge(-400)
+            .linkDistance(50)
+            .size([width, height]);
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var draw = function(graph) {
+            force
+                .nodes(graph.nodes)
+                .links(graph.links)
+                .start();
+
+            var link = svg.selectAll(".link")
+                .data(graph.links)
+                .enter().append("line")
+                .attr("class", "link")
+                .style("stroke-width", 1);
+
+            var node = svg.selectAll(".node")
+                .data(graph.nodes)
+                .enter().append('g');
+
+            node.append("circle")
+                .attr("class", "node")
+                .attr("r", 10)
+                .style("fill", function(d) {
+                    return color(d.group);
+                })
+                .call(force.drag);
+
+            node.append("text")
+                .attr("class", "text")
+                .text(function(d) {
+                    return d.name;
+                });
+
+            force.on("tick", function() {
+                link.attr("x1", function(d) {
+                        return d.source.x;
+                    })
+                    .attr("y1", function(d) {
+                        return d.source.y;
+                    })
+                    .attr("x2", function(d) {
+                        return d.target.x;
+                    })
+                    .attr("y2", function(d) {
+                        return d.target.y;
+                    });
+
+                node.select('circle').attr("cx", function(d) {
+                        return d.x;
+                    })
+                    .attr("cy", function(d) {
+                        return d.y;
+                    });
+
+                node.select('text').attr("dx", function(d) {
+                        return d.x;
+                    })
+                    .attr("dy", function(d) {
+                        return d.y;
+                    });
+            });
+        };
+
+        var relays = new Amour.Collection();
+        graph = {nodes:[], links:[]};
+        relays.fetch({
+            url: 'http://greeting.wedfairy.com/api/greetings/relay/',
+            success: function() {
+                relays.forEach(function(relay, index) {
+                    var profile = relay.get('profile') || {};
+                    relay.set('index', index);
+                    graph.nodes.push({name: profile.name, group: 1});
+                });
+                relays.forEach(function(relay) {
+                    var parent = relays.findWhere({owner_id: relay.get('parent_id')});
+                    graph.links.push({
+                        source: relay.get('index'),
+                        target: parent.get('index'),
+                        value: 1
+                    });
+                });
+                draw(graph);
+            }
+        })
+    })();
+</script>
+</body>
+</html>

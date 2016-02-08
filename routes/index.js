@@ -15,4 +15,8 @@ router.get('/', function(req, res) {
     });
 });
 
+router.get('/graph', function(req, res) {
+    res.render('graph');
+});
+
 module.exports = router;
