@@ -130,7 +130,9 @@ App.rediectWechatAuth = function() {
         scope: 'snsapi_userinfo',
         state: state
     };
-    App.openUrl(url + Amour.encodeQueryString(query) + '#wechat_redirect');
+    App.openUrl(url + Amour.encodeQueryString(query) + '#wechat_redirect', {
+        replace: true
+    });
 };
 
 /*
@@ -179,12 +181,14 @@ App.vent = new Amour.EventAggregator();
  * Authorizations
  */
 
-if (!Amour.TokenAuth.get()) {
-    Amour.storage.set('redirect-on-login', location.href);
-    App.rediectWechatAuth();
-}
-
 App.user = new Amour.Models.User();
+
+App.requireLogin = function() {
+    App.user.getUserInfo(null, function() {
+        Amour.storage.set('redirect-on-login', location.href);
+        App.rediectWechatAuth();
+    });
+}
 
 App.userGreeting = new (Amour.Model.extend({
     urlRoot: Amour.APIRoot + 'greetings/greeting/',

@@ -261,6 +261,7 @@ App.Pages.Record = new (PageView.extend({
         this.$('.user-place').text(placeName);
     },
     render: function() {
+        App.requireLogin();
         this.$('.btn-save').addClass('hidden');
         this.greeting.clear();
         this.inspirations.fetch({ reset: true });
