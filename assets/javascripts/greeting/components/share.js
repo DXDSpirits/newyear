@@ -50,7 +50,8 @@ function getPageTitle() {
 
 function getShareText() {
     var count = shares.isEmpty() ? 3370 : _.max(shares.pluck('id')) + 1;
-    var desc = '#新年祝福接力# 我是全国第' + count + '个分享乡音祝福的人。';
+    // var desc = '#新年祝福接力# 我是全国第' + count + '个分享乡音祝福的人。';
+    var desc = '#乡音祝福接力# ' + count + ' ';
     // desc += shareText;
     return desc;
 }
