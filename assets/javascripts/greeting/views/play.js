@@ -52,11 +52,11 @@ var PlayView = Amour.ModelView.extend({
         var self = this;
         this.verifyLike(function(liked, likeObj) {
             if (liked) {
-                likeObj.destroy({ global: false, wait: true });
+                likeObj.destroy({ wait: true });
             } else {
                 this.greetingLikes.create({
                     greeting: this.model.get('id')
-                }, { global: false, wait: true });
+                }, { wait: true });
             }
         }, this);
     },
